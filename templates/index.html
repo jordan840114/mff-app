@@ -17,22 +17,100 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --sky: #7bc8e2;
-      --white: #ffffff;
-      --black: #0d0d0d;
+      --b1: #7bc8e2;
+      --b2: #a8dff0;
+      --b3: #ffffff;
+      --b4: #c8ecf8;
+      --fg: #0d0d0d;
       --dim: rgba(13,13,13,0.38);
       --line: rgba(13,13,13,0.1);
-      --alert: #EF4444;
     }
 
     html, body {
-      background: var(--sky);
-      color: var(--black);
+      min-height: 100vh;
       font-family: 'Space Mono', monospace;
       font-size: 11px;
       letter-spacing: 0.06em;
-      min-height: 100vh;
+      color: var(--fg);
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── ANIMATED GRADIENT BACKGROUND ── */
+    .gradient-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: var(--b4);
+      transition: background 1.2s ease;
+      overflow: hidden;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.75;
+      transition: background 1.2s ease, width 1.2s ease, height 1.2s ease;
+      will-change: transform;
+    }
+
+    .blob-1 {
+      width: 65vw;
+      height: 65vw;
+      background: var(--b1);
+      top: -15%;
+      left: -10%;
+      animation: drift1 12s ease-in-out infinite;
+    }
+
+    .blob-2 {
+      width: 55vw;
+      height: 55vw;
+      background: var(--b2);
+      bottom: 5%;
+      right: -15%;
+      animation: drift2 16s ease-in-out infinite;
+    }
+
+    .blob-3 {
+      width: 45vw;
+      height: 45vw;
+      background: var(--b3);
+      top: 35%;
+      left: 25%;
+      animation: drift3 10s ease-in-out infinite;
+    }
+
+    @keyframes drift1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33%       { transform: translate(8vw, 6vh) scale(1.08); }
+      66%       { transform: translate(-4vw, 10vh) scale(0.94); }
+    }
+    @keyframes drift2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      40%       { transform: translate(-10vw, -8vh) scale(1.1); }
+      70%       { transform: translate(6vw, -4vh) scale(0.92); }
+    }
+    @keyframes drift3 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50%       { transform: translate(-8vw, 8vh) scale(1.12); }
+    }
+
+    /* SVG grain overlay */
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.22;
+      mix-blend-mode: overlay;
+    }
+
+    /* page content sits above bg */
+    .page {
+      position: relative;
+      z-index: 2;
     }
 
     /* ── NAV PILL ── */
@@ -44,12 +122,15 @@
     }
 
     nav {
-      background: var(--white);
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-radius: 100px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 10px 16px;
+      transition: background 0.4s;
     }
 
     .nav-logo {
@@ -57,7 +138,7 @@
       font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--black);
+      color: var(--fg);
     }
 
     .notif-btn {
@@ -72,15 +153,11 @@
       padding: 0;
       transition: color 0.2s;
     }
+    .notif-btn.active { color: var(--fg); }
 
-    .notif-btn.active { color: var(--black); }
+    /* ── MAIN ── */
+    main { padding: 28px 14px 40px; }
 
-    /* ── PAGE CONTENT ── */
-    main {
-      padding: 28px 14px;
-    }
-
-    /* ── ADD ROW ── */
     .add-row {
       display: flex;
       justify-content: space-between;
@@ -96,23 +173,21 @@
     }
 
     .add-btn {
-      background: var(--white);
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border: none;
       border-radius: 100px;
       font-family: 'Space Mono', monospace;
       font-size: 10px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--black);
-      padding: 8px 14px;
+      color: var(--fg);
+      padding: 8px 16px;
       cursor: pointer;
       transition: opacity 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
-
-    .add-btn:active { opacity: 0.7; }
+    .add-btn:active { opacity: 0.65; }
 
     /* ── EMPTY STATE ── */
     .empty-state {
@@ -122,21 +197,31 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--dim);
-      line-height: 2.4;
+      line-height: 2.6;
     }
 
     /* ── FLIGHT ITEM ── */
     .flight-item {
-      background: var(--white);
-      border-radius: 16px;
+      background: rgba(255,255,255,0.62);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 18px;
       padding: 18px;
       margin-bottom: 10px;
-      transition: opacity 0.2s;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+
+    .flight-item:active { transform: scale(0.98); }
+
+    .flight-item.selected {
+      background: rgba(255,255,255,0.88);
+      border-color: rgba(255,255,255,0.9);
     }
 
     .flight-item.alerted {
-      background: var(--alert);
-      color: var(--white);
+      background: rgba(255,255,255,0.72);
     }
 
     .flight-top {
@@ -155,18 +240,19 @@
     }
 
     .flight-route .arrow {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 400;
-      opacity: 0.4;
-      margin: 0 4px;
+      opacity: 0.35;
+      margin: 0 3px;
     }
 
     .flight-price {
       font-size: 18px;
       font-weight: 700;
       letter-spacing: 0.02em;
-      text-align: right;
     }
+
+    .price-alerted { color: #d63030; }
 
     .flight-mid {
       display: flex;
@@ -177,17 +263,18 @@
 
     .flight-date {
       font-size: 10px;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      opacity: 0.5;
+      color: var(--dim);
     }
 
     .alert-badge {
       font-size: 9px;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      background: rgba(255,255,255,0.2);
-      padding: 3px 7px;
+      background: #d63030;
+      color: #fff;
+      padding: 3px 8px;
       border-radius: 100px;
     }
 
@@ -196,29 +283,32 @@
       align-items: center;
       justify-content: space-between;
       padding-top: 10px;
-      border-top: 1px solid rgba(13,13,13,0.08);
-    }
-
-    .flight-item.alerted .flight-bottom {
-      border-top-color: rgba(255,255,255,0.2);
+      border-top: 1px solid rgba(13,13,13,0.07);
     }
 
     .flight-target {
       font-size: 10px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      opacity: 0.5;
+      color: var(--dim);
     }
 
     .flight-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+    }
+
+    .checked-time {
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      color: var(--dim);
+      opacity: 0.7;
     }
 
     .btn-sm {
-      background: none;
-      border: 1px solid rgba(13,13,13,0.15);
+      background: rgba(13,13,13,0.07);
+      border: none;
       border-radius: 100px;
       font-family: 'Space Mono', monospace;
       font-size: 9px;
@@ -227,61 +317,43 @@
       color: var(--dim);
       padding: 4px 10px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: background 0.2s;
     }
-
-    .flight-item.alerted .btn-sm {
-      border-color: rgba(255,255,255,0.3);
-      color: rgba(255,255,255,0.7);
-    }
-
-    .btn-sm:active { opacity: 0.6; }
-
-    .checked-time {
-      font-size: 9px;
-      letter-spacing: 0.06em;
-      opacity: 0.4;
-    }
+    .btn-sm:active { background: rgba(13,13,13,0.15); }
 
     /* ── BOTTOM SHEET ── */
     .sheet-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.35);
+      background: rgba(0,0,0,0.25);
       z-index: 100;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.25s;
     }
-
-    .sheet-overlay.open {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .sheet-overlay.open { opacity: 1; pointer-events: all; }
 
     .sheet {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--white);
-      border-radius: 20px 20px 0 0;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(240,248,255,0.92);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border-radius: 22px 22px 0 0;
+      border-top: 1px solid rgba(255,255,255,0.7);
       z-index: 101;
       padding: 0 18px calc(env(safe-area-inset-bottom, 16px) + 20px);
       transform: translateY(100%);
-      transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+      transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
       max-height: 92vh;
       overflow-y: auto;
     }
-
-    .sheet.open {
-      transform: translateY(0);
-    }
+    .sheet.open { transform: translateY(0); }
 
     .sheet-handle {
       width: 36px;
       height: 3px;
-      background: rgba(0,0,0,0.1);
+      background: rgba(0,0,0,0.12);
       border-radius: 2px;
       margin: 12px auto 0;
     }
@@ -290,9 +362,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 18px 0 16px;
-      border-bottom: 1px solid var(--line);
-      margin-bottom: 22px;
+      padding: 18px 0 14px;
+      border-bottom: 1px solid rgba(13,13,13,0.08);
+      margin-bottom: 20px;
     }
 
     .sheet-title {
@@ -303,7 +375,7 @@
     }
 
     .sheet-close {
-      background: rgba(0,0,0,0.06);
+      background: rgba(0,0,0,0.07);
       border: none;
       border-radius: 100px;
       font-family: 'Space Mono', monospace;
@@ -315,23 +387,23 @@
       cursor: pointer;
     }
 
-    .field { margin-bottom: 18px; }
+    .field { margin-bottom: 16px; }
 
     .field-label {
       font-size: 10px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--dim);
-      margin-bottom: 7px;
+      margin-bottom: 6px;
       display: block;
     }
 
     .field input, .field select {
       width: 100%;
-      background: rgba(0,0,0,0.04);
-      border: none;
-      border-radius: 8px;
-      color: var(--black);
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.8);
+      border-radius: 10px;
+      color: var(--fg);
       font-family: 'Space Mono', monospace;
       font-size: 13px;
       letter-spacing: 0.05em;
@@ -339,12 +411,14 @@
       padding: 11px 12px;
       outline: none;
       -webkit-appearance: none;
-      transition: background 0.2s;
+      transition: background 0.2s, border-color 0.2s;
     }
-
     .field input::placeholder { color: var(--dim); }
-    .field input:focus, .field select:focus { background: rgba(0,0,0,0.08); }
-    .field select option { background: #fff; text-transform: uppercase; }
+    .field input:focus, .field select:focus {
+      background: rgba(255,255,255,0.95);
+      border-color: rgba(255,255,255,1);
+    }
+    .field select option { background: #e8f4f8; }
 
     .field-row {
       display: grid;
@@ -354,8 +428,8 @@
 
     .submit-btn {
       width: 100%;
-      background: var(--black);
-      color: var(--white);
+      background: #0d0d0d;
+      color: #fff;
       border: none;
       border-radius: 100px;
       font-family: 'Space Mono', monospace;
@@ -368,7 +442,6 @@
       margin-top: 6px;
       transition: opacity 0.2s;
     }
-
     .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
     .submit-btn:active { opacity: 0.8; }
 
@@ -377,54 +450,62 @@
       position: fixed;
       bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
       left: 50%;
-      transform: translateX(-50%) translateY(16px);
-      background: var(--black);
-      color: var(--white);
+      transform: translateX(-50%) translateY(14px);
+      background: rgba(13,13,13,0.88);
+      backdrop-filter: blur(12px);
+      color: #fff;
       font-family: 'Space Mono', monospace;
       font-size: 10px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 9px 16px;
+      padding: 9px 18px;
       border-radius: 100px;
       white-space: nowrap;
       opacity: 0;
       pointer-events: none;
-      transition: all 0.2s;
+      transition: all 0.22s;
       z-index: 200;
     }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .spin {
-      display: inline-block;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
 
-<div class="nav-wrap">
-  <nav>
-    <div class="nav-logo">MFF ●</div>
-    <button class="notif-btn" id="notif-btn">Notify</button>
-  </nav>
+<!-- Animated gradient background -->
+<div class="gradient-bg" id="grad-bg">
+  <div class="blob blob-1" id="blob1"></div>
+  <div class="blob blob-2" id="blob2"></div>
+  <div class="blob blob-3" id="blob3"></div>
 </div>
 
-<main>
-  <div class="add-row">
-    <span class="page-label">Price Tracker</span>
-    <button class="add-btn" id="open-sheet-btn">+ Track Flight</button>
+<!-- SVG grain filter -->
+<svg class="grain" xmlns="http://www.w3.org/2000/svg">
+  <filter id="grain-filter" x="0%" y="0%" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch" result="noise"/>
+    <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise"/>
+    <feBlend in="SourceGraphic" in2="grayNoise" mode="overlay"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#grain-filter)" opacity="1"/>
+</svg>
+
+<div class="page">
+  <div class="nav-wrap">
+    <nav>
+      <div class="nav-logo">MFF ●</div>
+      <button class="notif-btn" id="notif-btn">Notify</button>
+    </nav>
   </div>
 
-  <div id="flight-list">
-    <div class="empty-state">No flights tracked.<br>Add one above.</div>
-  </div>
-</main>
+  <main>
+    <div class="add-row">
+      <span class="page-label">Price Tracker</span>
+      <button class="add-btn" id="open-sheet-btn">+ Track Flight</button>
+    </div>
+    <div id="flight-list">
+      <div class="empty-state">No flights tracked.<br>Add one above.</div>
+    </div>
+  </main>
+</div>
 
 <!-- Bottom Sheet -->
 <div class="sheet-overlay" id="overlay"></div>
@@ -434,7 +515,6 @@
     <span class="sheet-title">Track Flight</span>
     <button class="sheet-close" id="close-sheet-btn">Close</button>
   </div>
-
   <div class="field-row">
     <div class="field">
       <label class="field-label">From</label>
@@ -445,7 +525,6 @@
       <input type="text" id="destination" placeholder="NRT" maxlength="3" />
     </div>
   </div>
-
   <div class="field-row">
     <div class="field">
       <label class="field-label">Depart</label>
@@ -456,7 +535,6 @@
       <input type="date" id="return_date" />
     </div>
   </div>
-
   <div class="field-row">
     <div class="field">
       <label class="field-label">Target Price</label>
@@ -473,7 +551,6 @@
       </select>
     </div>
   </div>
-
   <button class="submit-btn" id="submit-btn">Add Flight</button>
 </div>
 
@@ -482,6 +559,111 @@
 <script>
   const VAPID_PUBLIC_KEY = "{{ vapid_public_key }}";
 
+  // ── Destination colour palettes ──
+  // Each palette: [blob1, blob2, blob3, base]
+  const PALETTES = {
+    // Japan
+    NRT: ['#f4b8d4','#c8a8f0','#a8d0f8','#dcc8f0'],
+    TYO: ['#f4b8d4','#c8a8f0','#a8d0f8','#dcc8f0'],
+    KIX: ['#f4b8d4','#c8a8f0','#a8d0f8','#dcc8f0'],
+    OSA: ['#f4b8d4','#c8a8f0','#a8d0f8','#dcc8f0'],
+    CTS: ['#c8e4f8','#e8f4ff','#a8ccf0','#d8eef8'],
+    OKA: ['#a8f0e4','#f0f090','#80d8f0','#c8f0e4'],
+    // Korea
+    ICN: ['#80c8f8','#a0f0d8','#c8e8f8','#b0e0f4'],
+    GMP: ['#80c8f8','#a0f0d8','#c8e8f8','#b0e0f4'],
+    // China
+    PEK: ['#f8c080','#f8e040','#f09060','#f8d8a0'],
+    PVG: ['#f8c080','#f8e040','#f09060','#f8d8a0'],
+    CAN: ['#f8c080','#f8e040','#f09060','#f8d8a0'],
+    // Southeast Asia
+    BKK: ['#60e8c0','#a0f870','#40d8b0','#90f0c8'],
+    SIN: ['#40d8b8','#90f040','#60e890','#78f0b0'],
+    KUL: ['#50e8a0','#90f860','#30d8a0','#70f0a8'],
+    CGK: ['#40e8b0','#a0f070','#60d898','#80f0b0'],
+    MNL: ['#f8d060','#f89840','#f0c840','#f8d890'],
+    SGN: ['#a8f070','#60e8b0','#f0f050','#b0f090'],
+    HKT: ['#40e8d8','#f0f070','#80f8b8','#a0f0d0'],
+    DPS: ['#60e8c8','#f8e870','#40d8b8','#90f0c8'],
+    // Europe
+    LHR: ['#f8e090','#f8c870','#e8d8a0','#f8e8b0'],
+    CDG: ['#f8d890','#f0b870','#e8c890','#f8e0b0'],
+    FCO: ['#f8c880','#f87060','#f8a860','#f8d8a0'],
+    AMS: ['#f8d870','#f8b850','#e8c870','#f8e0a0'],
+    FRA: ['#e8d890','#f8c070','#d8c880','#f0e0a0'],
+    BCN: ['#f8b060','#f8e050','#f89040','#f8d080'],
+    // North America
+    LAX: ['#f89060','#f8c050','#f07040','#f8c090'],
+    JFK: ['#f08060','#f8b040','#f06040','#f8b090'],
+    SFO: ['#f89870','#f8c060','#f07050','#f8c0a0'],
+    YYZ: ['#80b8f8','#c8e8f8','#a0c8f0','#b8dcf8'],
+    YVR: ['#80c8f0','#c8ecf8','#a0d0f0','#b8e4f8'],
+    // Middle East
+    DXB: ['#f8d050','#f8a030','#f8b820','#f8d880'],
+    DOH: ['#f8c840','#f8a820','#f0b040','#f8d070'],
+    // Australia
+    SYD: ['#f8d070','#f8c060','#f0e860','#f8d8a0'],
+    MEL: ['#f0d090','#f8b870','#e8c880','#f8e0b0'],
+    // Default sky
+    DEFAULT: ['#7bc8e2','#a8dff0','#ffffff','#c8ecf8'],
+    // Alert (price hit target)
+    ALERT: ['#f87070','#f8b0a0','#f89080','#f8c0b0'],
+  };
+
+  function getPalette(iata) {
+    const code = (iata || '').toUpperCase();
+    return PALETTES[code] || PALETTES.DEFAULT;
+  }
+
+  // Detect if any flights have hit alert
+  function hasAlert(flights) {
+    return flights.some(f => f.current_price && f.current_price <= f.target_price);
+  }
+
+  let currentPalette = null;
+
+  function applyPalette(palette, animate = true) {
+    if (!animate) {
+      document.getElementById('blob1').style.transition = 'none';
+      document.getElementById('blob2').style.transition = 'none';
+      document.getElementById('blob3').style.transition = 'none';
+      document.querySelector('.gradient-bg').style.transition = 'none';
+    }
+    document.querySelector('.gradient-bg').style.background = palette[3];
+    document.getElementById('blob1').style.background = palette[0];
+    document.getElementById('blob2').style.background = palette[1];
+    document.getElementById('blob3').style.background = palette[2];
+    if (!animate) {
+      setTimeout(() => {
+        document.getElementById('blob1').style.transition = '';
+        document.getElementById('blob2').style.transition = '';
+        document.getElementById('blob3').style.transition = '';
+        document.querySelector('.gradient-bg').style.transition = '';
+      }, 50);
+    }
+  }
+
+  let selectedFlightId = null;
+  let allFlights = [];
+
+  function updateBackground() {
+    if (hasAlert(allFlights)) {
+      applyPalette(PALETTES.ALERT);
+      return;
+    }
+    if (selectedFlightId) {
+      const f = allFlights.find(x => x.id === selectedFlightId);
+      if (f) { applyPalette(getPalette(f.destination)); return; }
+    }
+    if (allFlights.length > 0) {
+      // Use last added flight as default background
+      applyPalette(getPalette(allFlights[0].destination));
+    } else {
+      applyPalette(PALETTES.DEFAULT);
+    }
+  }
+
+  // ── Sheet ──
   const overlay = document.getElementById('overlay');
   const sheet = document.getElementById('sheet');
 
@@ -490,7 +672,6 @@
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
-
   function closeSheet() {
     sheet.classList.remove('open');
     overlay.classList.remove('open');
@@ -501,6 +682,7 @@
   document.getElementById('close-sheet-btn').addEventListener('click', closeSheet);
   overlay.addEventListener('click', closeSheet);
 
+  // ── Toast ──
   function showToast(msg, duration = 2500) {
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -523,24 +705,30 @@
   }
 
   function renderFlights(flights) {
+    allFlights = flights;
     const list = document.getElementById('flight-list');
     if (!flights.length) {
       list.innerHTML = '<div class="empty-state">No flights tracked.<br>Add one above.</div>';
+      updateBackground();
       return;
     }
 
     list.innerHTML = flights.map(f => {
       const alerted = f.current_price && f.current_price <= f.target_price;
-      const cls = alerted ? 'flight-item alerted' : 'flight-item';
+      const selected = f.id === selectedFlightId;
+      let cls = 'flight-item';
+      if (alerted) cls += ' alerted';
+      if (selected) cls += ' selected';
       const currentDisplay = f.current_price ? fmtPrice(f.current_price, f.currency) : '—';
+      const priceClass = alerted ? 'flight-price price-alerted' : 'flight-price';
       const tripLabel = f.return_date ? 'RT' : 'OW';
       return `
-        <div class="${cls}" data-id="${f.id}">
+        <div class="${cls}" data-id="${f.id}" onclick="selectFlight(${f.id})">
           <div class="flight-top">
             <div class="flight-route">
               ${f.origin}<span class="arrow"> → </span>${f.destination}
             </div>
-            <div class="flight-price">${currentDisplay}</div>
+            <div class="${priceClass}">${currentDisplay}</div>
           </div>
           <div class="flight-mid">
             <div class="flight-date">${f.departure_date}${f.return_date ? ' · ' + f.return_date : ''} · ${tripLabel}</div>
@@ -550,12 +738,23 @@
             <div class="flight-target">Target: ${fmtPrice(f.target_price, f.currency)}</div>
             <div class="flight-actions">
               <span class="checked-time">${timeSince(f.last_checked)}</span>
-              <button class="btn-sm" onclick="checkFlight(${f.id})">Check</button>
-              <button class="btn-sm" onclick="deleteFlight(${f.id})">Del</button>
+              <button class="btn-sm" onclick="event.stopPropagation(); checkFlight(${f.id})">Check</button>
+              <button class="btn-sm" onclick="event.stopPropagation(); deleteFlight(${f.id})">Del</button>
             </div>
           </div>
         </div>`;
     }).join('');
+
+    updateBackground();
+  }
+
+  function selectFlight(id) {
+    if (selectedFlightId === id) {
+      selectedFlightId = null;
+    } else {
+      selectedFlightId = id;
+    }
+    renderFlights(allFlights);
   }
 
   async function loadFlights() {
@@ -575,6 +774,7 @@
   }
 
   async function deleteFlight(id) {
+    if (selectedFlightId === id) selectedFlightId = null;
     try {
       await fetch(`/api/flights/${id}`, { method: 'DELETE' });
       await loadFlights();
@@ -594,6 +794,9 @@
       return;
     }
 
+    // Preview the destination palette while adding
+    applyPalette(getPalette(destination));
+
     const btn = document.getElementById('submit-btn');
     btn.disabled = true;
     btn.textContent = 'Adding...';
@@ -609,13 +812,23 @@
       showToast('Flight added');
       ['origin','destination','departure_date','return_date','target_price'].forEach(id => document.getElementById(id).value = '');
       await loadFlights();
-    } catch (e) { showToast('Failed to add'); }
-    finally {
+    } catch (e) {
+      showToast('Failed to add');
+      updateBackground();
+    } finally {
       btn.disabled = false;
       btn.textContent = 'Add Flight';
     }
   });
 
+  // Preview colour while typing destination
+  document.getElementById('destination').addEventListener('input', function() {
+    const val = this.value.trim().toUpperCase();
+    if (val.length === 3) applyPalette(getPalette(val));
+    else applyPalette(PALETTES.DEFAULT);
+  });
+
+  // ── Push Notifications ──
   const notifBtn = document.getElementById('notif-btn');
   let pushSub = null;
 
@@ -660,6 +873,7 @@
     return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
   }
 
+  applyPalette(PALETTES.DEFAULT, false);
   initPush();
   loadFlights();
 </script>
