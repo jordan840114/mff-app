@@ -38,7 +38,7 @@
       position: fixed;
       inset: -8%;
       z-index: 0;
-      background: #0e6898;
+      background: #07233c;
       transition: background 1.4s ease;
       filter: url(#lava-filter);
     }
@@ -49,44 +49,44 @@
       transition: background 1.4s ease;
     }
 
-    /* 深藍底層 */
-    #b1 { width: 52vw; height: 52vw; filter: blur(68px); opacity: 0.78;
-          top: 5%;  left: 8%;  background: #0a3870;
+    /* 深藍底層 — 極深，高 blur 讓邊緣自然消散 */
+    #b1 { width: 58vw; height: 58vw; filter: blur(88px); opacity: 0.82;
+          top: 5%;  left: 8%;  background: #050f2c;
           border-radius: 64% 36% 52% 48% / 58% 44% 56% 42%;
           animation: da 52s ease-in-out infinite; }
-    #b2 { width: 44vw; height: 44vw; filter: blur(58px); opacity: 0.74;
-          top: 52%; right: 5%; background: #0c3d7a;
+    #b2 { width: 50vw; height: 50vw; filter: blur(78px); opacity: 0.78;
+          top: 52%; right: 5%; background: #06122e;
           border-radius: 42% 58% 66% 34% / 52% 68% 32% 48%;
           animation: db 44s ease-in-out infinite; }
-    /* 中藍主體 */
-    #b3 { width: 46vw; height: 46vw; filter: blur(52px); opacity: 0.88;
-          top: 28%; left: 25%; background: #1878c0;
+    /* 過渡中藍 — 深與淺之間的橋接 */
+    #b3 { width: 52vw; height: 52vw; filter: blur(70px); opacity: 0.86;
+          top: 28%; left: 22%; background: #0d4e90;
           border-radius: 72% 28% 44% 56% / 36% 62% 38% 64%;
           animation: dc 36s ease-in-out infinite; }
-    #b4 { width: 40vw; height: 40vw; filter: blur(46px); opacity: 0.84;
-          top: 55%; left: 5%;  background: #1a6ab0;
+    #b4 { width: 46vw; height: 46vw; filter: blur(64px); opacity: 0.82;
+          top: 55%; left: 5%;  background: #105ea0;
           border-radius: 38% 62% 58% 42% / 66% 34% 62% 38%;
           animation: dd 30s ease-in-out infinite; }
-    #b8 { width: 38vw; height: 38vw; filter: blur(44px); opacity: 0.82;
-          top: 12%; left: 48%; background: #1268a8;
+    #b8 { width: 44vw; height: 44vw; filter: blur(62px); opacity: 0.80;
+          top: 12%; left: 48%; background: #0c4a84;
           border-radius: 56% 44% 36% 64% / 44% 56% 48% 52%;
           animation: dh 46s ease-in-out infinite; }
-    /* 淺藍點綴 */
-    #b5 { width: 32vw; height: 32vw; filter: blur(38px); opacity: 0.78;
-          top: 8%;  right: 18%; background: #3aa0d0;
+    /* 灰藍淡色 — 去飽和度，不搶眼 */
+    #b5 { width: 38vw; height: 38vw; filter: blur(54px); opacity: 0.72;
+          top: 8%;  right: 18%; background: #3c88a8;
           border-radius: 48% 52% 68% 32% / 60% 40% 56% 44%;
           animation: de 26s ease-in-out infinite; }
-    #b6 { width: 28vw; height: 28vw; filter: blur(34px); opacity: 0.74;
-          top: 68%; right: 22%; background: #48b0dc;
+    #b6 { width: 34vw; height: 34vw; filter: blur(48px); opacity: 0.68;
+          top: 68%; right: 22%; background: #4a95b2;
           border-radius: 66% 34% 42% 58% / 38% 62% 44% 56%;
           animation: df 38s ease-in-out infinite; }
-    /* 米白塊：面積加大、兩塊 */
-    #b7 { width: 30vw; height: 30vw; filter: blur(34px); opacity: 0.52;
-          top: 35%; left: 50%; background: #c8dce8;
+    /* 米灰白 — 更低飽和，類舊紙白 */
+    #b7 { width: 36vw; height: 36vw; filter: blur(46px); opacity: 0.46;
+          top: 35%; left: 50%; background: #7aa8bc;
           border-radius: 54% 46% 62% 38% / 48% 66% 34% 52%;
           animation: dg 32s ease-in-out infinite; }
-    #b9 { width: 24vw; height: 24vw; filter: blur(28px); opacity: 0.44;
-          top: 72%; left: 38%; background: #b8ccd8;
+    #b9 { width: 30vw; height: 30vw; filter: blur(40px); opacity: 0.40;
+          top: 72%; left: 38%; background: #6e9aac;
           border-radius: 40% 60% 54% 46% / 62% 38% 58% 42%;
           animation: di 29s ease-in-out infinite; }
 
@@ -550,6 +550,34 @@
     }
     .airport-item:active { background: rgba(255,255,255,0.5); }
 
+    /* Hierarchy drill-down */
+    .airport-nav {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 16px 0; flex-shrink: 0;
+    }
+    .airport-nav-back {
+      background: none; border: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--fg); padding: 4px 0; cursor: pointer;
+    }
+    .airport-nav-crumb {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--dim); flex: 1;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .hier-item {
+      display: flex; align-items: center;
+      padding: 14px 16px; cursor: pointer;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      transition: background 0.15s;
+    }
+    .hier-item:active { background: rgba(255,255,255,0.5); }
+    .hier-name { flex: 1; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--fg); }
+    .hier-meta { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--dim); margin-right: 8px; letter-spacing: 0.06em; }
+    .hier-arrow { color: var(--dim); font-size: 14px; }
+
     .region-header {
       font-family: 'Space Mono', monospace;
       font-size: 9px; letter-spacing: 0.14em;
@@ -700,7 +728,11 @@
   <div style="flex:1" id="modal-backdrop"></div>
   <div class="airport-panel">
     <div class="airport-panel-handle"></div>
-    <div class="airport-search-wrap">
+    <div class="airport-nav" id="airport-nav" style="display:none">
+      <button class="airport-nav-back" onclick="navBack()">← Back</button>
+      <span class="airport-nav-crumb" id="airport-nav-crumb"></span>
+    </div>
+    <div class="airport-search-wrap" id="airport-search-wrap">
       <input class="airport-search-input" id="airport-search" placeholder="搜尋機場名稱或代碼..." autocomplete="off" />
     </div>
     <div class="airport-results" id="airport-results"></div>
@@ -1047,32 +1079,70 @@
   document.getElementById('close-sheet-btn').addEventListener('click', closeSheet);
   overlay.addEventListener('click', closeSheet);
 
-  // ── Airport modal ──
+  // ── Airport hierarchy data ──
+  const REGION_META = {
+    '台灣':      { continent:'亞洲', sub:'東亞'   },
+    '日本':      { continent:'亞洲', sub:'東亞'   },
+    '韓國':      { continent:'亞洲', sub:'東亞'   },
+    '中國大陸':  { continent:'亞洲', sub:'東亞'   },
+    '香港・澳門': { continent:'亞洲', sub:'東亞'   },
+    '東南亞':    { continent:'亞洲', sub:'東南亞' },
+    '南亞':      { continent:'亞洲', sub:'南亞'   },
+    '中東':      { continent:'中東', sub:'中東'   },
+    '歐洲':      { continent:'歐洲', sub:'歐洲'   },
+    '北美洲':    { continent:'美洲', sub:'北美洲' },
+    '大洋洲':    { continent:'大洋洲', sub:'大洋洲'},
+    '非洲':      { continent:'非洲', sub:'非洲'   },
+  };
+  // For continents with sub-regions under Asia; others go continent→country directly
+  const CONTINENT_SUBS = {
+    '亞洲': ['東亞','東南亞','南亞'],
+  };
+  const SUB_REGIONS = {
+    '東亞':   ['台灣','日本','韓國','中國大陸','香港・澳門'],
+    '東南亞': ['東南亞'],
+    '南亞':   ['南亞'],
+  };
+  const CONTINENTS = ['亞洲','中東','歐洲','美洲','大洋洲','非洲'];
+  // Taiwan airports with international routes (origin only)
+  const TW_INTL = ['TPE','TSA','KHH','RMQ'];
+
+  // ── Airport modal state ──
   const airportModal = document.getElementById('airport-modal');
   let activeAirportTarget = null;
+  let navPath = []; // e.g. ['亞洲','東亞','日本']
 
   function openAirportModal(target) {
     activeAirportTarget = target;
+    navPath = [];
     document.getElementById('airport-search').value = '';
-    renderAirportResults('');
+    if (target === 'origin') {
+      document.getElementById('airport-search-wrap').style.display = 'none';
+      document.getElementById('airport-nav').style.display = 'none';
+      document.getElementById('airport-results').innerHTML =
+        AIRPORTS.filter(a => TW_INTL.includes(a.code)).map(a => airportItemHTML(a)).join('');
+    } else {
+      document.getElementById('airport-search-wrap').style.display = '';
+      renderHierarchy();
+    }
     airportModal.classList.add('open');
     document.body.style.overflow = 'hidden';
-    setTimeout(() => document.getElementById('airport-search').focus(), 300);
   }
 
   function closeAirportModal() {
     airportModal.classList.remove('open');
     document.body.style.overflow = '';
     activeAirportTarget = null;
+    document.getElementById('airport-search-wrap').style.display = '';
   }
 
   document.getElementById('modal-backdrop').addEventListener('click', closeAirportModal);
-
   document.getElementById('origin-trigger').addEventListener('click', () => openAirportModal('origin'));
   document.getElementById('destination-trigger').addEventListener('click', () => openAirportModal('destination'));
 
   function airportItemHTML(a) {
-    return `<div class="airport-item" onclick="selectAirport('${a.code}','${a.name.replace(/'/g,"\\'")}')">
+    const safeName = a.name.replace(/'/g,"\\'");
+    return `<div class="airport-item" onclick="selectAirport('${a.code}','${safeName}')">
       <div class="airport-code">${a.code}</div>
       <div class="airport-info">
         <div class="airport-name">${a.name}</div>
@@ -1081,34 +1151,131 @@
     </div>`;
   }
 
-  function renderAirportResults(q) {
-    const results = document.getElementById('airport-results');
-    if (q.length < 1) {
-      const byRegion = {};
-      AIRPORTS.forEach(a => {
-        if (!byRegion[a.region]) byRegion[a.region] = [];
-        byRegion[a.region].push(a);
-      });
-      let html = '';
-      REGION_ORDER.forEach(r => {
-        if (!byRegion[r]) return;
-        html += `<div class="region-header">${r}</div>`;
-        html += byRegion[r].map(a => airportItemHTML(a)).join('');
-      });
-      results.innerHTML = html;
+  function hierItemHTML(name, meta, onclick) {
+    return `<div class="hier-item" onclick="${onclick}">
+      <div class="hier-name">${name}</div>
+      ${meta ? `<div class="hier-meta">${meta}</div>` : ''}
+      <div class="hier-arrow">›</div>
+    </div>`;
+  }
+
+  function updateNavBar() {
+    const nav = document.getElementById('airport-nav');
+    const crumb = document.getElementById('airport-nav-crumb');
+    if (navPath.length === 0) {
+      nav.style.display = 'none';
     } else {
-      const lower = q.toLowerCase();
-      const filtered = AIRPORTS.filter(a =>
-        a.code.toLowerCase().includes(lower) ||
-        a.name.toLowerCase().includes(lower) ||
-        a.country.toLowerCase().includes(lower)
-      );
-      results.innerHTML = filtered.slice(0, 80).map(a => airportItemHTML(a)).join('');
+      nav.style.display = '';
+      crumb.textContent = navPath.join(' › ');
+    }
+  }
+
+  function drillDown(item) {
+    navPath.push(item);
+    document.getElementById('airport-search').value = '';
+    renderHierarchy();
+  }
+
+  function navBack() {
+    navPath.pop();
+    document.getElementById('airport-search').value = '';
+    renderHierarchy();
+  }
+
+  function airportsInRegions(regions) {
+    return AIRPORTS.filter(a => regions.includes(a.region));
+  }
+
+  function airportsForContinent(continent) {
+    return AIRPORTS.filter(a => {
+      const m = REGION_META[a.region];
+      return m && m.continent === continent;
+    });
+  }
+
+  function renderHierarchy() {
+    updateNavBar();
+    const results = document.getElementById('airport-results');
+    const depth = navPath.length;
+
+    if (depth === 0) {
+      // Level 0: continents
+      results.innerHTML = CONTINENTS.map(c => {
+        const cnt = airportsForContinent(c).length;
+        return hierItemHTML(c, cnt + ' 個機場', `drillDown('${c}')`);
+      }).join('');
+
+    } else if (depth === 1) {
+      const continent = navPath[0];
+      const subs = CONTINENT_SUBS[continent];
+      if (subs) {
+        // Level 1: subregions (Asia only)
+        results.innerHTML = subs.map(sub => {
+          const regions = SUB_REGIONS[sub];
+          const cnt = airportsInRegions(regions).length;
+          return hierItemHTML(sub, cnt + ' 個機場', `drillDown('${sub}')`);
+        }).join('');
+      } else {
+        // Level 1→countries directly (non-Asia)
+        const byCountry = {};
+        airportsForContinent(continent).forEach(a => {
+          if (!byCountry[a.country]) byCountry[a.country] = [];
+          byCountry[a.country].push(a);
+        });
+        results.innerHTML = Object.keys(byCountry).map(c => {
+          const cnt = byCountry[c].length;
+          return hierItemHTML(c, cnt + ' 個機場', `drillDown('${c.replace(/'/g,"\\'")}')`)
+        }).join('');
+      }
+
+    } else if (depth === 2) {
+      const continent = navPath[0];
+      const subs = CONTINENT_SUBS[continent];
+      if (subs) {
+        // Level 2: countries within subregion
+        const sub = navPath[1];
+        const regions = SUB_REGIONS[sub];
+        const byCountry = {};
+        airportsInRegions(regions).forEach(a => {
+          if (!byCountry[a.country]) byCountry[a.country] = [];
+          byCountry[a.country].push(a);
+        });
+        results.innerHTML = Object.keys(byCountry).map(c => {
+          const list = byCountry[c];
+          if (list.length === 1) {
+            return airportItemHTML(list[0]);
+          }
+          return hierItemHTML(c, list.length + ' 個機場', `drillDown('${c.replace(/'/g,"\\'")}')`)
+        }).join('');
+      } else {
+        // Level 2: airports in country (non-Asia)
+        const country = navPath[1];
+        results.innerHTML = AIRPORTS.filter(a => a.country === country).map(a => airportItemHTML(a)).join('');
+      }
+
+    } else if (depth === 3) {
+      // Level 3: airports in country (Asia path)
+      const country = navPath[2];
+      results.innerHTML = AIRPORTS.filter(a => a.country === country).map(a => airportItemHTML(a)).join('');
     }
   }
 
   document.getElementById('airport-search').addEventListener('input', function() {
-    renderAirportResults(this.value);
+    const q = this.value.trim();
+    const results = document.getElementById('airport-results');
+    if (q.length === 0) {
+      navPath = [];
+      renderHierarchy();
+      return;
+    }
+    navPath = []; updateNavBar();
+    const lower = q.toLowerCase();
+    const filtered = AIRPORTS.filter(a =>
+      a.code.toLowerCase().includes(lower) ||
+      a.name.toLowerCase().includes(lower) ||
+      a.country.toLowerCase().includes(lower)
+    );
+    results.innerHTML = filtered.slice(0, 80).map(a => airportItemHTML(a)).join('');
   });
 
   function selectAirport(code, name) {
@@ -1118,9 +1285,18 @@
     trigger.textContent = code + ' · ' + name;
     trigger.classList.remove('placeholder');
     closeAirportModal();
-    // preview background
     if (activeAirportTarget === 'destination') applyPalette(getPalette(code));
   }
+
+  // ── Return date auto-fill (departure + 1 day) ──
+  document.getElementById('departure_date').addEventListener('change', function() {
+    const retEl = document.getElementById('return_date');
+    if (this.value) {
+      const d = new Date(this.value + 'T00:00:00');
+      d.setDate(d.getDate() + 1);
+      retEl.value = d.toISOString().split('T')[0];
+    }
+  });
 
   // ── Toast ──
   function showToast(msg, d=2500) {
