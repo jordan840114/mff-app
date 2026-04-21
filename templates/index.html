@@ -177,9 +177,10 @@
     }
 
     .nav-logo {
-      width: 120px;
-      height: 120px;
+      width: 110px;
+      height: 110px;
       flex-shrink: 0;
+      object-fit: contain;
     }
 
     .notif-btn {
@@ -601,16 +602,7 @@
 <div class="page">
   <nav>
     <!-- Circular text logo -->
-    <svg class="nav-logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <path id="cp" d="M60,60 m-48,0 a48,48 0 1,1 96,0 a48,48 0 1,1 -96,0"/>
-      </defs>
-      <text font-size="13" font-family="'Space Mono',monospace" font-weight="700"
-            fill="rgba(255,255,255,0.96)" letter-spacing="2.4"
-            text-rendering="geometricPrecision">
-        <textPath href="#cp" startOffset="2%">MY✦FAV✦FLIGHT✦MY✦FAV</textPath>
-      </text>
-    </svg>
+    <img class="nav-logo" src="/static/logo.png" alt="My Fav Flight">
     <button class="notif-btn" id="notif-btn">Notify</button>
   </nav>
 
