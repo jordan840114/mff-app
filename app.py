@@ -1,5 +1,6 @@
 import os
 import json
+import time
 from flask import Flask, render_template, request, jsonify
 from apscheduler.schedulers.background import BackgroundScheduler
 from models import db, Flight, PushSubscription
@@ -10,17 +11,28 @@ from datetime import datetime
 app = Flask(__name__)
 
 database_url = os.environ.get("DATABASE_URL", "sqlite:///mff.db")
-# Render 的 PostgreSQL URL 以 postgres:// 開頭，SQLAlchemy 需要 postgresql://
 if database_url.startswith("postgres://"):
     database_url = database_url.replace("postgres://", "postgresql://", 1)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "connect_args": {"connect_timeout": 10} if "postgresql" in database_url else {},
+    "pool_pre_ping": True,
+}
 
 db.init_app(app)
 
-with app.app_context():
-    db.create_all()
+# 啟動時建立資料表，失敗時重試
+for attempt in range(5):
+    try:
+        with app.app_context():
+            db.create_all()
+        break
+    except Exception as e:
+        print(f"DB init attempt {attempt+1} failed: {e}")
+        if attempt < 4:
+            time.sleep(3)
 
 
 def send_notification(title, body):
@@ -28,14 +40,16 @@ def send_notification(title, body):
         send_push_to_all(db, PushSubscription, title, body)
 
 
-scheduler = BackgroundScheduler(timezone="Asia/Taipei")
+scheduler = BackgroundScheduler(timezone="Asia/Taipei", daemon=True)
 scheduler.add_job(
     lambda: check_all_flights(app, db, Flight, send_notification),
     "interval",
     hours=6,
-    next_run_time=None,
 )
-scheduler.start()
+try:
+    scheduler.start()
+except Exception as e:
+    print(f"Scheduler start failed: {e}")
 
 
 @app.route("/")
@@ -67,7 +81,6 @@ def add_flight():
     db.session.add(flight)
     db.session.commit()
 
-    # 新增後立即查一次價格
     try:
         price = fetch_cheapest_price(
             flight.origin, flight.destination,
