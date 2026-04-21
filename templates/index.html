@@ -50,69 +50,106 @@
       transition: background 1.4s ease;
     }
 
-    /* b1/b2: 深藍大色塊（背景層，高 blur，微移動）*/
-    #b1 { width: 130vw; height: 130vw; filter: blur(120px); opacity: 0.95;
-          top: -20%; left: -15%; background: #0a3870;
-          animation: da 48s ease-in-out infinite; }
-    #b2 { width: 110vw; height: 110vw; filter: blur(110px); opacity: 0.9;
-          bottom: -15%; right: -15%; background: #082858;
-          animation: db 42s ease-in-out infinite; }
-    #b3 { width: 70vw;  height: 70vw;  filter: blur(65px);  opacity: 0.82;
-          top: 15%;  left: 5%;  background: #1e80c8;
-          animation: dc 34s ease-in-out infinite; }
-    #b4 { width: 55vw;  height: 55vw;  filter: blur(50px);  opacity: 0.72;
-          top: 45%;  right: 8%; background: #5ab8e8;
-          animation: dd 28s ease-in-out infinite; }
-    #b5 { width: 45vw;  height: 45vw;  filter: blur(52px);  opacity: 0.34;
-          top: 25%;  right: 15%; background: #9ab4c2;
-          animation: de 38s ease-in-out infinite; }
+    #b1 { width: 62vw; height: 62vw; filter: blur(72px);  opacity: 0.92;
+          top: 5%;   left: 10%;  background: #0a3870;
+          animation: da 52s ease-in-out infinite; }
+    #b2 { width: 50vw; height: 50vw; filter: blur(62px);  opacity: 0.88;
+          top: 50%;  right: 5%;  background: #082858;
+          animation: db 44s ease-in-out infinite; }
+    #b3 { width: 38vw; height: 38vw; filter: blur(50px);  opacity: 0.82;
+          top: 30%;  left: 30%;  background: #1e80c8;
+          animation: dc 36s ease-in-out infinite; }
+    #b4 { width: 32vw; height: 32vw; filter: blur(42px);  opacity: 0.78;
+          top: 60%;  left: 8%;   background: #1a6ab0;
+          animation: dd 30s ease-in-out infinite; }
+    #b5 { width: 26vw; height: 26vw; filter: blur(36px);  opacity: 0.72;
+          top: 10%;  right: 20%; background: #4aa8d8;
+          animation: de 26s ease-in-out infinite; }
+    #b6 { width: 22vw; height: 22vw; filter: blur(32px);  opacity: 0.68;
+          top: 70%;  right: 25%; background: #5ab8e8;
+          animation: df 38s ease-in-out infinite; }
+    #b7 { width: 18vw; height: 18vw; filter: blur(28px);  opacity: 0.32;
+          top: 40%;  left: 55%;  background: #8aaec0;
+          animation: dg 32s ease-in-out infinite; }
+    #b8 { width: 20vw; height: 20vw; filter: blur(34px);  opacity: 0.76;
+          top: 15%;  left: 50%;  background: #0e4a7a;
+          animation: dh 46s ease-in-out infinite; }
 
     @keyframes da {
       0%   { transform: translate(0,0) scale(1); }
-      18%  { transform: translate(6vw, 14vh) scale(1.04); }
-      35%  { transform: translate(12vw, 4vh) scale(0.97); }
-      52%  { transform: translate(3vw, 20vh) scale(1.06); }
-      70%  { transform: translate(-8vw, 10vh) scale(0.95); }
-      85%  { transform: translate(-4vw, 2vh) scale(1.02); }
+      14%  { transform: translate(18vw, 22vh) scale(1.08); }
+      30%  { transform: translate(8vw,  42vh) scale(0.94); }
+      47%  { transform: translate(-16vw, 30vh) scale(1.1); }
+      63%  { transform: translate(-22vw,-10vh) scale(0.92); }
+      78%  { transform: translate(5vw, -25vh)  scale(1.05); }
+      92%  { transform: translate(14vw, 8vh)   scale(0.97); }
       100% { transform: translate(0,0) scale(1); }
     }
     @keyframes db {
       0%   { transform: translate(0,0) scale(1); }
-      15%  { transform: translate(-8vw,-10vh) scale(1.03); }
-      32%  { transform: translate(-14vw,-4vh) scale(0.96); }
-      50%  { transform: translate(-6vw,-18vh) scale(1.07); }
-      68%  { transform: translate(5vw,-8vh) scale(0.94); }
-      84%  { transform: translate(2vw,-2vh) scale(1.01); }
+      12%  { transform: translate(-20vw,-18vh) scale(1.06); }
+      28%  { transform: translate(-8vw, -35vh) scale(0.93); }
+      45%  { transform: translate(16vw, -28vh) scale(1.1); }
+      62%  { transform: translate(24vw,  12vh) scale(0.9); }
+      78%  { transform: translate(-4vw,  20vh) scale(1.04); }
+      91%  { transform: translate(-14vw, 5vh)  scale(0.96); }
       100% { transform: translate(0,0) scale(1); }
     }
     @keyframes dc {
       0%   { transform: translate(0,0) scale(1); }
-      12%  { transform: translate(10vw,-6vh) scale(1.08); }
-      28%  { transform: translate(20vw,-16vh) scale(0.94); }
-      44%  { transform: translate(8vw,12vh) scale(1.12); }
-      60%  { transform: translate(-14vw,20vh) scale(0.9); }
-      76%  { transform: translate(-20vw,6vh) scale(1.05); }
-      90%  { transform: translate(-6vw,-4vh) scale(0.97); }
+      11%  { transform: translate(22vw,-14vh) scale(1.12); }
+      24%  { transform: translate(14vw, 24vh) scale(0.88); }
+      40%  { transform: translate(-18vw, 18vh) scale(1.14); }
+      56%  { transform: translate(-24vw,-20vh) scale(0.9); }
+      70%  { transform: translate(8vw,  -30vh) scale(1.08); }
+      86%  { transform: translate(20vw,  6vh)  scale(0.94); }
       100% { transform: translate(0,0) scale(1); }
     }
     @keyframes dd {
       0%   { transform: translate(0,0) scale(1); }
-      14%  { transform: translate(-12vw,-8vh) scale(1.1); }
-      30%  { transform: translate(-22vw,-18vh) scale(0.92); }
-      46%  { transform: translate(-8vw,10vh) scale(1.14); }
-      62%  { transform: translate(14vw,16vh) scale(0.88); }
-      78%  { transform: translate(20vw,2vh) scale(1.06); }
-      92%  { transform: translate(6vw,-6vh) scale(0.96); }
+      13%  { transform: translate(28vw, 10vh) scale(1.1); }
+      27%  { transform: translate(20vw,-22vh) scale(0.9); }
+      43%  { transform: translate(-10vw,-32vh) scale(1.15); }
+      59%  { transform: translate(-28vw,-8vh)  scale(0.86); }
+      74%  { transform: translate(-12vw, 26vh) scale(1.06); }
+      89%  { transform: translate(10vw,  18vh) scale(0.95); }
       100% { transform: translate(0,0) scale(1); }
     }
     @keyframes de {
       0%   { transform: translate(0,0) scale(1); }
-      16%  { transform: translate(-10vw,8vh) scale(1.1); }
-      33%  { transform: translate(-22vw,18vh) scale(0.9); }
-      50%  { transform: translate(-6vw,28vh) scale(1.16); }
-      66%  { transform: translate(12vw,14vh) scale(0.87); }
-      82%  { transform: translate(18vw,-10vh) scale(1.08); }
-      94%  { transform: translate(4vw,-6vh) scale(0.95); }
+      15%  { transform: translate(-16vw, 28vh) scale(1.12); }
+      32%  { transform: translate(-26vw,-12vh) scale(0.88); }
+      48%  { transform: translate(-4vw, -36vh) scale(1.16); }
+      65%  { transform: translate(20vw, -18vh) scale(0.86); }
+      80%  { transform: translate(28vw,  16vh) scale(1.08); }
+      93%  { transform: translate(6vw,   30vh) scale(0.94); }
+      100% { transform: translate(0,0) scale(1); }
+    }
+    @keyframes df {
+      0%   { transform: translate(0,0) scale(1); }
+      16%  { transform: translate(-22vw,-24vh) scale(1.1); }
+      33%  { transform: translate(-8vw, -40vh) scale(0.9); }
+      50%  { transform: translate(18vw, -28vh) scale(1.13); }
+      66%  { transform: translate(26vw,  10vh) scale(0.88); }
+      82%  { transform: translate(4vw,   32vh) scale(1.06); }
+      94%  { transform: translate(-12vw, 16vh) scale(0.96); }
+      100% { transform: translate(0,0) scale(1); }
+    }
+    @keyframes dg {
+      0%   { transform: translate(0,0) scale(1); }
+      20%  { transform: translate(-30vw,-16vh) scale(1.14); }
+      40%  { transform: translate(-14vw, 28vh) scale(0.86); }
+      60%  { transform: translate(24vw,  32vh) scale(1.12); }
+      80%  { transform: translate(30vw, -20vh) scale(0.88); }
+      100% { transform: translate(0,0) scale(1); }
+    }
+    @keyframes dh {
+      0%   { transform: translate(0,0) scale(1); }
+      17%  { transform: translate(-24vw, 14vh) scale(1.08); }
+      36%  { transform: translate(-16vw,-26vh) scale(0.92); }
+      54%  { transform: translate(14vw, -32vh) scale(1.1); }
+      71%  { transform: translate(28vw,  8vh)  scale(0.9); }
+      87%  { transform: translate(10vw,  28vh) scale(1.05); }
       100% { transform: translate(0,0) scale(1); }
     }
 
@@ -553,6 +590,9 @@
   <div class="blob" id="b3"></div>
   <div class="blob" id="b4"></div>
   <div class="blob" id="b5"></div>
+  <div class="blob" id="b6"></div>
+  <div class="blob" id="b7"></div>
+  <div class="blob" id="b8"></div>
 </div>
 
 <!-- Grain overlay (canvas-based, injected by JS) -->
@@ -936,10 +976,14 @@
   function applyPalette(p, animate = true) {
     const dur = animate ? '' : '0s';
     const bg = document.getElementById('grad-bg');
-    ['b1','b2','b3','b4','b5'].forEach((id,i) => {
+    // b1-b5 from palette; b6=like b4, b8=like b1, b7 stays off-white
+    const mapping = ['b1','b2','b3','b4','b5','b6','b8'];
+    const pidx    = [0, 1, 2, 3, 4, 3, 0];
+    mapping.forEach((id, mi) => {
       const el = document.getElementById(id);
+      if (!el) return;
       if (!animate) el.style.transition = 'none';
-      el.style.background = p[i];
+      el.style.background = p[pidx[mi]];
       if (!animate) setTimeout(() => el.style.transition = '', 30);
     });
     if (!animate) bg.style.transition = 'none';
