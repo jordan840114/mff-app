@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#7bc8e2" />
+  <meta name="theme-color" content="#0d5a84" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="MFF" />
@@ -11,18 +11,14 @@
   <link rel="apple-touch-icon" href="/static/icon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
   <title>MFF</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --b1: #7bc8e2;
-      --b2: #a8dff0;
-      --b3: #ffffff;
-      --b4: #c8ecf8;
       --fg: #0d0d0d;
-      --dim: rgba(13,13,13,0.38);
+      --dim: rgba(13,13,13,0.42);
       --line: rgba(13,13,13,0.1);
     }
 
@@ -37,153 +33,142 @@
     }
 
     /* ── ANIMATED GRADIENT BACKGROUND ── */
-    .gradient-bg {
+    #grad-bg {
       position: fixed;
       inset: 0;
       z-index: 0;
-      background: var(--b4);
-      transition: background 1.2s ease;
+      background: #0c5a84;
+      transition: background 1.4s ease;
       overflow: hidden;
     }
 
     .blob {
       position: absolute;
       border-radius: 50%;
-      filter: blur(90px);
-      opacity: 0.75;
-      transition: background 1.2s ease, width 1.2s ease, height 1.2s ease;
       will-change: transform;
+      transition: background 1.4s ease;
     }
 
-    .blob-1 {
-      width: 65vw;
-      height: 65vw;
-      background: var(--b1);
-      top: -15%;
-      left: -10%;
-      animation: drift1 12s ease-in-out infinite;
+    #b1 { width: 140vw; height: 140vw; filter: blur(130px); opacity: 0.9;
+          top: -30%; left: -20%; background: #1878b8;
+          animation: da 14s ease-in-out infinite; }
+    #b2 { width: 120vw; height: 120vw; filter: blur(120px); opacity: 0.85;
+          bottom: -20%; right: -20%; background: #0a4a78;
+          animation: db 18s ease-in-out infinite; }
+    #b3 { width: 90vw;  height: 90vw;  filter: blur(100px); opacity: 0.7;
+          top: 20%;  left: 10%; background: #3aaad8;
+          animation: dc 11s ease-in-out infinite; }
+    #b4 { width: 80vw;  height: 80vw;  filter: blur(110px); opacity: 0.65;
+          top: 50%;  right: 5%; background: #4868c0;
+          animation: dd 15s ease-in-out infinite; }
+    #b5 { width: 70vw;  height: 70vw;  filter: blur(90px);  opacity: 0.55;
+          top: 10%;  right: 10%; background: #d0eef8;
+          animation: de 9s  ease-in-out infinite; }
+
+    @keyframes da {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33%      { transform: translate(10vw,8vh) scale(1.06); }
+      66%      { transform: translate(-6vw,12vh) scale(0.95); }
+    }
+    @keyframes db {
+      0%,100% { transform: translate(0,0) scale(1); }
+      40%      { transform: translate(-12vw,-10vh) scale(1.08); }
+      70%      { transform: translate(8vw,-5vh) scale(0.94); }
+    }
+    @keyframes dc {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50%      { transform: translate(-10vw,10vh) scale(1.1); }
+    }
+    @keyframes dd {
+      0%,100% { transform: translate(0,0) scale(1); }
+      30%      { transform: translate(-8vw,-8vh) scale(1.05); }
+      70%      { transform: translate(6vw,6vh) scale(0.96); }
+    }
+    @keyframes de {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50%      { transform: translate(8vw,12vh) scale(1.12); }
     }
 
-    .blob-2 {
-      width: 55vw;
-      height: 55vw;
-      background: var(--b2);
-      bottom: 5%;
-      right: -15%;
-      animation: drift2 16s ease-in-out infinite;
-    }
-
-    .blob-3 {
-      width: 45vw;
-      height: 45vw;
-      background: var(--b3);
-      top: 35%;
-      left: 25%;
-      animation: drift3 10s ease-in-out infinite;
-    }
-
-    @keyframes drift1 {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      33%       { transform: translate(8vw, 6vh) scale(1.08); }
-      66%       { transform: translate(-4vw, 10vh) scale(0.94); }
-    }
-    @keyframes drift2 {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      40%       { transform: translate(-10vw, -8vh) scale(1.1); }
-      70%       { transform: translate(6vw, -4vh) scale(0.92); }
-    }
-    @keyframes drift3 {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      50%       { transform: translate(-8vw, 8vh) scale(1.12); }
-    }
-
-    /* SVG grain overlay */
-    .grain {
+    /* ── GRAIN OVERLAY ── */
+    #grain {
       position: fixed;
       inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      opacity: 0.22;
-      mix-blend-mode: overlay;
-    }
-
-    /* page content sits above bg */
-    .page {
-      position: relative;
       z-index: 2;
+      pointer-events: none;
+      opacity: 0.38;
+      mix-blend-mode: overlay;
+      background-size: 180px 180px;
+      background-repeat: repeat;
     }
 
-    /* ── NAV PILL ── */
-    .nav-wrap {
-      padding: 14px 14px 0;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
+    /* ── PAGE ── */
+    .page { position: relative; z-index: 3; }
 
+    /* ── NAV ── */
     nav {
-      background: rgba(255,255,255,0.72);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 100px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 16px;
-      transition: background 0.4s;
+      padding: 18px 18px 10px;
     }
 
     .nav-logo {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--fg);
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
     }
 
     .notif-btn {
-      background: none;
-      border: none;
-      color: var(--dim);
+      background: rgba(255,255,255,0.22);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 100px;
+      color: rgba(255,255,255,0.85);
       font-family: 'Space Mono', monospace;
       font-size: 10px;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       cursor: pointer;
-      padding: 0;
-      transition: color 0.2s;
+      padding: 6px 14px;
+      transition: background 0.2s;
     }
-    .notif-btn.active { color: var(--fg); }
+    .notif-btn.active {
+      background: rgba(255,255,255,0.38);
+      color: #fff;
+    }
+    .notif-btn:active { opacity: 0.7; }
 
     /* ── MAIN ── */
-    main { padding: 28px 14px 40px; }
+    main { padding: 20px 14px 48px; }
 
     .add-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     .page-label {
       font-size: 10px;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--dim);
+      color: rgba(255,255,255,0.55);
     }
 
     .add-btn {
-      background: rgba(255,255,255,0.82);
+      background: rgba(255,255,255,0.88);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: none;
       border-radius: 100px;
       font-family: 'Space Mono', monospace;
       font-size: 10px;
+      font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--fg);
-      padding: 8px 16px;
+      padding: 9px 16px;
       cursor: pointer;
       transition: opacity 0.2s;
     }
@@ -191,46 +176,44 @@
 
     /* ── EMPTY STATE ── */
     .empty-state {
-      padding: 60px 0;
+      padding: 70px 0;
       text-align: center;
       font-size: 10px;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--dim);
-      line-height: 2.6;
+      color: rgba(255,255,255,0.4);
+      line-height: 2.8;
     }
 
     /* ── FLIGHT ITEM ── */
     .flight-item {
-      background: rgba(255,255,255,0.62);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.28);
       border-radius: 18px;
       padding: 18px;
       margin-bottom: 10px;
       cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-      border: 1px solid rgba(255,255,255,0.5);
+      transition: background 0.25s, border-color 0.25s, transform 0.15s;
+      color: #fff;
     }
-
-    .flight-item:active { transform: scale(0.98); }
-
     .flight-item.selected {
-      background: rgba(255,255,255,0.88);
-      border-color: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.3);
+      border-color: rgba(255,255,255,0.55);
     }
-
     .flight-item.alerted {
-      background: rgba(255,255,255,0.72);
+      background: rgba(230,60,50,0.55);
+      border-color: rgba(255,120,100,0.5);
     }
+    .flight-item:active { transform: scale(0.985); }
 
     .flight-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
-
     .flight-route {
       font-size: 22px;
       font-weight: 700;
@@ -238,97 +221,82 @@
       text-transform: uppercase;
       line-height: 1;
     }
-
-    .flight-route .arrow {
+    .flight-route .arr {
       font-size: 13px;
       font-weight: 400;
-      opacity: 0.35;
+      opacity: 0.45;
       margin: 0 3px;
     }
-
     .flight-price {
       font-size: 18px;
       font-weight: 700;
       letter-spacing: 0.02em;
+      text-align: right;
     }
-
-    .price-alerted { color: #d63030; }
-
     .flight-mid {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 12px;
     }
-
     .flight-date {
       font-size: 10px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--dim);
+      opacity: 0.55;
     }
-
     .alert-badge {
       font-size: 9px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      background: #d63030;
-      color: #fff;
+      background: rgba(255,255,255,0.25);
       padding: 3px 8px;
       border-radius: 100px;
     }
-
     .flight-bottom {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding-top: 10px;
-      border-top: 1px solid rgba(13,13,13,0.07);
+      border-top: 1px solid rgba(255,255,255,0.15);
     }
-
     .flight-target {
       font-size: 10px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--dim);
+      opacity: 0.5;
     }
-
     .flight-actions {
       display: flex;
       align-items: center;
       gap: 8px;
     }
-
     .checked-time {
       font-size: 9px;
-      letter-spacing: 0.06em;
-      color: var(--dim);
-      opacity: 0.7;
+      opacity: 0.45;
+      letter-spacing: 0.05em;
     }
-
     .btn-sm {
-      background: rgba(13,13,13,0.07);
-      border: none;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
       border-radius: 100px;
       font-family: 'Space Mono', monospace;
       font-size: 9px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--dim);
+      color: rgba(255,255,255,0.7);
       padding: 4px 10px;
       cursor: pointer;
       transition: background 0.2s;
     }
-    .btn-sm:active { background: rgba(13,13,13,0.15); }
+    .btn-sm:active { background: rgba(255,255,255,0.28); }
 
     /* ── BOTTOM SHEET ── */
     .sheet-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.25);
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.3);
       z-index: 100;
-      opacity: 0;
-      pointer-events: none;
+      opacity: 0; pointer-events: none;
       transition: opacity 0.25s;
     }
     .sheet-overlay.open { opacity: 1; pointer-events: all; }
@@ -336,165 +304,228 @@
     .sheet {
       position: fixed;
       bottom: 0; left: 0; right: 0;
-      background: rgba(240,248,255,0.92);
-      backdrop-filter: blur(30px);
-      -webkit-backdrop-filter: blur(30px);
+      background: rgba(220,240,255,0.9);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
       border-radius: 22px 22px 0 0;
       border-top: 1px solid rgba(255,255,255,0.7);
       z-index: 101;
-      padding: 0 18px calc(env(safe-area-inset-bottom, 16px) + 20px);
+      padding: 0 16px calc(env(safe-area-inset-bottom,16px) + 20px);
       transform: translateY(100%);
-      transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+      transition: transform 0.32s cubic-bezier(0.32,0.72,0,1);
       max-height: 92vh;
       overflow-y: auto;
     }
     .sheet.open { transform: translateY(0); }
 
     .sheet-handle {
-      width: 36px;
-      height: 3px;
-      background: rgba(0,0,0,0.12);
+      width: 36px; height: 3px;
+      background: rgba(0,0,0,0.14);
       border-radius: 2px;
       margin: 12px auto 0;
     }
-
     .sheet-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 0 14px;
-      border-bottom: 1px solid rgba(13,13,13,0.08);
-      margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 0 14px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      margin-bottom: 18px;
     }
-
     .sheet-title {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--fg);
     }
-
     .sheet-close {
-      background: rgba(0,0,0,0.07);
-      border: none;
-      border-radius: 100px;
+      background: rgba(0,0,0,0.07); border: none; border-radius: 100px;
       font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--dim);
-      padding: 5px 12px;
-      cursor: pointer;
+      font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--dim); padding: 5px 12px; cursor: pointer;
     }
 
-    .field { margin-bottom: 16px; }
-
+    .field { margin-bottom: 14px; }
     .field-label {
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--dim);
-      margin-bottom: 6px;
-      display: block;
+      font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--dim); margin-bottom: 6px; display: block;
     }
 
-    .field input, .field select {
+    /* airport picker trigger */
+    .airport-trigger {
       width: 100%;
       background: rgba(255,255,255,0.7);
-      border: 1px solid rgba(255,255,255,0.8);
+      border: 1px solid rgba(255,255,255,0.9);
+      border-radius: 10px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase;
+      color: var(--fg); padding: 11px 12px;
+      cursor: pointer; text-align: left;
+      transition: background 0.2s;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .airport-trigger.placeholder { color: var(--dim); }
+    .airport-trigger:active { background: rgba(255,255,255,0.9); }
+
+    .field input[type="date"], .field input[type="number"], .field select {
+      width: 100%;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.9);
       border-radius: 10px;
       color: var(--fg);
       font-family: 'Space Mono', monospace;
-      font-size: 13px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      padding: 11px 12px;
-      outline: none;
-      -webkit-appearance: none;
-      transition: background 0.2s, border-color 0.2s;
+      font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase;
+      padding: 11px 12px; outline: none; -webkit-appearance: none;
+      transition: background 0.2s;
     }
     .field input::placeholder { color: var(--dim); }
-    .field input:focus, .field select:focus {
-      background: rgba(255,255,255,0.95);
-      border-color: rgba(255,255,255,1);
-    }
-    .field select option { background: #e8f4f8; }
+    .field input:focus, .field select:focus { background: rgba(255,255,255,0.95); }
+    .field select option { background: #e4f2fa; }
 
-    .field-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
     .submit-btn {
-      width: 100%;
-      background: #0d0d0d;
-      color: #fff;
-      border: none;
-      border-radius: 100px;
+      width: 100%; background: #0d0d0d; color: #fff;
+      border: none; border-radius: 100px;
       font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 16px;
-      cursor: pointer;
-      margin-top: 6px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 16px; cursor: pointer; margin-top: 8px;
       transition: opacity 0.2s;
     }
     .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
     .submit-btn:active { opacity: 0.8; }
 
+    /* ── AIRPORT SEARCH MODAL ── */
+    .airport-modal {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.35);
+      display: flex; flex-direction: column;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .airport-modal.open { opacity: 1; pointer-events: all; }
+
+    .airport-panel {
+      background: rgba(225,242,255,0.95);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      border-radius: 22px 22px 0 0;
+      border-top: 1px solid rgba(255,255,255,0.7);
+      flex: 1;
+      margin-top: auto;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
+    }
+    .airport-modal.open .airport-panel { transform: translateY(0); }
+
+    .airport-panel-handle {
+      width: 36px; height: 3px;
+      background: rgba(0,0,0,0.14);
+      border-radius: 2px;
+      margin: 12px auto 0;
+      flex-shrink: 0;
+    }
+
+    .airport-search-wrap {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      flex-shrink: 0;
+    }
+
+    .airport-search-input {
+      width: 100%;
+      background: rgba(255,255,255,0.75);
+      border: 1px solid rgba(255,255,255,0.9);
+      border-radius: 100px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--fg);
+      padding: 10px 16px;
+      outline: none;
+      -webkit-appearance: none;
+    }
+    .airport-search-input::placeholder { color: var(--dim); }
+    .airport-search-input:focus { background: rgba(255,255,255,0.95); }
+
+    .airport-results {
+      overflow-y: auto;
+      flex: 1;
+      padding: 8px 0 calc(env(safe-area-inset-bottom,0px) + 16px);
+    }
+
+    .airport-item {
+      display: flex; align-items: center;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: background 0.15s;
+      gap: 12px;
+    }
+    .airport-item:active { background: rgba(255,255,255,0.5); }
+
+    .airport-code {
+      font-family: 'Space Mono', monospace;
+      font-size: 14px; font-weight: 700;
+      letter-spacing: 0.08em; color: var(--fg);
+      flex-shrink: 0; width: 38px;
+    }
+    .airport-info { flex: 1; min-width: 0; }
+    .airport-name {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px; color: var(--fg);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .airport-country {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--dim);
+      margin-top: 1px;
+    }
+
     /* ── TOAST ── */
     .toast {
       position: fixed;
-      bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
-      left: 50%;
-      transform: translateX(-50%) translateY(14px);
-      background: rgba(13,13,13,0.88);
+      bottom: calc(env(safe-area-inset-bottom,0px) + 24px);
+      left: 50%; transform: translateX(-50%) translateY(14px);
+      background: rgba(10,10,10,0.88);
       backdrop-filter: blur(12px);
       color: #fff;
       font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 9px 18px;
-      border-radius: 100px;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.22s;
-      z-index: 200;
+      font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 9px 18px; border-radius: 100px;
+      white-space: nowrap; opacity: 0; pointer-events: none;
+      transition: all 0.22s; z-index: 300;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
 
-<!-- Animated gradient background -->
-<div class="gradient-bg" id="grad-bg">
-  <div class="blob blob-1" id="blob1"></div>
-  <div class="blob blob-2" id="blob2"></div>
-  <div class="blob blob-3" id="blob3"></div>
+<!-- Gradient background -->
+<div id="grad-bg">
+  <div class="blob" id="b1"></div>
+  <div class="blob" id="b2"></div>
+  <div class="blob" id="b3"></div>
+  <div class="blob" id="b4"></div>
+  <div class="blob" id="b5"></div>
 </div>
 
-<!-- SVG grain filter -->
-<svg class="grain" xmlns="http://www.w3.org/2000/svg">
-  <filter id="grain-filter" x="0%" y="0%" width="100%" height="100%">
-    <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="4" stitchTiles="stitch" result="noise"/>
-    <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise"/>
-    <feBlend in="SourceGraphic" in2="grayNoise" mode="overlay"/>
-  </filter>
-  <rect width="100%" height="100%" filter="url(#grain-filter)" opacity="1"/>
-</svg>
+<!-- Grain overlay (canvas-based, injected by JS) -->
+<div id="grain"></div>
 
 <div class="page">
-  <div class="nav-wrap">
-    <nav>
-      <div class="nav-logo">MFF ●</div>
-      <button class="notif-btn" id="notif-btn">Notify</button>
-    </nav>
-  </div>
+  <nav>
+    <!-- Circular text logo -->
+    <svg class="nav-logo" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <path id="cp" d="M40,40 m-29,0 a29,29 0 1,1 58,0 a29,29 0 1,1 -58,0"/>
+      </defs>
+      <text font-size="8.8" font-family="'Space Mono',monospace" font-weight="700"
+            fill="rgba(255,255,255,0.92)" letter-spacing="2.2">
+        <textPath href="#cp" startOffset="0%">MY✦FAV✦FLIGHT✦MY✦FAV</textPath>
+      </text>
+    </svg>
+    <button class="notif-btn" id="notif-btn">Notify</button>
+  </nav>
 
   <main>
     <div class="add-row">
@@ -507,7 +538,7 @@
   </main>
 </div>
 
-<!-- Bottom Sheet -->
+<!-- Add flight sheet -->
 <div class="sheet-overlay" id="overlay"></div>
 <div class="sheet" id="sheet">
   <div class="sheet-handle"></div>
@@ -517,41 +548,60 @@
   </div>
   <div class="field-row">
     <div class="field">
-      <label class="field-label">From</label>
-      <input type="text" id="origin" placeholder="TPE" maxlength="3" />
+      <label class="field-label">出發地</label>
+      <button class="airport-trigger placeholder" id="origin-trigger" data-target="origin">選擇機場</button>
+      <input type="hidden" id="origin" />
     </div>
     <div class="field">
-      <label class="field-label">To</label>
-      <input type="text" id="destination" placeholder="NRT" maxlength="3" />
+      <label class="field-label">目的地</label>
+      <button class="airport-trigger placeholder" id="destination-trigger" data-target="destination">選擇機場</button>
+      <input type="hidden" id="destination" />
     </div>
   </div>
   <div class="field-row">
     <div class="field">
-      <label class="field-label">Depart</label>
+      <label class="field-label">去程日期</label>
       <input type="date" id="departure_date" />
     </div>
     <div class="field">
-      <label class="field-label">Return</label>
+      <label class="field-label">回程日期</label>
       <input type="date" id="return_date" />
     </div>
   </div>
   <div class="field-row">
     <div class="field">
-      <label class="field-label">Target Price</label>
+      <label class="field-label">目標價格</label>
       <input type="number" id="target_price" placeholder="8000" />
     </div>
     <div class="field">
-      <label class="field-label">Currency</label>
+      <label class="field-label">幣別</label>
       <select id="currency">
         <option value="TWD">TWD</option>
         <option value="USD">USD</option>
         <option value="JPY">JPY</option>
         <option value="EUR">EUR</option>
         <option value="KRW">KRW</option>
+        <option value="HKD">HKD</option>
+        <option value="SGD">SGD</option>
+        <option value="AUD">AUD</option>
+        <option value="GBP">GBP</option>
+        <option value="THB">THB</option>
       </select>
     </div>
   </div>
-  <button class="submit-btn" id="submit-btn">Add Flight</button>
+  <button class="submit-btn" id="submit-btn">新增航班</button>
+</div>
+
+<!-- Airport search modal -->
+<div class="airport-modal" id="airport-modal">
+  <div style="flex:1" id="modal-backdrop"></div>
+  <div class="airport-panel">
+    <div class="airport-panel-handle"></div>
+    <div class="airport-search-wrap">
+      <input class="airport-search-input" id="airport-search" placeholder="搜尋機場名稱或代碼..." autocomplete="off" />
+    </div>
+    <div class="airport-results" id="airport-results"></div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -559,149 +609,431 @@
 <script>
   const VAPID_PUBLIC_KEY = "{{ vapid_public_key }}";
 
-  // ── Destination colour palettes ──
-  // Each palette: [blob1, blob2, blob3, base]
+  // ── Airport data ──
+  const AIRPORTS = [
+    // 台灣
+    {code:'TPE',name:'台灣桃園國際機場',country:'台灣'},
+    {code:'TSA',name:'台北松山機場',country:'台灣'},
+    {code:'KHH',name:'高雄國際機場',country:'台灣'},
+    {code:'RMQ',name:'台中國際機場',country:'台灣'},
+    {code:'TNN',name:'台南機場',country:'台灣'},
+    {code:'TTT',name:'台東機場',country:'台灣'},
+    {code:'HUN',name:'花蓮機場',country:'台灣'},
+    {code:'MZG',name:'澎湖馬公機場',country:'台灣'},
+    // 日本
+    {code:'NRT',name:'東京成田國際機場',country:'日本'},
+    {code:'HND',name:'東京羽田機場',country:'日本'},
+    {code:'KIX',name:'大阪關西國際機場',country:'日本'},
+    {code:'ITM',name:'大阪伊丹機場',country:'日本'},
+    {code:'NGO',name:'名古屋中部國際機場',country:'日本'},
+    {code:'CTS',name:'札幌新千歲機場',country:'日本'},
+    {code:'FUK',name:'福岡機場',country:'日本'},
+    {code:'OKA',name:'沖繩那霸機場',country:'日本'},
+    {code:'SDJ',name:'仙台機場',country:'日本'},
+    {code:'HIJ',name:'廣島機場',country:'日本'},
+    {code:'UKB',name:'神戶機場',country:'日本'},
+    {code:'KOJ',name:'鹿兒島機場',country:'日本'},
+    {code:'KMJ',name:'熊本機場',country:'日本'},
+    {code:'OIT',name:'大分機場',country:'日本'},
+    {code:'KMI',name:'宮崎機場',country:'日本'},
+    {code:'MYJ',name:'松山機場',country:'日本'},
+    {code:'TAK',name:'高松機場',country:'日本'},
+    {code:'TKS',name:'德島機場',country:'日本'},
+    {code:'KCZ',name:'高知機場',country:'日本'},
+    {code:'AOJ',name:'青森機場',country:'日本'},
+    {code:'HKD',name:'函館機場',country:'日本'},
+    {code:'AKJ',name:'旭川機場',country:'日本'},
+    {code:'ISG',name:'石垣島新石垣機場',country:'日本'},
+    {code:'MMY',name:'宮古島下地島機場',country:'日本'},
+    // 韓國
+    {code:'ICN',name:'首爾仁川國際機場',country:'韓國'},
+    {code:'GMP',name:'首爾金浦機場',country:'韓國'},
+    {code:'PUS',name:'釜山金海國際機場',country:'韓國'},
+    {code:'CJU',name:'濟州國際機場',country:'韓國'},
+    {code:'TAE',name:'大邱國際機場',country:'韓國'},
+    {code:'CJJ',name:'清州國際機場',country:'韓國'},
+    // 中國
+    {code:'PEK',name:'北京首都國際機場',country:'中國'},
+    {code:'PKX',name:'北京大興國際機場',country:'中國'},
+    {code:'PVG',name:'上海浦東國際機場',country:'中國'},
+    {code:'SHA',name:'上海虹橋機場',country:'中國'},
+    {code:'CAN',name:'廣州白雲國際機場',country:'中國'},
+    {code:'SZX',name:'深圳寶安國際機場',country:'中國'},
+    {code:'CTU',name:'成都天府國際機場',country:'中國'},
+    {code:'KMG',name:'昆明長水國際機場',country:'中國'},
+    {code:'XIY',name:'西安咸陽國際機場',country:'中國'},
+    {code:'WUH',name:'武漢天河國際機場',country:'中國'},
+    {code:'CSX',name:'長沙黃花國際機場',country:'中國'},
+    {code:'HGH',name:'杭州蕭山國際機場',country:'中國'},
+    {code:'NKG',name:'南京祿口國際機場',country:'中國'},
+    {code:'CKG',name:'重慶江北國際機場',country:'中國'},
+    {code:'HAK',name:'海口美蘭國際機場',country:'中國'},
+    {code:'SYX',name:'三亞鳳凰國際機場',country:'中國'},
+    {code:'XMN',name:'廈門高崎國際機場',country:'中國'},
+    {code:'FOC',name:'福州長樂國際機場',country:'中國'},
+    {code:'TAO',name:'青島膠東國際機場',country:'中國'},
+    {code:'DLC',name:'大連周水子國際機場',country:'中國'},
+    {code:'SHE',name:'瀋陽桃仙國際機場',country:'中國'},
+    {code:'HRB',name:'哈爾濱太平國際機場',country:'中國'},
+    {code:'CGO',name:'鄭州新鄭國際機場',country:'中國'},
+    {code:'NNG',name:'南寧吳圩國際機場',country:'中國'},
+    {code:'URC',name:'烏魯木齊地窩堡機場',country:'中國'},
+    // 香港、澳門
+    {code:'HKG',name:'香港國際機場',country:'香港'},
+    {code:'MFM',name:'澳門國際機場',country:'澳門'},
+    // 東南亞
+    {code:'BKK',name:'曼谷素萬那普機場',country:'泰國'},
+    {code:'DMK',name:'曼谷廊曼機場',country:'泰國'},
+    {code:'HKT',name:'普吉國際機場',country:'泰國'},
+    {code:'CNX',name:'清邁國際機場',country:'泰國'},
+    {code:'CEI',name:'清萊機場',country:'泰國'},
+    {code:'USM',name:'蘇梅島機場',country:'泰國'},
+    {code:'KBV',name:'甲米國際機場',country:'泰國'},
+    {code:'SGN',name:'胡志明市新山一機場',country:'越南'},
+    {code:'HAN',name:'河內內排機場',country:'越南'},
+    {code:'DAD',name:'峴港國際機場',country:'越南'},
+    {code:'PQC',name:'富國島國際機場',country:'越南'},
+    {code:'SIN',name:'新加坡樟宜機場',country:'新加坡'},
+    {code:'KUL',name:'吉隆坡國際機場',country:'馬來西亞'},
+    {code:'PEN',name:'檳城國際機場',country:'馬來西亞'},
+    {code:'BKI',name:'亞庇國際機場',country:'馬來西亞'},
+    {code:'KCH',name:'古晉國際機場',country:'馬來西亞'},
+    {code:'CGK',name:'雅加達蘇加諾-哈達國際機場',country:'印尼'},
+    {code:'DPS',name:'峇里島恩古拉萊機場',country:'印尼'},
+    {code:'SUB',name:'泗水朱安達機場',country:'印尼'},
+    {code:'LOP',name:'龍目島機場',country:'印尼'},
+    {code:'MNL',name:'馬尼拉尼諾伊·阿基諾機場',country:'菲律賓'},
+    {code:'CEB',name:'宿霧馬克坦機場',country:'菲律賓'},
+    {code:'RGN',name:'仰光國際機場',country:'緬甸'},
+    {code:'REP',name:'暹粒吳哥機場',country:'柬埔寨'},
+    {code:'PNH',name:'金邊國際機場',country:'柬埔寨'},
+    {code:'VTE',name:'永珍瓦岱機場',country:'寮國'},
+    {code:'BWN',name:'斯里巴加灣機場',country:'汶萊'},
+    // 南亞
+    {code:'DEL',name:'德里英迪拉·甘地國際機場',country:'印度'},
+    {code:'BOM',name:'孟買查特拉帕蒂·希瓦吉機場',country:'印度'},
+    {code:'MAA',name:'清奈國際機場',country:'印度'},
+    {code:'BLR',name:'班加羅爾機場',country:'印度'},
+    {code:'HYD',name:'海德拉巴機場',country:'印度'},
+    {code:'CCU',name:'加爾各答機場',country:'印度'},
+    {code:'CMB',name:'可倫坡班達拉奈克機場',country:'斯里蘭卡'},
+    {code:'MLE',name:'馬累維拉納機場',country:'馬爾地夫'},
+    {code:'KTM',name:'加德滿都特里布萬機場',country:'尼泊爾'},
+    // 中東
+    {code:'DXB',name:'杜拜國際機場',country:'阿聯酋'},
+    {code:'AUH',name:'阿布達比國際機場',country:'阿聯酋'},
+    {code:'DOH',name:'多哈哈馬德國際機場',country:'卡達'},
+    {code:'IST',name:'伊斯坦堡機場',country:'土耳其'},
+    {code:'SAW',name:'伊斯坦堡薩比哈機場',country:'土耳其'},
+    {code:'TLV',name:'特拉維夫本·古里安機場',country:'以色列'},
+    {code:'RUH',name:'利雅德阿卜杜勒阿齊茲機場',country:'沙烏地阿拉伯'},
+    {code:'JED',name:'吉達阿卜杜勒阿齊茲機場',country:'沙烏地阿拉伯'},
+    {code:'MCT',name:'馬斯喀特國際機場',country:'阿曼'},
+    {code:'KWI',name:'科威特國際機場',country:'科威特'},
+    {code:'BAH',name:'巴林國際機場',country:'巴林'},
+    {code:'CAI',name:'開羅國際機場',country:'埃及'},
+    // 歐洲
+    {code:'LHR',name:'倫敦希斯洛機場',country:'英國'},
+    {code:'LGW',name:'倫敦蓋威克機場',country:'英國'},
+    {code:'STN',name:'倫敦史坦斯特機場',country:'英國'},
+    {code:'MAN',name:'曼徹斯特機場',country:'英國'},
+    {code:'EDI',name:'愛丁堡機場',country:'英國'},
+    {code:'CDG',name:'巴黎戴高樂機場',country:'法國'},
+    {code:'ORY',name:'巴黎奧利機場',country:'法國'},
+    {code:'NCE',name:'尼斯蔚藍海岸機場',country:'法國'},
+    {code:'FRA',name:'法蘭克福機場',country:'德國'},
+    {code:'MUC',name:'慕尼黑機場',country:'德國'},
+    {code:'BER',name:'柏林布蘭登堡機場',country:'德國'},
+    {code:'AMS',name:'阿姆斯特丹史基浦機場',country:'荷蘭'},
+    {code:'MAD',name:'馬德里巴拉哈斯機場',country:'西班牙'},
+    {code:'BCN',name:'巴塞隆納機場',country:'西班牙'},
+    {code:'PMI',name:'馬約卡帕爾馬機場',country:'西班牙'},
+    {code:'FCO',name:'羅馬達文西機場',country:'義大利'},
+    {code:'MXP',name:'米蘭馬爾彭薩機場',country:'義大利'},
+    {code:'VCE',name:'威尼斯馬可波羅機場',country:'義大利'},
+    {code:'ZRH',name:'蘇黎世機場',country:'瑞士'},
+    {code:'GVA',name:'日內瓦機場',country:'瑞士'},
+    {code:'VIE',name:'維也納國際機場',country:'奧地利'},
+    {code:'BRU',name:'布魯塞爾機場',country:'比利時'},
+    {code:'CPH',name:'哥本哈根機場',country:'丹麥'},
+    {code:'ARN',name:'斯德哥爾摩阿蘭達機場',country:'瑞典'},
+    {code:'OSL',name:'奧斯陸加德莫恩機場',country:'挪威'},
+    {code:'HEL',name:'赫爾辛基萬塔機場',country:'芬蘭'},
+    {code:'LIS',name:'里斯本機場',country:'葡萄牙'},
+    {code:'OPO',name:'波多機場',country:'葡萄牙'},
+    {code:'DUB',name:'都柏林機場',country:'愛爾蘭'},
+    {code:'WAW',name:'華沙肖邦機場',country:'波蘭'},
+    {code:'PRG',name:'布拉格瓦茨拉夫·哈維爾機場',country:'捷克'},
+    {code:'BUD',name:'布達佩斯費倫茨·利斯特機場',country:'匈牙利'},
+    {code:'ATH',name:'雅典埃萊夫塞里奧斯·韋尼澤洛斯機場',country:'希臘'},
+    {code:'HER',name:'伊拉克里翁尼科斯·卡扎扎基斯機場',country:'希臘'},
+    {code:'SKG',name:'塞薩洛尼基機場',country:'希臘'},
+    {code:'SVO',name:'莫斯科謝列梅捷沃機場',country:'俄羅斯'},
+    {code:'DME',name:'莫斯科多莫傑多沃機場',country:'俄羅斯'},
+    {code:'KBP',name:'基輔鮑里斯波爾機場',country:'烏克蘭'},
+    {code:'CIA',name:'羅馬錢皮諾機場',country:'義大利'},
+    {code:'LIN',name:'米蘭林納特機場',country:'義大利'},
+    // 北美
+    {code:'JFK',name:'紐約甘迺迪國際機場',country:'美國'},
+    {code:'LGA',name:'紐約拉瓜地亞機場',country:'美國'},
+    {code:'EWR',name:'紐瓦克自由國際機場',country:'美國'},
+    {code:'LAX',name:'洛杉磯國際機場',country:'美國'},
+    {code:'SFO',name:'舊金山國際機場',country:'美國'},
+    {code:'ORD',name:'芝加哥奧海爾機場',country:'美國'},
+    {code:'ATL',name:'亞特蘭大哈茲菲爾德-傑克遜機場',country:'美國'},
+    {code:'DFW',name:'達拉斯沃斯堡機場',country:'美國'},
+    {code:'MIA',name:'邁阿密國際機場',country:'美國'},
+    {code:'BOS',name:'波士頓洛根機場',country:'美國'},
+    {code:'SEA',name:'西雅圖塔科馬機場',country:'美國'},
+    {code:'DEN',name:'丹佛國際機場',country:'美國'},
+    {code:'LAS',name:'拉斯維加斯哈리機場',country:'美國'},
+    {code:'PHX',name:'鳳凰城天港機場',country:'美國'},
+    {code:'IAH',name:'休士頓喬治·布希機場',country:'美國'},
+    {code:'MSP',name:'明尼阿波利斯-聖保羅機場',country:'美國'},
+    {code:'DTW',name:'底特律韋恩縣機場',country:'美國'},
+    {code:'PHL',name:'費城國際機場',country:'美國'},
+    {code:'CLT',name:'夏洛特道格拉斯機場',country:'美國'},
+    {code:'SAN',name:'聖地牙哥國際機場',country:'美國'},
+    {code:'PDX',name:'波特蘭機場',country:'美國'},
+    {code:'HNL',name:'檀香山國際機場',country:'美國'},
+    {code:'YYZ',name:'多倫多皮爾遜機場',country:'加拿大'},
+    {code:'YVR',name:'溫哥華國際機場',country:'加拿大'},
+    {code:'YUL',name:'蒙特婁皮埃爾·埃利奧特·特魯多機場',country:'加拿大'},
+    {code:'YYC',name:'卡加里機場',country:'加拿大'},
+    {code:'MEX',name:'墨西哥城貝尼托·華雷斯機場',country:'墨西哥'},
+    {code:'CUN',name:'坎昆國際機場',country:'墨西哥'},
+    // 大洋洲
+    {code:'SYD',name:'雪梨金斯福德·史密斯機場',country:'澳洲'},
+    {code:'MEL',name:'墨爾本機場',country:'澳洲'},
+    {code:'BNE',name:'布里斯本機場',country:'澳洲'},
+    {code:'PER',name:'柏斯機場',country:'澳洲'},
+    {code:'ADL',name:'阿德萊德機場',country:'澳洲'},
+    {code:'AKL',name:'奧克蘭機場',country:'紐西蘭'},
+    {code:'CHC',name:'基督城機場',country:'紐西蘭'},
+    {code:'WLG',name:'威靈頓機場',country:'紐西蘭'},
+    // 非洲
+    {code:'JNB',name:'約翰尼斯堡奧利弗·坦博機場',country:'南非'},
+    {code:'CPT',name:'開普敦機場',country:'南非'},
+    {code:'NBO',name:'奈洛比喬莫·肯雅塔機場',country:'肯亞'},
+    {code:'CMN',name:'卡薩布蘭卡穆罕默德五世機場',country:'摩洛哥'},
+    {code:'RAK',name:'馬拉喀什門納拉機場',country:'摩洛哥'},
+    {code:'CAI',name:'開羅國際機場',country:'埃及'},
+    {code:'ADD',name:'阿迪斯阿貝巴博萊機場',country:'衣索比亞'},
+  ];
+
+  // ── Destination colour palettes [b1, b2, b3, b4, b5, base] ──
   const PALETTES = {
-    // Japan
-    NRT: ['#f4b8d4','#c8a8f0','#a8d0f8','#dcc8f0'],
-    TYO: ['#f4b8d4','#c8a8f0','#a8d0f8','#dcc8f0'],
-    KIX: ['#f4b8d4','#c8a8f0','#a8d0f8','#dcc8f0'],
-    OSA: ['#f4b8d4','#c8a8f0','#a8d0f8','#dcc8f0'],
-    CTS: ['#c8e4f8','#e8f4ff','#a8ccf0','#d8eef8'],
-    OKA: ['#a8f0e4','#f0f090','#80d8f0','#c8f0e4'],
-    // Korea
-    ICN: ['#80c8f8','#a0f0d8','#c8e8f8','#b0e0f4'],
-    GMP: ['#80c8f8','#a0f0d8','#c8e8f8','#b0e0f4'],
-    // China
-    PEK: ['#f8c080','#f8e040','#f09060','#f8d8a0'],
-    PVG: ['#f8c080','#f8e040','#f09060','#f8d8a0'],
-    CAN: ['#f8c080','#f8e040','#f09060','#f8d8a0'],
-    // Southeast Asia
-    BKK: ['#60e8c0','#a0f870','#40d8b0','#90f0c8'],
-    SIN: ['#40d8b8','#90f040','#60e890','#78f0b0'],
-    KUL: ['#50e8a0','#90f860','#30d8a0','#70f0a8'],
-    CGK: ['#40e8b0','#a0f070','#60d898','#80f0b0'],
-    MNL: ['#f8d060','#f89840','#f0c840','#f8d890'],
-    SGN: ['#a8f070','#60e8b0','#f0f050','#b0f090'],
-    HKT: ['#40e8d8','#f0f070','#80f8b8','#a0f0d0'],
-    DPS: ['#60e8c8','#f8e870','#40d8b8','#90f0c8'],
-    // Europe
-    LHR: ['#f8e090','#f8c870','#e8d8a0','#f8e8b0'],
-    CDG: ['#f8d890','#f0b870','#e8c890','#f8e0b0'],
-    FCO: ['#f8c880','#f87060','#f8a860','#f8d8a0'],
-    AMS: ['#f8d870','#f8b850','#e8c870','#f8e0a0'],
-    FRA: ['#e8d890','#f8c070','#d8c880','#f0e0a0'],
-    BCN: ['#f8b060','#f8e050','#f89040','#f8d080'],
-    // North America
-    LAX: ['#f89060','#f8c050','#f07040','#f8c090'],
-    JFK: ['#f08060','#f8b040','#f06040','#f8b090'],
-    SFO: ['#f89870','#f8c060','#f07050','#f8c0a0'],
-    YYZ: ['#80b8f8','#c8e8f8','#a0c8f0','#b8dcf8'],
-    YVR: ['#80c8f0','#c8ecf8','#a0d0f0','#b8e4f8'],
-    // Middle East
-    DXB: ['#f8d050','#f8a030','#f8b820','#f8d880'],
-    DOH: ['#f8c840','#f8a820','#f0b040','#f8d070'],
-    // Australia
-    SYD: ['#f8d070','#f8c060','#f0e860','#f8d8a0'],
-    MEL: ['#f0d090','#f8b870','#e8c880','#f8e0b0'],
+    // Japan - cherry blossom pink & soft purple
+    NRT:['#e890b8','#c070d8','#9090e8','#f0b8d8','#d8b0f0','#9060b8'],
+    HND:['#e890b8','#c070d8','#9090e8','#f0b8d8','#d8b0f0','#9060b8'],
+    KIX:['#e890b8','#c070d8','#9090e8','#f0b8d8','#d8b0f0','#9060b8'],
+    ITM:['#e890b8','#c070d8','#9090e8','#f0b8d8','#d8b0f0','#9060b8'],
+    CTS:['#90c8f0','#b8e0f8','#7090d8','#c8e8f8','#d8f0ff','#4070b0'],
+    OKA:['#40d8c0','#80f0b8','#40b8e0','#a0f8e0','#f8f880','#208880'],
+    FUK:['#e898b0','#c878d8','#9888e0','#f0b0d0','#d0b8f0','#8858a8'],
+    // Korea - cool blue & mint
+    ICN:['#6090f0','#40c8d8','#80c0f8','#90d8f8','#a8f0e0','#204890'],
+    GMP:['#6090f0','#40c8d8','#80c0f8','#90d8f8','#a8f0e0','#204890'],
+    PUS:['#5080e8','#38b8d0','#70b8f8','#88d0f0','#98e8d8','#183880'],
+    CJU:['#98e8c8','#60d0a8','#40b8e8','#b8f8e0','#80f8d0','#108068'],
+    // China - warm gold & red-orange
+    PEK:['#f8a040','#f8c820','#f87040','#f8d880','#f8e090','#b85020'],
+    PVG:['#f8a040','#f8c820','#f87040','#f8d880','#f8e090','#b85020'],
+    CAN:['#f89030','#f8b820','#f86030','#f8cc70','#f8d888','#a04018'],
+    HKG:['#f0a060','#f8d040','#e87850','#f8c888','#f8e0a0','#a06030'],
+    MFM:['#f0a060','#f8d040','#e87850','#f8c888','#f8e0a0','#a06030'],
+    // Southeast Asia - tropical teal & lime
+    BKK:['#20d8a8','#90f858','#10c8d0','#80f8c0','#c8f880','#087848'],
+    HKT:['#20d0e0','#80f898','#40b8f8','#a0f8d8','#f8f870','#0888a0'],
+    SIN:['#00d8b0','#88f840','#10c8e0','#78f8c0','#c0f870','#007060'],
+    KUL:['#18d0a0','#78f848','#28b8d8','#88f8c0','#b8f868','#086848'],
+    DPS:['#28d8b8','#98f860','#18c8e0','#88f8c8','#d0f888','#089858'],
+    BKI:['#20d8b0','#80f858','#20c0d8','#80f8c8','#c8f878','#088860'],
+    MNL:['#f8c030','#f8e038','#f89028','#f8d880','#f8f070','#b08010'],
+    SGN:['#28e0a0','#90f860','#18c8d0','#90f8c0','#c8f880','#088858'],
+    HAN:['#28d8a8','#88f858','#18c0d0','#88f8c0','#c0f878','#087850'],
+    CGK:['#30d8b0','#88f860','#20c8d8','#88f8c8','#c8f880','#107860'],
+    // Middle East - sunset gold
+    DXB:['#f8b840','#f8e028','#f89030','#f8d878','#f8f080','#b08018'],
+    DOH:['#f8c038','#f8e828','#f8a030','#f8d880','#f8f088','#b89018'],
+    AUH:['#f8b838','#f8e020','#f89028','#f8d870','#f8f078','#b08010'],
+    IST:['#f89080','#f8c060','#e87870','#f8b890','#f8d888','#b04838'],
+    // Europe - warm gold & ochre
+    LHR:['#f8d070','#f8b050','#e8b858','#f8e098','#f8e8b0','#a07028'],
+    CDG:['#f8c870','#f8a848','#e8b058','#f8d888','#f8e0a8','#987020'],
+    FRA:['#f0c860','#e8a840','#d8b048','#f0d878','#f0e0a0','#886020'],
+    AMS:['#f0d070','#f0b048','#e0c058','#f0d888','#f0e8a8','#908028'],
+    FCO:['#f8a860','#f89050','#e89850','#f8c880','#f8d898','#b06030'],
+    BCN:['#f8b060','#f8d838','#e89040','#f8c888','#f8e880','#b07020'],
+    MXP:['#f0a858','#f0c840','#e09040','#f0c880','#f0e090','#a86820'],
+    MAD:['#f8b050','#f8d030','#e89040','#f8c888','#f8e888','#b07018'],
+    VIE:['#e8b860','#e8d858','#d8a848','#e8d080','#e8e898','#887018'],
+    ZRH:['#d8c068','#d8d860','#c8a848','#d8d080','#d8e890','#787018'],
+    CPH:['#80a8e8','#a0c8f8','#6898d8','#c0d8f8','#d8e8ff','#305898'],
+    ARN:['#78a0e0','#98c0f0','#6090d0','#b8d0f0','#d0e0ff','#284888'],
+    HEL:['#68a0e0','#88c0f0','#5888d0','#b0d0f0','#c8e0ff','#204080'],
+    // North America - sunset & sky
+    LAX:['#f89060','#f8c840','#e87848','#f8b888','#f8d898','#b05028'],
+    JFK:['#f89870','#f8b848','#e88858','#f8b898','#f8d8a0','#a85830'],
+    SFO:['#f8a068','#f8c848','#e89048','#f8c090','#f8d898','#a86028'],
+    ORD:['#6888e8','#8898f8','#5878d8','#98b0f8','#c0c8f8','#283878'],
+    MIA:['#f09090','#f8d060','#e87870','#f8b8a0','#f8e098','#c04840'],
+    YVR:['#68b0e8','#98d8f8','#5898d8','#b8d8f8','#d0ecff','#286898'],
+    YYZ:['#78a8e0','#a8c8f8','#6890d8','#c0d0f8','#d8e4ff','#305090'],
+    HNL:['#40d8d0','#90f8a0','#28b8e8','#98f8e0','#c8f8d0','#108888'],
+    // Oceania - vivid blue & green
+    SYD:['#20a8e0','#60e898','#1890d0','#90d8f8','#c0f8d0','#086898'],
+    MEL:['#28a0d8','#58e090','#1888c8','#88d0f0','#b8f0c8','#086090'],
+    BNE:['#f8c050','#f8e848','#f89838','#f8d888','#f8f090','#b08820'],
+    AKL:['#30b8e8','#70f8a8','#2098d8','#98e0f8','#c8f8d8','#0878a8'],
     // Default sky
-    DEFAULT: ['#7bc8e2','#a8dff0','#ffffff','#c8ecf8'],
-    // Alert (price hit target)
-    ALERT: ['#f87070','#f8b0a0','#f89080','#f8c0b0'],
+    DEFAULT:['#1878b8','#0a4a78','#3aaad8','#4868c0','#d0eef8','#0c5a84'],
+    // Alert
+    ALERT:['#e84040','#f88050','#e86060','#f8a080','#f8c8b0','#b02020'],
   };
 
   function getPalette(iata) {
-    const code = (iata || '').toUpperCase();
-    return PALETTES[code] || PALETTES.DEFAULT;
+    return PALETTES[(iata||'').toUpperCase()] || PALETTES.DEFAULT;
   }
 
-  // Detect if any flights have hit alert
-  function hasAlert(flights) {
-    return flights.some(f => f.current_price && f.current_price <= f.target_price);
+  function applyPalette(p, animate = true) {
+    const dur = animate ? '' : '0s';
+    const bg = document.getElementById('grad-bg');
+    ['b1','b2','b3','b4','b5'].forEach((id,i) => {
+      const el = document.getElementById(id);
+      if (!animate) el.style.transition = 'none';
+      el.style.background = p[i];
+      if (!animate) setTimeout(() => el.style.transition = '', 30);
+    });
+    if (!animate) bg.style.transition = 'none';
+    bg.style.background = p[5];
+    if (!animate) setTimeout(() => bg.style.transition = '', 30);
   }
 
-  let currentPalette = null;
+  // ── Animated canvas grain ──
+  const grainEl = document.getElementById('grain');
+  const GRAIN_SIZE = 180;
 
-  function applyPalette(palette, animate = true) {
-    if (!animate) {
-      document.getElementById('blob1').style.transition = 'none';
-      document.getElementById('blob2').style.transition = 'none';
-      document.getElementById('blob3').style.transition = 'none';
-      document.querySelector('.gradient-bg').style.transition = 'none';
+  function makeGrain() {
+    const c = document.createElement('canvas');
+    c.width = GRAIN_SIZE; c.height = GRAIN_SIZE;
+    const ctx = c.getContext('2d');
+    const img = ctx.createImageData(GRAIN_SIZE, GRAIN_SIZE);
+    for (let i = 0; i < img.data.length; i += 4) {
+      const v = Math.random() * 255 | 0;
+      img.data[i] = v; img.data[i+1] = v; img.data[i+2] = v; img.data[i+3] = 255;
     }
-    document.querySelector('.gradient-bg').style.background = palette[3];
-    document.getElementById('blob1').style.background = palette[0];
-    document.getElementById('blob2').style.background = palette[1];
-    document.getElementById('blob3').style.background = palette[2];
-    if (!animate) {
-      setTimeout(() => {
-        document.getElementById('blob1').style.transition = '';
-        document.getElementById('blob2').style.transition = '';
-        document.getElementById('blob3').style.transition = '';
-        document.querySelector('.gradient-bg').style.transition = '';
-      }, 50);
-    }
+    ctx.putImageData(img, 0, 0);
+    return c.toDataURL('image/png');
   }
 
-  let selectedFlightId = null;
-  let allFlights = [];
-
-  function updateBackground() {
-    if (hasAlert(allFlights)) {
-      applyPalette(PALETTES.ALERT);
-      return;
-    }
-    if (selectedFlightId) {
-      const f = allFlights.find(x => x.id === selectedFlightId);
-      if (f) { applyPalette(getPalette(f.destination)); return; }
-    }
-    if (allFlights.length > 0) {
-      // Use last added flight as default background
-      applyPalette(getPalette(allFlights[0].destination));
-    } else {
-      applyPalette(PALETTES.DEFAULT);
-    }
+  let gFrame = 0;
+  function tickGrain() {
+    if (gFrame % 2 === 0) grainEl.style.backgroundImage = `url(${makeGrain()})`;
+    gFrame++;
+    requestAnimationFrame(tickGrain);
   }
+  tickGrain();
 
   // ── Sheet ──
   const overlay = document.getElementById('overlay');
-  const sheet = document.getElementById('sheet');
-
-  function openSheet() {
-    sheet.classList.add('open');
-    overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeSheet() {
-    sheet.classList.remove('open');
-    overlay.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
+  const sheet   = document.getElementById('sheet');
+  function openSheet()  { sheet.classList.add('open'); overlay.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeSheet() { sheet.classList.remove('open'); overlay.classList.remove('open'); document.body.style.overflow=''; }
   document.getElementById('open-sheet-btn').addEventListener('click', openSheet);
   document.getElementById('close-sheet-btn').addEventListener('click', closeSheet);
   overlay.addEventListener('click', closeSheet);
 
-  // ── Toast ──
-  function showToast(msg, duration = 2500) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), duration);
+  // ── Airport modal ──
+  const airportModal = document.getElementById('airport-modal');
+  let activeAirportTarget = null;
+
+  function openAirportModal(target) {
+    activeAirportTarget = target;
+    document.getElementById('airport-search').value = '';
+    renderAirportResults('');
+    airportModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('airport-search').focus(), 300);
   }
 
-  function fmtPrice(price, currency) {
-    if (price == null) return '—';
-    return price.toLocaleString() + ' ' + currency;
+  function closeAirportModal() {
+    airportModal.classList.remove('open');
+    document.body.style.overflow = '';
+    activeAirportTarget = null;
   }
+
+  document.getElementById('modal-backdrop').addEventListener('click', closeAirportModal);
+
+  document.getElementById('origin-trigger').addEventListener('click', () => openAirportModal('origin'));
+  document.getElementById('destination-trigger').addEventListener('click', () => openAirportModal('destination'));
+
+  function renderAirportResults(q) {
+    const lower = q.toLowerCase();
+    const filtered = q.length < 1
+      ? AIRPORTS
+      : AIRPORTS.filter(a =>
+          a.code.toLowerCase().includes(lower) ||
+          a.name.toLowerCase().includes(lower) ||
+          a.country.toLowerCase().includes(lower)
+        );
+
+    const results = document.getElementById('airport-results');
+    results.innerHTML = filtered.slice(0, 80).map(a => `
+      <div class="airport-item" onclick="selectAirport('${a.code}','${a.name.replace(/'/g,"\\'")}')">
+        <div class="airport-code">${a.code}</div>
+        <div class="airport-info">
+          <div class="airport-name">${a.name}</div>
+          <div class="airport-country">${a.country}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  document.getElementById('airport-search').addEventListener('input', function() {
+    renderAirportResults(this.value);
+  });
+
+  function selectAirport(code, name) {
+    if (!activeAirportTarget) return;
+    document.getElementById(activeAirportTarget).value = code;
+    const trigger = document.getElementById(activeAirportTarget + '-trigger');
+    trigger.textContent = code + ' · ' + name;
+    trigger.classList.remove('placeholder');
+    closeAirportModal();
+    // preview background
+    if (activeAirportTarget === 'destination') applyPalette(getPalette(code));
+  }
+
+  // ── Toast ──
+  function showToast(msg, d=2500) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), d);
+  }
+
+  function fmtPrice(p, cur) { return p == null ? '—' : p.toLocaleString() + ' ' + cur; }
 
   function timeSince(str) {
     if (!str) return 'Not checked';
-    const diff = Date.now() - new Date(str + 'Z').getTime();
-    const h = Math.floor(diff / 3600000);
+    const h = Math.floor((Date.now() - new Date(str+'Z').getTime()) / 3600000);
     if (h < 1) return 'Just now';
     if (h < 24) return h + 'h ago';
-    return Math.floor(h / 24) + 'd ago';
+    return Math.floor(h/24) + 'd ago';
+  }
+
+  let allFlights = [];
+  let selectedId = null;
+
+  function updateBg() {
+    if (allFlights.some(f => f.current_price && f.current_price <= f.target_price)) {
+      applyPalette(PALETTES.ALERT); return;
+    }
+    if (selectedId) {
+      const f = allFlights.find(x => x.id === selectedId);
+      if (f) { applyPalette(getPalette(f.destination)); return; }
+    }
+    if (allFlights.length) applyPalette(getPalette(allFlights[0].destination));
+    else applyPalette(PALETTES.DEFAULT);
   }
 
   function renderFlights(flights) {
@@ -709,126 +1041,93 @@
     const list = document.getElementById('flight-list');
     if (!flights.length) {
       list.innerHTML = '<div class="empty-state">No flights tracked.<br>Add one above.</div>';
-      updateBackground();
-      return;
+      updateBg(); return;
     }
-
     list.innerHTML = flights.map(f => {
-      const alerted = f.current_price && f.current_price <= f.target_price;
-      const selected = f.id === selectedFlightId;
-      let cls = 'flight-item';
-      if (alerted) cls += ' alerted';
-      if (selected) cls += ' selected';
-      const currentDisplay = f.current_price ? fmtPrice(f.current_price, f.currency) : '—';
-      const priceClass = alerted ? 'flight-price price-alerted' : 'flight-price';
+      const alerted  = f.current_price && f.current_price <= f.target_price;
+      const selected = f.id === selectedId;
+      let cls = 'flight-item' + (alerted ? ' alerted' : '') + (selected ? ' selected' : '');
       const tripLabel = f.return_date ? 'RT' : 'OW';
-      return `
-        <div class="${cls}" data-id="${f.id}" onclick="selectFlight(${f.id})">
-          <div class="flight-top">
-            <div class="flight-route">
-              ${f.origin}<span class="arrow"> → </span>${f.destination}
-            </div>
-            <div class="${priceClass}">${currentDisplay}</div>
+      return `<div class="${cls}" data-id="${f.id}" onclick="selectFlight(${f.id})">
+        <div class="flight-top">
+          <div class="flight-route">${f.origin}<span class="arr"> → </span>${f.destination}</div>
+          <div class="flight-price">${fmtPrice(f.current_price, f.currency)}</div>
+        </div>
+        <div class="flight-mid">
+          <div class="flight-date">${f.departure_date}${f.return_date?' · '+f.return_date:''} · ${tripLabel}</div>
+          ${alerted ? '<span class="alert-badge">↓ Below Target</span>' : ''}
+        </div>
+        <div class="flight-bottom">
+          <div class="flight-target">Target: ${fmtPrice(f.target_price, f.currency)}</div>
+          <div class="flight-actions">
+            <span class="checked-time">${timeSince(f.last_checked)}</span>
+            <button class="btn-sm" onclick="event.stopPropagation();checkFlight(${f.id})">Check</button>
+            <button class="btn-sm" onclick="event.stopPropagation();deleteFlight(${f.id})">Del</button>
           </div>
-          <div class="flight-mid">
-            <div class="flight-date">${f.departure_date}${f.return_date ? ' · ' + f.return_date : ''} · ${tripLabel}</div>
-            ${alerted ? '<span class="alert-badge">↓ Below Target</span>' : ''}
-          </div>
-          <div class="flight-bottom">
-            <div class="flight-target">Target: ${fmtPrice(f.target_price, f.currency)}</div>
-            <div class="flight-actions">
-              <span class="checked-time">${timeSince(f.last_checked)}</span>
-              <button class="btn-sm" onclick="event.stopPropagation(); checkFlight(${f.id})">Check</button>
-              <button class="btn-sm" onclick="event.stopPropagation(); deleteFlight(${f.id})">Del</button>
-            </div>
-          </div>
-        </div>`;
+        </div>
+      </div>`;
     }).join('');
-
-    updateBackground();
+    updateBg();
   }
 
   function selectFlight(id) {
-    if (selectedFlightId === id) {
-      selectedFlightId = null;
-    } else {
-      selectedFlightId = id;
-    }
+    selectedId = selectedId === id ? null : id;
     renderFlights(allFlights);
   }
 
   async function loadFlights() {
-    try {
-      const r = await fetch('/api/flights');
-      renderFlights(await r.json());
-    } catch (e) { showToast('Load failed'); }
+    try { renderFlights(await (await fetch('/api/flights')).json()); }
+    catch(e) { showToast('Load failed'); }
   }
 
   async function checkFlight(id) {
     try {
-      const r = await fetch(`/api/flights/${id}/check`, { method: 'POST' });
-      if (!r.ok) throw new Error();
+      if (!(await fetch(`/api/flights/${id}/check`, {method:'POST'})).ok) throw 0;
       showToast('Updated');
-    } catch (e) { showToast('Check failed'); }
+    } catch(e) { showToast('Check failed'); }
     await loadFlights();
   }
 
   async function deleteFlight(id) {
-    if (selectedFlightId === id) selectedFlightId = null;
-    try {
-      await fetch(`/api/flights/${id}`, { method: 'DELETE' });
-      await loadFlights();
-    } catch (e) { showToast('Delete failed'); }
+    if (selectedId === id) selectedId = null;
+    try { await fetch(`/api/flights/${id}`, {method:'DELETE'}); await loadFlights(); }
+    catch(e) { showToast('Delete failed'); }
   }
 
   document.getElementById('submit-btn').addEventListener('click', async () => {
-    const origin = document.getElementById('origin').value.trim().toUpperCase();
-    const destination = document.getElementById('destination').value.trim().toUpperCase();
-    const departure_date = document.getElementById('departure_date').value;
-    const return_date = document.getElementById('return_date').value;
-    const target_price = document.getElementById('target_price').value;
-    const currency = document.getElementById('currency').value;
+    const origin       = document.getElementById('origin').value;
+    const destination  = document.getElementById('destination').value;
+    const dep          = document.getElementById('departure_date').value;
+    const ret          = document.getElementById('return_date').value;
+    const target       = document.getElementById('target_price').value;
+    const currency     = document.getElementById('currency').value;
 
-    if (!origin || !destination || !departure_date || !target_price) {
-      showToast('Fill all required fields');
-      return;
-    }
-
-    // Preview the destination palette while adding
-    applyPalette(getPalette(destination));
+    if (!origin || !destination || !dep || !target) { showToast('請填寫所有必填欄位'); return; }
 
     const btn = document.getElementById('submit-btn');
-    btn.disabled = true;
-    btn.textContent = 'Adding...';
+    btn.disabled = true; btn.textContent = '新增中...';
 
     try {
       const r = await fetch('/api/flights', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ origin, destination, departure_date, return_date, target_price: parseInt(target_price), currency })
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({origin, destination, departure_date:dep, return_date:ret, target_price:parseInt(target), currency})
       });
-      if (!r.ok) throw new Error();
+      if (!r.ok) throw 0;
       closeSheet();
-      showToast('Flight added');
-      ['origin','destination','departure_date','return_date','target_price'].forEach(id => document.getElementById(id).value = '');
+      showToast('航班已新增');
+      ['origin','destination','departure_date','return_date','target_price'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('origin-trigger').textContent = '選擇機場';
+      document.getElementById('origin-trigger').classList.add('placeholder');
+      document.getElementById('destination-trigger').textContent = '選擇機場';
+      document.getElementById('destination-trigger').classList.add('placeholder');
       await loadFlights();
-    } catch (e) {
-      showToast('Failed to add');
-      updateBackground();
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Add Flight';
-    }
+    } catch(e) { showToast('新增失敗'); updateBg(); }
+    finally { btn.disabled = false; btn.textContent = '新增航班'; }
   });
 
-  // Preview colour while typing destination
-  document.getElementById('destination').addEventListener('input', function() {
-    const val = this.value.trim().toUpperCase();
-    if (val.length === 3) applyPalette(getPalette(val));
-    else applyPalette(PALETTES.DEFAULT);
-  });
-
-  // ── Push Notifications ──
+  // ── Push notifications ──
   const notifBtn = document.getElementById('notif-btn');
   let pushSub = null;
 
@@ -838,7 +1137,7 @@
       const reg = await navigator.serviceWorker.register('/static/sw.js');
       pushSub = await reg.pushManager.getSubscription();
       notifBtn.classList.toggle('active', !!pushSub);
-    } catch (e) {}
+    } catch(e) {}
   }
 
   notifBtn.addEventListener('click', async () => {
@@ -846,31 +1145,25 @@
     try {
       const reg = await navigator.serviceWorker.ready;
       if (pushSub) {
-        await fetch('/api/unsubscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ endpoint: pushSub.endpoint }) });
+        await fetch('/api/unsubscribe', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({endpoint: pushSub.endpoint})});
         await pushSub.unsubscribe();
-        pushSub = null;
-        notifBtn.classList.remove('active');
-        showToast('Notifications off');
+        pushSub = null; notifBtn.classList.remove('active'); showToast('通知已關閉');
       } else {
-        const perm = await Notification.requestPermission();
-        if (perm !== 'granted') { showToast('Permission denied'); return; }
+        if (await Notification.requestPermission() !== 'granted') { showToast('權限被拒絕'); return; }
         const sub = await reg.pushManager.subscribe({
           userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+          applicationServerKey: urlB64(VAPID_PUBLIC_KEY)
         });
-        await fetch('/api/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(sub) });
-        pushSub = sub;
-        notifBtn.classList.add('active');
-        showToast('Notifications on');
+        await fetch('/api/subscribe', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(sub)});
+        pushSub = sub; notifBtn.classList.add('active'); showToast('通知已開啟');
       }
-    } catch (e) { showToast('Error'); }
+    } catch(e) { showToast('Error'); }
   });
 
-  function urlBase64ToUint8Array(base64String) {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-    const rawData = atob(base64);
-    return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
+  function urlB64(s) {
+    const p = '='.repeat((4 - s.length%4)%4);
+    const b = (s+p).replace(/-/g,'+').replace(/_/g,'/');
+    return Uint8Array.from([...atob(b)].map(c=>c.charCodeAt(0)));
   }
 
   applyPalette(PALETTES.DEFAULT, false);
