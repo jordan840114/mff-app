@@ -49,44 +49,51 @@
       transition: background 1.4s ease;
     }
 
-    #b1 { width: 140vw; height: 140vw; filter: blur(130px); opacity: 0.9;
-          top: -30%; left: -20%; background: #1878b8;
-          animation: da 14s ease-in-out infinite; }
-    #b2 { width: 120vw; height: 120vw; filter: blur(120px); opacity: 0.85;
-          bottom: -20%; right: -20%; background: #0a4a78;
-          animation: db 18s ease-in-out infinite; }
-    #b3 { width: 90vw;  height: 90vw;  filter: blur(100px); opacity: 0.7;
-          top: 20%;  left: 10%; background: #3aaad8;
-          animation: dc 11s ease-in-out infinite; }
-    #b4 { width: 80vw;  height: 80vw;  filter: blur(110px); opacity: 0.65;
-          top: 50%;  right: 5%; background: #4868c0;
-          animation: dd 15s ease-in-out infinite; }
-    #b5 { width: 70vw;  height: 70vw;  filter: blur(90px);  opacity: 0.55;
-          top: 10%;  right: 10%; background: #d0eef8;
-          animation: de 9s  ease-in-out infinite; }
+    /* b1/b2: 深藍大色塊（背景層，高 blur，微移動）*/
+    #b1 { width: 130vw; height: 130vw; filter: blur(120px); opacity: 0.95;
+          top: -20%; left: -15%; background: #0a3870;
+          animation: da 18s ease-in-out infinite; }
+    #b2 { width: 110vw; height: 110vw; filter: blur(110px); opacity: 0.9;
+          bottom: -15%; right: -15%; background: #082858;
+          animation: db 22s ease-in-out infinite; }
+    /* b3: 中藍色塊（明顯流動）*/
+    #b3 { width: 70vw;  height: 70vw;  filter: blur(65px);  opacity: 0.85;
+          top: 15%;  left: 5%;  background: #1e80c8;
+          animation: dc 10s ease-in-out infinite; }
+    /* b4: 淺藍色塊（清晰流動）*/
+    #b4 { width: 55vw;  height: 55vw;  filter: blur(50px);  opacity: 0.75;
+          top: 45%;  right: 8%; background: #5ab8e8;
+          animation: dd 13s ease-in-out infinite; }
+    /* b5: 白/近白色塊（最亮、最明顯移動）*/
+    #b5 { width: 45vw;  height: 45vw;  filter: blur(40px);  opacity: 0.7;
+          top: 25%;  right: 15%; background: #c8e8f8;
+          animation: de 8s  ease-in-out infinite; }
 
     @keyframes da {
       0%,100% { transform: translate(0,0) scale(1); }
-      33%      { transform: translate(10vw,8vh) scale(1.06); }
-      66%      { transform: translate(-6vw,12vh) scale(0.95); }
+      35%      { transform: translate(8vw, 10vh) scale(1.05); }
+      70%      { transform: translate(-5vw, 15vh) scale(0.96); }
     }
     @keyframes db {
       0%,100% { transform: translate(0,0) scale(1); }
-      40%      { transform: translate(-12vw,-10vh) scale(1.08); }
-      70%      { transform: translate(8vw,-5vh) scale(0.94); }
+      40%      { transform: translate(-10vw,-12vh) scale(1.06); }
+      75%      { transform: translate(7vw, -6vh) scale(0.95); }
     }
     @keyframes dc {
       0%,100% { transform: translate(0,0) scale(1); }
-      50%      { transform: translate(-10vw,10vh) scale(1.1); }
+      30%      { transform: translate(22vw, -14vh) scale(1.1); }
+      65%      { transform: translate(-18vw, 18vh) scale(0.92); }
     }
     @keyframes dd {
       0%,100% { transform: translate(0,0) scale(1); }
-      30%      { transform: translate(-8vw,-8vh) scale(1.05); }
-      70%      { transform: translate(6vw,6vh) scale(0.96); }
+      25%      { transform: translate(-20vw,-16vh) scale(1.12); }
+      60%      { transform: translate(18vw, 14vh) scale(0.9); }
+      85%      { transform: translate(-10vw, 8vh) scale(1.05); }
     }
     @keyframes de {
       0%,100% { transform: translate(0,0) scale(1); }
-      50%      { transform: translate(8vw,12vh) scale(1.12); }
+      40%      { transform: translate(-24vw, 20vh) scale(1.15); }
+      70%      { transform: translate(20vw, -18vh) scale(0.88); }
     }
 
     /* ── GRAIN OVERLAY ── */
@@ -113,8 +120,8 @@
     }
 
     .nav-logo {
-      width: 56px;
-      height: 56px;
+      width: 72px;
+      height: 72px;
       flex-shrink: 0;
     }
 
@@ -462,6 +469,14 @@
     }
     .airport-item:active { background: rgba(255,255,255,0.5); }
 
+    .region-header {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--dim);
+      padding: 10px 16px 4px;
+      pointer-events: none;
+    }
+
     .airport-code {
       font-family: 'Space Mono', monospace;
       font-size: 14px; font-weight: 700;
@@ -610,215 +625,189 @@
   const VAPID_PUBLIC_KEY = "{{ vapid_public_key }}";
 
   // ── Airport data ──
+  const REGION_ORDER = ['台灣','日本','韓國','中國大陸','香港・澳門','東南亞','南亞','中東','歐洲','北美洲','大洋洲','非洲'];
+
   const AIRPORTS = [
-    // 台灣
-    {code:'TPE',name:'台灣桃園國際機場',country:'台灣'},
-    {code:'TSA',name:'台北松山機場',country:'台灣'},
-    {code:'KHH',name:'高雄國際機場',country:'台灣'},
-    {code:'RMQ',name:'台中國際機場',country:'台灣'},
-    {code:'TNN',name:'台南機場',country:'台灣'},
-    {code:'TTT',name:'台東機場',country:'台灣'},
-    {code:'HUN',name:'花蓮機場',country:'台灣'},
-    {code:'MZG',name:'澎湖馬公機場',country:'台灣'},
-    // 日本
-    {code:'NRT',name:'東京成田國際機場',country:'日本'},
-    {code:'HND',name:'東京羽田機場',country:'日本'},
-    {code:'KIX',name:'大阪關西國際機場',country:'日本'},
-    {code:'ITM',name:'大阪伊丹機場',country:'日本'},
-    {code:'NGO',name:'名古屋中部國際機場',country:'日本'},
-    {code:'CTS',name:'札幌新千歲機場',country:'日本'},
-    {code:'FUK',name:'福岡機場',country:'日本'},
-    {code:'OKA',name:'沖繩那霸機場',country:'日本'},
-    {code:'SDJ',name:'仙台機場',country:'日本'},
-    {code:'HIJ',name:'廣島機場',country:'日本'},
-    {code:'UKB',name:'神戶機場',country:'日本'},
-    {code:'KOJ',name:'鹿兒島機場',country:'日本'},
-    {code:'KMJ',name:'熊本機場',country:'日本'},
-    {code:'OIT',name:'大分機場',country:'日本'},
-    {code:'KMI',name:'宮崎機場',country:'日本'},
-    {code:'MYJ',name:'松山機場',country:'日本'},
-    {code:'TAK',name:'高松機場',country:'日本'},
-    {code:'TKS',name:'德島機場',country:'日本'},
-    {code:'KCZ',name:'高知機場',country:'日本'},
-    {code:'AOJ',name:'青森機場',country:'日本'},
-    {code:'HKD',name:'函館機場',country:'日本'},
-    {code:'AKJ',name:'旭川機場',country:'日本'},
-    {code:'ISG',name:'石垣島新石垣機場',country:'日本'},
-    {code:'MMY',name:'宮古島下地島機場',country:'日本'},
-    // 韓國
-    {code:'ICN',name:'首爾仁川國際機場',country:'韓國'},
-    {code:'GMP',name:'首爾金浦機場',country:'韓國'},
-    {code:'PUS',name:'釜山金海國際機場',country:'韓國'},
-    {code:'CJU',name:'濟州國際機場',country:'韓國'},
-    {code:'TAE',name:'大邱國際機場',country:'韓國'},
-    {code:'CJJ',name:'清州國際機場',country:'韓國'},
-    // 中國
-    {code:'PEK',name:'北京首都國際機場',country:'中國'},
-    {code:'PKX',name:'北京大興國際機場',country:'中國'},
-    {code:'PVG',name:'上海浦東國際機場',country:'中國'},
-    {code:'SHA',name:'上海虹橋機場',country:'中國'},
-    {code:'CAN',name:'廣州白雲國際機場',country:'中國'},
-    {code:'SZX',name:'深圳寶安國際機場',country:'中國'},
-    {code:'CTU',name:'成都天府國際機場',country:'中國'},
-    {code:'KMG',name:'昆明長水國際機場',country:'中國'},
-    {code:'XIY',name:'西安咸陽國際機場',country:'中國'},
-    {code:'WUH',name:'武漢天河國際機場',country:'中國'},
-    {code:'CSX',name:'長沙黃花國際機場',country:'中國'},
-    {code:'HGH',name:'杭州蕭山國際機場',country:'中國'},
-    {code:'NKG',name:'南京祿口國際機場',country:'中國'},
-    {code:'CKG',name:'重慶江北國際機場',country:'中國'},
-    {code:'HAK',name:'海口美蘭國際機場',country:'中國'},
-    {code:'SYX',name:'三亞鳳凰國際機場',country:'中國'},
-    {code:'XMN',name:'廈門高崎國際機場',country:'中國'},
-    {code:'FOC',name:'福州長樂國際機場',country:'中國'},
-    {code:'TAO',name:'青島膠東國際機場',country:'中國'},
-    {code:'DLC',name:'大連周水子國際機場',country:'中國'},
-    {code:'SHE',name:'瀋陽桃仙國際機場',country:'中國'},
-    {code:'HRB',name:'哈爾濱太平國際機場',country:'中國'},
-    {code:'CGO',name:'鄭州新鄭國際機場',country:'中國'},
-    {code:'NNG',name:'南寧吳圩國際機場',country:'中國'},
-    {code:'URC',name:'烏魯木齊地窩堡機場',country:'中國'},
-    // 香港、澳門
-    {code:'HKG',name:'香港國際機場',country:'香港'},
-    {code:'MFM',name:'澳門國際機場',country:'澳門'},
-    // 東南亞
-    {code:'BKK',name:'曼谷素萬那普機場',country:'泰國'},
-    {code:'DMK',name:'曼谷廊曼機場',country:'泰國'},
-    {code:'HKT',name:'普吉國際機場',country:'泰國'},
-    {code:'CNX',name:'清邁國際機場',country:'泰國'},
-    {code:'CEI',name:'清萊機場',country:'泰國'},
-    {code:'USM',name:'蘇梅島機場',country:'泰國'},
-    {code:'KBV',name:'甲米國際機場',country:'泰國'},
-    {code:'SGN',name:'胡志明市新山一機場',country:'越南'},
-    {code:'HAN',name:'河內內排機場',country:'越南'},
-    {code:'DAD',name:'峴港國際機場',country:'越南'},
-    {code:'PQC',name:'富國島國際機場',country:'越南'},
-    {code:'SIN',name:'新加坡樟宜機場',country:'新加坡'},
-    {code:'KUL',name:'吉隆坡國際機場',country:'馬來西亞'},
-    {code:'PEN',name:'檳城國際機場',country:'馬來西亞'},
-    {code:'BKI',name:'亞庇國際機場',country:'馬來西亞'},
-    {code:'KCH',name:'古晉國際機場',country:'馬來西亞'},
-    {code:'CGK',name:'雅加達蘇加諾-哈達國際機場',country:'印尼'},
-    {code:'DPS',name:'峇里島恩古拉萊機場',country:'印尼'},
-    {code:'SUB',name:'泗水朱安達機場',country:'印尼'},
-    {code:'LOP',name:'龍目島機場',country:'印尼'},
-    {code:'MNL',name:'馬尼拉尼諾伊·阿基諾機場',country:'菲律賓'},
-    {code:'CEB',name:'宿霧馬克坦機場',country:'菲律賓'},
-    {code:'RGN',name:'仰光國際機場',country:'緬甸'},
-    {code:'REP',name:'暹粒吳哥機場',country:'柬埔寨'},
-    {code:'PNH',name:'金邊國際機場',country:'柬埔寨'},
-    {code:'VTE',name:'永珍瓦岱機場',country:'寮國'},
-    {code:'BWN',name:'斯里巴加灣機場',country:'汶萊'},
-    // 南亞
-    {code:'DEL',name:'德里英迪拉·甘地國際機場',country:'印度'},
-    {code:'BOM',name:'孟買查特拉帕蒂·希瓦吉機場',country:'印度'},
-    {code:'MAA',name:'清奈國際機場',country:'印度'},
-    {code:'BLR',name:'班加羅爾機場',country:'印度'},
-    {code:'HYD',name:'海德拉巴機場',country:'印度'},
-    {code:'CCU',name:'加爾各答機場',country:'印度'},
-    {code:'CMB',name:'可倫坡班達拉奈克機場',country:'斯里蘭卡'},
-    {code:'MLE',name:'馬累維拉納機場',country:'馬爾地夫'},
-    {code:'KTM',name:'加德滿都特里布萬機場',country:'尼泊爾'},
-    // 中東
-    {code:'DXB',name:'杜拜國際機場',country:'阿聯酋'},
-    {code:'AUH',name:'阿布達比國際機場',country:'阿聯酋'},
-    {code:'DOH',name:'多哈哈馬德國際機場',country:'卡達'},
-    {code:'IST',name:'伊斯坦堡機場',country:'土耳其'},
-    {code:'SAW',name:'伊斯坦堡薩比哈機場',country:'土耳其'},
-    {code:'TLV',name:'特拉維夫本·古里安機場',country:'以色列'},
-    {code:'RUH',name:'利雅德阿卜杜勒阿齊茲機場',country:'沙烏地阿拉伯'},
-    {code:'JED',name:'吉達阿卜杜勒阿齊茲機場',country:'沙烏地阿拉伯'},
-    {code:'MCT',name:'馬斯喀特國際機場',country:'阿曼'},
-    {code:'KWI',name:'科威特國際機場',country:'科威特'},
-    {code:'BAH',name:'巴林國際機場',country:'巴林'},
-    {code:'CAI',name:'開羅國際機場',country:'埃及'},
-    // 歐洲
-    {code:'LHR',name:'倫敦希斯洛機場',country:'英國'},
-    {code:'LGW',name:'倫敦蓋威克機場',country:'英國'},
-    {code:'STN',name:'倫敦史坦斯特機場',country:'英國'},
-    {code:'MAN',name:'曼徹斯特機場',country:'英國'},
-    {code:'EDI',name:'愛丁堡機場',country:'英國'},
-    {code:'CDG',name:'巴黎戴高樂機場',country:'法國'},
-    {code:'ORY',name:'巴黎奧利機場',country:'法國'},
-    {code:'NCE',name:'尼斯蔚藍海岸機場',country:'法國'},
-    {code:'FRA',name:'法蘭克福機場',country:'德國'},
-    {code:'MUC',name:'慕尼黑機場',country:'德國'},
-    {code:'BER',name:'柏林布蘭登堡機場',country:'德國'},
-    {code:'AMS',name:'阿姆斯特丹史基浦機場',country:'荷蘭'},
-    {code:'MAD',name:'馬德里巴拉哈斯機場',country:'西班牙'},
-    {code:'BCN',name:'巴塞隆納機場',country:'西班牙'},
-    {code:'PMI',name:'馬約卡帕爾馬機場',country:'西班牙'},
-    {code:'FCO',name:'羅馬達文西機場',country:'義大利'},
-    {code:'MXP',name:'米蘭馬爾彭薩機場',country:'義大利'},
-    {code:'VCE',name:'威尼斯馬可波羅機場',country:'義大利'},
-    {code:'ZRH',name:'蘇黎世機場',country:'瑞士'},
-    {code:'GVA',name:'日內瓦機場',country:'瑞士'},
-    {code:'VIE',name:'維也納國際機場',country:'奧地利'},
-    {code:'BRU',name:'布魯塞爾機場',country:'比利時'},
-    {code:'CPH',name:'哥本哈根機場',country:'丹麥'},
-    {code:'ARN',name:'斯德哥爾摩阿蘭達機場',country:'瑞典'},
-    {code:'OSL',name:'奧斯陸加德莫恩機場',country:'挪威'},
-    {code:'HEL',name:'赫爾辛基萬塔機場',country:'芬蘭'},
-    {code:'LIS',name:'里斯本機場',country:'葡萄牙'},
-    {code:'OPO',name:'波多機場',country:'葡萄牙'},
-    {code:'DUB',name:'都柏林機場',country:'愛爾蘭'},
-    {code:'WAW',name:'華沙肖邦機場',country:'波蘭'},
-    {code:'PRG',name:'布拉格瓦茨拉夫·哈維爾機場',country:'捷克'},
-    {code:'BUD',name:'布達佩斯費倫茨·利斯特機場',country:'匈牙利'},
-    {code:'ATH',name:'雅典埃萊夫塞里奧斯·韋尼澤洛斯機場',country:'希臘'},
-    {code:'HER',name:'伊拉克里翁尼科斯·卡扎扎基斯機場',country:'希臘'},
-    {code:'SKG',name:'塞薩洛尼基機場',country:'希臘'},
-    {code:'SVO',name:'莫斯科謝列梅捷沃機場',country:'俄羅斯'},
-    {code:'DME',name:'莫斯科多莫傑多沃機場',country:'俄羅斯'},
-    {code:'KBP',name:'基輔鮑里斯波爾機場',country:'烏克蘭'},
-    {code:'CIA',name:'羅馬錢皮諾機場',country:'義大利'},
-    {code:'LIN',name:'米蘭林納特機場',country:'義大利'},
-    // 北美
-    {code:'JFK',name:'紐約甘迺迪國際機場',country:'美國'},
-    {code:'LGA',name:'紐約拉瓜地亞機場',country:'美國'},
-    {code:'EWR',name:'紐瓦克自由國際機場',country:'美國'},
-    {code:'LAX',name:'洛杉磯國際機場',country:'美國'},
-    {code:'SFO',name:'舊金山國際機場',country:'美國'},
-    {code:'ORD',name:'芝加哥奧海爾機場',country:'美國'},
-    {code:'ATL',name:'亞特蘭大哈茲菲爾德-傑克遜機場',country:'美國'},
-    {code:'DFW',name:'達拉斯沃斯堡機場',country:'美國'},
-    {code:'MIA',name:'邁阿密國際機場',country:'美國'},
-    {code:'BOS',name:'波士頓洛根機場',country:'美國'},
-    {code:'SEA',name:'西雅圖塔科馬機場',country:'美國'},
-    {code:'DEN',name:'丹佛國際機場',country:'美國'},
-    {code:'LAS',name:'拉斯維加斯哈리機場',country:'美國'},
-    {code:'PHX',name:'鳳凰城天港機場',country:'美國'},
-    {code:'IAH',name:'休士頓喬治·布希機場',country:'美國'},
-    {code:'MSP',name:'明尼阿波利斯-聖保羅機場',country:'美國'},
-    {code:'DTW',name:'底特律韋恩縣機場',country:'美國'},
-    {code:'PHL',name:'費城國際機場',country:'美國'},
-    {code:'CLT',name:'夏洛特道格拉斯機場',country:'美國'},
-    {code:'SAN',name:'聖地牙哥國際機場',country:'美國'},
-    {code:'PDX',name:'波特蘭機場',country:'美國'},
-    {code:'HNL',name:'檀香山國際機場',country:'美國'},
-    {code:'YYZ',name:'多倫多皮爾遜機場',country:'加拿大'},
-    {code:'YVR',name:'溫哥華國際機場',country:'加拿大'},
-    {code:'YUL',name:'蒙特婁皮埃爾·埃利奧特·特魯多機場',country:'加拿大'},
-    {code:'YYC',name:'卡加里機場',country:'加拿大'},
-    {code:'MEX',name:'墨西哥城貝尼托·華雷斯機場',country:'墨西哥'},
-    {code:'CUN',name:'坎昆國際機場',country:'墨西哥'},
-    // 大洋洲
-    {code:'SYD',name:'雪梨金斯福德·史密斯機場',country:'澳洲'},
-    {code:'MEL',name:'墨爾本機場',country:'澳洲'},
-    {code:'BNE',name:'布里斯本機場',country:'澳洲'},
-    {code:'PER',name:'柏斯機場',country:'澳洲'},
-    {code:'ADL',name:'阿德萊德機場',country:'澳洲'},
-    {code:'AKL',name:'奧克蘭機場',country:'紐西蘭'},
-    {code:'CHC',name:'基督城機場',country:'紐西蘭'},
-    {code:'WLG',name:'威靈頓機場',country:'紐西蘭'},
-    // 非洲
-    {code:'JNB',name:'約翰尼斯堡奧利弗·坦博機場',country:'南非'},
-    {code:'CPT',name:'開普敦機場',country:'南非'},
-    {code:'NBO',name:'奈洛比喬莫·肯雅塔機場',country:'肯亞'},
-    {code:'CMN',name:'卡薩布蘭卡穆罕默德五世機場',country:'摩洛哥'},
-    {code:'RAK',name:'馬拉喀什門納拉機場',country:'摩洛哥'},
-    {code:'CAI',name:'開羅國際機場',country:'埃及'},
-    {code:'ADD',name:'阿迪斯阿貝巴博萊機場',country:'衣索比亞'},
+    {code:'TPE',name:'台灣桃園國際機場',country:'台灣',region:'台灣'},
+    {code:'TSA',name:'台北松山機場',country:'台灣',region:'台灣'},
+    {code:'KHH',name:'高雄國際機場',country:'台灣',region:'台灣'},
+    {code:'RMQ',name:'台中國際機場',country:'台灣',region:'台灣'},
+    {code:'TNN',name:'台南機場',country:'台灣',region:'台灣'},
+    {code:'TTT',name:'台東機場',country:'台灣',region:'台灣'},
+    {code:'HUN',name:'花蓮機場',country:'台灣',region:'台灣'},
+    {code:'MZG',name:'澎湖馬公機場',country:'台灣',region:'台灣'},
+    {code:'NRT',name:'東京成田國際機場',country:'日本',region:'日本'},
+    {code:'HND',name:'東京羽田機場',country:'日本',region:'日本'},
+    {code:'KIX',name:'大阪關西國際機場',country:'日本',region:'日本'},
+    {code:'ITM',name:'大阪伊丹機場',country:'日本',region:'日本'},
+    {code:'NGO',name:'名古屋中部國際機場',country:'日本',region:'日本'},
+    {code:'CTS',name:'札幌新千歲機場',country:'日本',region:'日本'},
+    {code:'FUK',name:'福岡機場',country:'日本',region:'日本'},
+    {code:'OKA',name:'沖繩那霸機場',country:'日本',region:'日本'},
+    {code:'SDJ',name:'仙台機場',country:'日本',region:'日本'},
+    {code:'HIJ',name:'廣島機場',country:'日本',region:'日本'},
+    {code:'UKB',name:'神戶機場',country:'日本',region:'日本'},
+    {code:'KOJ',name:'鹿兒島機場',country:'日本',region:'日本'},
+    {code:'KMJ',name:'熊本機場',country:'日本',region:'日本'},
+    {code:'OIT',name:'大分機場',country:'日本',region:'日本'},
+    {code:'KMI',name:'宮崎機場',country:'日本',region:'日本'},
+    {code:'TAK',name:'高松機場',country:'日本',region:'日本'},
+    {code:'AOJ',name:'青森機場',country:'日本',region:'日本'},
+    {code:'HKD',name:'函館機場',country:'日本',region:'日本'},
+    {code:'AKJ',name:'旭川機場',country:'日本',region:'日本'},
+    {code:'ISG',name:'石垣島新石垣機場',country:'日本',region:'日本'},
+    {code:'MMY',name:'宮古島下地島機場',country:'日本',region:'日本'},
+    {code:'ICN',name:'首爾仁川國際機場',country:'韓國',region:'韓國'},
+    {code:'GMP',name:'首爾金浦機場',country:'韓國',region:'韓國'},
+    {code:'PUS',name:'釜山金海國際機場',country:'韓國',region:'韓國'},
+    {code:'CJU',name:'濟州國際機場',country:'韓國',region:'韓國'},
+    {code:'TAE',name:'大邱國際機場',country:'韓國',region:'韓國'},
+    {code:'CJJ',name:'清州國際機場',country:'韓國',region:'韓國'},
+    {code:'PEK',name:'北京首都國際機場',country:'中國',region:'中國大陸'},
+    {code:'PKX',name:'北京大興國際機場',country:'中國',region:'中國大陸'},
+    {code:'PVG',name:'上海浦東國際機場',country:'中國',region:'中國大陸'},
+    {code:'SHA',name:'上海虹橋機場',country:'中國',region:'中國大陸'},
+    {code:'CAN',name:'廣州白雲國際機場',country:'中國',region:'中國大陸'},
+    {code:'SZX',name:'深圳寶安國際機場',country:'中國',region:'中國大陸'},
+    {code:'CTU',name:'成都天府國際機場',country:'中國',region:'中國大陸'},
+    {code:'KMG',name:'昆明長水國際機場',country:'中國',region:'中國大陸'},
+    {code:'XIY',name:'西安咸陽國際機場',country:'中國',region:'中國大陸'},
+    {code:'WUH',name:'武漢天河國際機場',country:'中國',region:'中國大陸'},
+    {code:'CSX',name:'長沙黃花國際機場',country:'中國',region:'中國大陸'},
+    {code:'HGH',name:'杭州蕭山國際機場',country:'中國',region:'中國大陸'},
+    {code:'NKG',name:'南京祿口國際機場',country:'中國',region:'中國大陸'},
+    {code:'CKG',name:'重慶江北國際機場',country:'中國',region:'中國大陸'},
+    {code:'HAK',name:'海口美蘭國際機場',country:'中國',region:'中國大陸'},
+    {code:'SYX',name:'三亞鳳凰國際機場',country:'中國',region:'中國大陸'},
+    {code:'XMN',name:'廈門高崎國際機場',country:'中國',region:'中國大陸'},
+    {code:'FOC',name:'福州長樂國際機場',country:'中國',region:'中國大陸'},
+    {code:'TAO',name:'青島膠東國際機場',country:'中國',region:'中國大陸'},
+    {code:'DLC',name:'大連周水子國際機場',country:'中國',region:'中國大陸'},
+    {code:'SHE',name:'瀋陽桃仙國際機場',country:'中國',region:'中國大陸'},
+    {code:'HRB',name:'哈爾濱太平國際機場',country:'中國',region:'中國大陸'},
+    {code:'CGO',name:'鄭州新鄭國際機場',country:'中國',region:'中國大陸'},
+    {code:'NNG',name:'南寧吳圩國際機場',country:'中國',region:'中國大陸'},
+    {code:'URC',name:'烏魯木齊地窩堡機場',country:'中國',region:'中國大陸'},
+    {code:'HKG',name:'香港國際機場',country:'香港',region:'香港・澳門'},
+    {code:'MFM',name:'澳門國際機場',country:'澳門',region:'香港・澳門'},
+    {code:'BKK',name:'曼谷素萬那普機場',country:'泰國',region:'東南亞'},
+    {code:'DMK',name:'曼谷廊曼機場',country:'泰國',region:'東南亞'},
+    {code:'HKT',name:'普吉國際機場',country:'泰國',region:'東南亞'},
+    {code:'CNX',name:'清邁國際機場',country:'泰國',region:'東南亞'},
+    {code:'CEI',name:'清萊機場',country:'泰國',region:'東南亞'},
+    {code:'USM',name:'蘇梅島機場',country:'泰國',region:'東南亞'},
+    {code:'KBV',name:'甲米國際機場',country:'泰國',region:'東南亞'},
+    {code:'SGN',name:'胡志明市新山一機場',country:'越南',region:'東南亞'},
+    {code:'HAN',name:'河內內排機場',country:'越南',region:'東南亞'},
+    {code:'DAD',name:'峴港國際機場',country:'越南',region:'東南亞'},
+    {code:'PQC',name:'富國島國際機場',country:'越南',region:'東南亞'},
+    {code:'SIN',name:'新加坡樟宜機場',country:'新加坡',region:'東南亞'},
+    {code:'KUL',name:'吉隆坡國際機場',country:'馬來西亞',region:'東南亞'},
+    {code:'PEN',name:'檳城國際機場',country:'馬來西亞',region:'東南亞'},
+    {code:'BKI',name:'亞庇國際機場',country:'馬來西亞',region:'東南亞'},
+    {code:'KCH',name:'古晉國際機場',country:'馬來西亞',region:'東南亞'},
+    {code:'CGK',name:'雅加達蘇加諾-哈達國際機場',country:'印尼',region:'東南亞'},
+    {code:'DPS',name:'峇里島恩古拉萊機場',country:'印尼',region:'東南亞'},
+    {code:'SUB',name:'泗水朱安達機場',country:'印尼',region:'東南亞'},
+    {code:'LOP',name:'龍目島機場',country:'印尼',region:'東南亞'},
+    {code:'MNL',name:'馬尼拉尼諾伊·阿基諾機場',country:'菲律賓',region:'東南亞'},
+    {code:'CEB',name:'宿霧馬克坦機場',country:'菲律賓',region:'東南亞'},
+    {code:'RGN',name:'仰光國際機場',country:'緬甸',region:'東南亞'},
+    {code:'REP',name:'暹粒吳哥機場',country:'柬埔寨',region:'東南亞'},
+    {code:'PNH',name:'金邊國際機場',country:'柬埔寨',region:'東南亞'},
+    {code:'VTE',name:'永珍瓦岱機場',country:'寮國',region:'東南亞'},
+    {code:'BWN',name:'斯里巴加灣機場',country:'汶萊',region:'東南亞'},
+    {code:'DEL',name:'德里英迪拉·甘地國際機場',country:'印度',region:'南亞'},
+    {code:'BOM',name:'孟買查特拉帕蒂·希瓦吉機場',country:'印度',region:'南亞'},
+    {code:'MAA',name:'清奈國際機場',country:'印度',region:'南亞'},
+    {code:'BLR',name:'班加羅爾機場',country:'印度',region:'南亞'},
+    {code:'HYD',name:'海德拉巴機場',country:'印度',region:'南亞'},
+    {code:'CCU',name:'加爾各答機場',country:'印度',region:'南亞'},
+    {code:'CMB',name:'可倫坡班達拉奈克機場',country:'斯里蘭卡',region:'南亞'},
+    {code:'MLE',name:'馬累維拉納機場',country:'馬爾地夫',region:'南亞'},
+    {code:'KTM',name:'加德滿都特里布萬機場',country:'尼泊爾',region:'南亞'},
+    {code:'DXB',name:'杜拜國際機場',country:'阿聯酋',region:'中東'},
+    {code:'AUH',name:'阿布達比國際機場',country:'阿聯酋',region:'中東'},
+    {code:'DOH',name:'多哈哈馬德國際機場',country:'卡達',region:'中東'},
+    {code:'IST',name:'伊斯坦堡機場',country:'土耳其',region:'中東'},
+    {code:'SAW',name:'伊斯坦堡薩比哈機場',country:'土耳其',region:'中東'},
+    {code:'TLV',name:'特拉維夫本·古里安機場',country:'以色列',region:'中東'},
+    {code:'RUH',name:'利雅德阿卜杜勒阿齊茲機場',country:'沙烏地阿拉伯',region:'中東'},
+    {code:'JED',name:'吉達阿卜杜勒阿齊茲機場',country:'沙烏地阿拉伯',region:'中東'},
+    {code:'MCT',name:'馬斯喀特國際機場',country:'阿曼',region:'中東'},
+    {code:'KWI',name:'科威特國際機場',country:'科威特',region:'中東'},
+    {code:'BAH',name:'巴林國際機場',country:'巴林',region:'中東'},
+    {code:'CAI',name:'開羅國際機場',country:'埃及',region:'中東'},
+    {code:'LHR',name:'倫敦希斯洛機場',country:'英國',region:'歐洲'},
+    {code:'LGW',name:'倫敦蓋威克機場',country:'英國',region:'歐洲'},
+    {code:'STN',name:'倫敦史坦斯特機場',country:'英國',region:'歐洲'},
+    {code:'MAN',name:'曼徹斯特機場',country:'英國',region:'歐洲'},
+    {code:'EDI',name:'愛丁堡機場',country:'英國',region:'歐洲'},
+    {code:'CDG',name:'巴黎戴高樂機場',country:'法國',region:'歐洲'},
+    {code:'ORY',name:'巴黎奧利機場',country:'法國',region:'歐洲'},
+    {code:'NCE',name:'尼斯蔚藍海岸機場',country:'法國',region:'歐洲'},
+    {code:'FRA',name:'法蘭克福機場',country:'德國',region:'歐洲'},
+    {code:'MUC',name:'慕尼黑機場',country:'德國',region:'歐洲'},
+    {code:'BER',name:'柏林布蘭登堡機場',country:'德國',region:'歐洲'},
+    {code:'AMS',name:'阿姆斯特丹史基浦機場',country:'荷蘭',region:'歐洲'},
+    {code:'MAD',name:'馬德里巴拉哈斯機場',country:'西班牙',region:'歐洲'},
+    {code:'BCN',name:'巴塞隆納機場',country:'西班牙',region:'歐洲'},
+    {code:'PMI',name:'馬約卡帕爾馬機場',country:'西班牙',region:'歐洲'},
+    {code:'FCO',name:'羅馬達文西機場',country:'義大利',region:'歐洲'},
+    {code:'MXP',name:'米蘭馬爾彭薩機場',country:'義大利',region:'歐洲'},
+    {code:'VCE',name:'威尼斯馬可波羅機場',country:'義大利',region:'歐洲'},
+    {code:'ZRH',name:'蘇黎世機場',country:'瑞士',region:'歐洲'},
+    {code:'GVA',name:'日內瓦機場',country:'瑞士',region:'歐洲'},
+    {code:'VIE',name:'維也納國際機場',country:'奧地利',region:'歐洲'},
+    {code:'BRU',name:'布魯塞爾機場',country:'比利時',region:'歐洲'},
+    {code:'CPH',name:'哥本哈根機場',country:'丹麥',region:'歐洲'},
+    {code:'ARN',name:'斯德哥爾摩阿蘭達機場',country:'瑞典',region:'歐洲'},
+    {code:'OSL',name:'奧斯陸加德莫恩機場',country:'挪威',region:'歐洲'},
+    {code:'HEL',name:'赫爾辛基萬塔機場',country:'芬蘭',region:'歐洲'},
+    {code:'LIS',name:'里斯本機場',country:'葡萄牙',region:'歐洲'},
+    {code:'OPO',name:'波多機場',country:'葡萄牙',region:'歐洲'},
+    {code:'DUB',name:'都柏林機場',country:'愛爾蘭',region:'歐洲'},
+    {code:'WAW',name:'華沙肖邦機場',country:'波蘭',region:'歐洲'},
+    {code:'PRG',name:'布拉格瓦茨拉夫·哈維爾機場',country:'捷克',region:'歐洲'},
+    {code:'BUD',name:'布達佩斯費倫茨·利斯特機場',country:'匈牙利',region:'歐洲'},
+    {code:'ATH',name:'雅典埃萊夫塞里奧斯·韋尼澤洛斯機場',country:'希臘',region:'歐洲'},
+    {code:'HER',name:'伊拉克里翁機場',country:'希臘',region:'歐洲'},
+    {code:'SVO',name:'莫斯科謝列梅捷沃機場',country:'俄羅斯',region:'歐洲'},
+    {code:'JFK',name:'紐約甘迺迪國際機場',country:'美國',region:'北美洲'},
+    {code:'LGA',name:'紐約拉瓜地亞機場',country:'美國',region:'北美洲'},
+    {code:'EWR',name:'紐瓦克自由國際機場',country:'美國',region:'北美洲'},
+    {code:'LAX',name:'洛杉磯國際機場',country:'美國',region:'北美洲'},
+    {code:'SFO',name:'舊金山國際機場',country:'美國',region:'北美洲'},
+    {code:'ORD',name:'芝加哥奧海爾機場',country:'美國',region:'北美洲'},
+    {code:'ATL',name:'亞特蘭大哈茲菲爾德-傑克遜機場',country:'美國',region:'北美洲'},
+    {code:'DFW',name:'達拉斯沃斯堡機場',country:'美國',region:'北美洲'},
+    {code:'MIA',name:'邁阿密國際機場',country:'美國',region:'北美洲'},
+    {code:'BOS',name:'波士頓洛根機場',country:'美國',region:'北美洲'},
+    {code:'SEA',name:'西雅圖塔科馬機場',country:'美國',region:'北美洲'},
+    {code:'DEN',name:'丹佛國際機場',country:'美國',region:'北美洲'},
+    {code:'LAS',name:'拉斯維加斯麥卡倫機場',country:'美國',region:'北美洲'},
+    {code:'PHX',name:'鳳凰城天港機場',country:'美國',region:'北美洲'},
+    {code:'IAH',name:'休士頓喬治·布希機場',country:'美國',region:'北美洲'},
+    {code:'HNL',name:'檀香山國際機場',country:'美國',region:'北美洲'},
+    {code:'YYZ',name:'多倫多皮爾遜機場',country:'加拿大',region:'北美洲'},
+    {code:'YVR',name:'溫哥華國際機場',country:'加拿大',region:'北美洲'},
+    {code:'YUL',name:'蒙特婁皮埃爾·埃利奧特·特魯多機場',country:'加拿大',region:'北美洲'},
+    {code:'YYC',name:'卡加里機場',country:'加拿大',region:'北美洲'},
+    {code:'MEX',name:'墨西哥城貝尼托·華雷斯機場',country:'墨西哥',region:'北美洲'},
+    {code:'CUN',name:'坎昆國際機場',country:'墨西哥',region:'北美洲'},
+    {code:'SYD',name:'雪梨金斯福德·史密斯機場',country:'澳洲',region:'大洋洲'},
+    {code:'MEL',name:'墨爾本機場',country:'澳洲',region:'大洋洲'},
+    {code:'BNE',name:'布里斯本機場',country:'澳洲',region:'大洋洲'},
+    {code:'PER',name:'柏斯機場',country:'澳洲',region:'大洋洲'},
+    {code:'ADL',name:'阿德萊德機場',country:'澳洲',region:'大洋洲'},
+    {code:'AKL',name:'奧克蘭機場',country:'紐西蘭',region:'大洋洲'},
+    {code:'CHC',name:'基督城機場',country:'紐西蘭',region:'大洋洲'},
+    {code:'WLG',name:'威靈頓機場',country:'紐西蘭',region:'大洋洲'},
+    {code:'JNB',name:'約翰尼斯堡奧利弗·坦博機場',country:'南非',region:'非洲'},
+    {code:'CPT',name:'開普敦機場',country:'南非',region:'非洲'},
+    {code:'NBO',name:'奈洛比喬莫·肯雅塔機場',country:'肯亞',region:'非洲'},
+    {code:'CMN',name:'卡薩布蘭卡穆罕默德五世機場',country:'摩洛哥',region:'非洲'},
+    {code:'ADD',name:'阿迪斯阿貝巴博萊機場',country:'衣索比亞',region:'非洲'},
   ];
 
   // ── Destination colour palettes [b1, b2, b3, b4, b5, base] ──
@@ -975,25 +964,40 @@
   document.getElementById('origin-trigger').addEventListener('click', () => openAirportModal('origin'));
   document.getElementById('destination-trigger').addEventListener('click', () => openAirportModal('destination'));
 
-  function renderAirportResults(q) {
-    const lower = q.toLowerCase();
-    const filtered = q.length < 1
-      ? AIRPORTS
-      : AIRPORTS.filter(a =>
-          a.code.toLowerCase().includes(lower) ||
-          a.name.toLowerCase().includes(lower) ||
-          a.country.toLowerCase().includes(lower)
-        );
+  function airportItemHTML(a) {
+    return `<div class="airport-item" onclick="selectAirport('${a.code}','${a.name.replace(/'/g,"\\'")}')">
+      <div class="airport-code">${a.code}</div>
+      <div class="airport-info">
+        <div class="airport-name">${a.name}</div>
+        <div class="airport-country">${a.country}</div>
+      </div>
+    </div>`;
+  }
 
+  function renderAirportResults(q) {
     const results = document.getElementById('airport-results');
-    results.innerHTML = filtered.slice(0, 80).map(a => `
-      <div class="airport-item" onclick="selectAirport('${a.code}','${a.name.replace(/'/g,"\\'")}')">
-        <div class="airport-code">${a.code}</div>
-        <div class="airport-info">
-          <div class="airport-name">${a.name}</div>
-          <div class="airport-country">${a.country}</div>
-        </div>
-      </div>`).join('');
+    if (q.length < 1) {
+      const byRegion = {};
+      AIRPORTS.forEach(a => {
+        if (!byRegion[a.region]) byRegion[a.region] = [];
+        byRegion[a.region].push(a);
+      });
+      let html = '';
+      REGION_ORDER.forEach(r => {
+        if (!byRegion[r]) return;
+        html += `<div class="region-header">${r}</div>`;
+        html += byRegion[r].map(a => airportItemHTML(a)).join('');
+      });
+      results.innerHTML = html;
+    } else {
+      const lower = q.toLowerCase();
+      const filtered = AIRPORTS.filter(a =>
+        a.code.toLowerCase().includes(lower) ||
+        a.name.toLowerCase().includes(lower) ||
+        a.country.toLowerCase().includes(lower)
+      );
+      results.innerHTML = filtered.slice(0, 80).map(a => airportItemHTML(a)).join('');
+    }
   }
 
   document.getElementById('airport-search').addEventListener('input', function() {
