@@ -52,48 +52,67 @@
     /* b1/b2: 深藍大色塊（背景層，高 blur，微移動）*/
     #b1 { width: 130vw; height: 130vw; filter: blur(120px); opacity: 0.95;
           top: -20%; left: -15%; background: #0a3870;
-          animation: da 18s ease-in-out infinite; }
+          animation: da 48s ease-in-out infinite; }
     #b2 { width: 110vw; height: 110vw; filter: blur(110px); opacity: 0.9;
           bottom: -15%; right: -15%; background: #082858;
-          animation: db 22s ease-in-out infinite; }
-    /* b3: 中藍色塊（明顯流動）*/
-    #b3 { width: 70vw;  height: 70vw;  filter: blur(65px);  opacity: 0.85;
+          animation: db 42s ease-in-out infinite; }
+    #b3 { width: 70vw;  height: 70vw;  filter: blur(65px);  opacity: 0.82;
           top: 15%;  left: 5%;  background: #1e80c8;
-          animation: dc 10s ease-in-out infinite; }
-    /* b4: 淺藍色塊（清晰流動）*/
-    #b4 { width: 55vw;  height: 55vw;  filter: blur(50px);  opacity: 0.75;
+          animation: dc 34s ease-in-out infinite; }
+    #b4 { width: 55vw;  height: 55vw;  filter: blur(50px);  opacity: 0.72;
           top: 45%;  right: 8%; background: #5ab8e8;
-          animation: dd 13s ease-in-out infinite; }
-    /* b5: 白/近白色塊（最亮、最明顯移動）*/
-    #b5 { width: 45vw;  height: 45vw;  filter: blur(40px);  opacity: 0.7;
-          top: 25%;  right: 15%; background: #c8e8f8;
-          animation: de 8s  ease-in-out infinite; }
+          animation: dd 28s ease-in-out infinite; }
+    #b5 { width: 45vw;  height: 45vw;  filter: blur(45px);  opacity: 0.42;
+          top: 25%;  right: 15%; background: #88c8e8;
+          animation: de 38s ease-in-out infinite; }
 
     @keyframes da {
-      0%,100% { transform: translate(0,0) scale(1); }
-      35%      { transform: translate(8vw, 10vh) scale(1.05); }
-      70%      { transform: translate(-5vw, 15vh) scale(0.96); }
+      0%   { transform: translate(0,0) scale(1); }
+      18%  { transform: translate(6vw, 14vh) scale(1.04); }
+      35%  { transform: translate(12vw, 4vh) scale(0.97); }
+      52%  { transform: translate(3vw, 20vh) scale(1.06); }
+      70%  { transform: translate(-8vw, 10vh) scale(0.95); }
+      85%  { transform: translate(-4vw, 2vh) scale(1.02); }
+      100% { transform: translate(0,0) scale(1); }
     }
     @keyframes db {
-      0%,100% { transform: translate(0,0) scale(1); }
-      40%      { transform: translate(-10vw,-12vh) scale(1.06); }
-      75%      { transform: translate(7vw, -6vh) scale(0.95); }
+      0%   { transform: translate(0,0) scale(1); }
+      15%  { transform: translate(-8vw,-10vh) scale(1.03); }
+      32%  { transform: translate(-14vw,-4vh) scale(0.96); }
+      50%  { transform: translate(-6vw,-18vh) scale(1.07); }
+      68%  { transform: translate(5vw,-8vh) scale(0.94); }
+      84%  { transform: translate(2vw,-2vh) scale(1.01); }
+      100% { transform: translate(0,0) scale(1); }
     }
     @keyframes dc {
-      0%,100% { transform: translate(0,0) scale(1); }
-      30%      { transform: translate(22vw, -14vh) scale(1.1); }
-      65%      { transform: translate(-18vw, 18vh) scale(0.92); }
+      0%   { transform: translate(0,0) scale(1); }
+      12%  { transform: translate(10vw,-6vh) scale(1.08); }
+      28%  { transform: translate(20vw,-16vh) scale(0.94); }
+      44%  { transform: translate(8vw,12vh) scale(1.12); }
+      60%  { transform: translate(-14vw,20vh) scale(0.9); }
+      76%  { transform: translate(-20vw,6vh) scale(1.05); }
+      90%  { transform: translate(-6vw,-4vh) scale(0.97); }
+      100% { transform: translate(0,0) scale(1); }
     }
     @keyframes dd {
-      0%,100% { transform: translate(0,0) scale(1); }
-      25%      { transform: translate(-20vw,-16vh) scale(1.12); }
-      60%      { transform: translate(18vw, 14vh) scale(0.9); }
-      85%      { transform: translate(-10vw, 8vh) scale(1.05); }
+      0%   { transform: translate(0,0) scale(1); }
+      14%  { transform: translate(-12vw,-8vh) scale(1.1); }
+      30%  { transform: translate(-22vw,-18vh) scale(0.92); }
+      46%  { transform: translate(-8vw,10vh) scale(1.14); }
+      62%  { transform: translate(14vw,16vh) scale(0.88); }
+      78%  { transform: translate(20vw,2vh) scale(1.06); }
+      92%  { transform: translate(6vw,-6vh) scale(0.96); }
+      100% { transform: translate(0,0) scale(1); }
     }
     @keyframes de {
-      0%,100% { transform: translate(0,0) scale(1); }
-      40%      { transform: translate(-24vw, 20vh) scale(1.15); }
-      70%      { transform: translate(20vw, -18vh) scale(0.88); }
+      0%   { transform: translate(0,0) scale(1); }
+      16%  { transform: translate(-10vw,8vh) scale(1.1); }
+      33%  { transform: translate(-22vw,18vh) scale(0.9); }
+      50%  { transform: translate(-6vw,28vh) scale(1.16); }
+      66%  { transform: translate(12vw,14vh) scale(0.87); }
+      82%  { transform: translate(18vw,-10vh) scale(1.08); }
+      94%  { transform: translate(4vw,-6vh) scale(0.95); }
+      100% { transform: translate(0,0) scale(1); }
     }
 
     /* ── GRAIN OVERLAY ── */
@@ -120,8 +139,8 @@
     }
 
     .nav-logo {
-      width: 72px;
-      height: 72px;
+      width: 96px;
+      height: 96px;
       flex-shrink: 0;
     }
 
@@ -530,12 +549,12 @@
 <div class="page">
   <nav>
     <!-- Circular text logo -->
-    <svg class="nav-logo" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+    <svg class="nav-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <path id="cp" d="M40,40 m-29,0 a29,29 0 1,1 58,0 a29,29 0 1,1 -58,0"/>
+        <path id="cp" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/>
       </defs>
-      <text font-size="8.8" font-family="'Space Mono',monospace" font-weight="700"
-            fill="rgba(255,255,255,0.92)" letter-spacing="2.2">
+      <text font-size="10.5" font-family="'Space Mono',monospace" font-weight="700"
+            fill="rgba(255,255,255,0.95)" letter-spacing="2.8">
         <textPath href="#cp" startOffset="0%">MY✦FAV✦FLIGHT✦MY✦FAV</textPath>
       </text>
     </svg>
