@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#7ec8e3" />
+  <meta name="theme-color" content="#a8d8ea" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="MFF" />
@@ -11,21 +11,17 @@
   <link rel="apple-touch-icon" href="/static/icon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <title>MY FAVORITE FLIGHT</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --sky: #7ec8e3;
-      --sky-dark: #5bb3d0;
+      --sky: #a8d8ea;
+      --black: #0d0d0d;
       --white: #ffffff;
-      --black: #0a0a0a;
-      --gray: #6b7280;
-      --light: #f0f8fc;
-      --accent: #0a0a0a;
-      --green: #22c55e;
-      --red: #ef4444;
+      --gray: rgba(13,13,13,0.4);
+      --mid: rgba(13,13,13,0.12);
     }
 
     html { font-family: 'Space Grotesk', -apple-system, sans-serif; }
@@ -33,115 +29,387 @@
     body {
       background: var(--sky);
       min-height: 100vh;
-      padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+      overflow-x: hidden;
     }
 
-    /* Header */
-    header {
+    /* ── NAV ── */
+    nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px 20px 0;
-      max-width: 640px;
-      margin: 0 auto;
+      padding: 18px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--sky);
     }
 
-    .logo {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+    .logo-pill {
       background: var(--black);
       color: var(--white);
-      font-size: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.12em;
-      padding: 6px 12px;
-      border-radius: 100px;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
+      padding: 6px 13px;
+      border-radius: 100px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
     }
 
-    .logo-dot {
-      width: 6px;
-      height: 6px;
+    .logo-pill::after {
+      content: '';
+      width: 5px;
+      height: 5px;
       background: var(--sky);
       border-radius: 50%;
+      display: block;
     }
 
     #notify-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--white);
-      border: 2px solid var(--black);
-      border-radius: 100px;
-      color: var(--black);
       font-family: inherit;
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
+      background: transparent;
+      border: 1.5px solid var(--black);
+      border-radius: 100px;
+      color: var(--black);
       padding: 6px 14px;
       cursor: pointer;
       transition: all 0.15s;
     }
 
-    #notify-btn:hover { background: var(--black); color: var(--white); }
-    #notify-btn.active { background: var(--black); color: var(--sky); }
-
-    .notify-dot {
-      width: 6px;
-      height: 6px;
-      background: currentColor;
-      border-radius: 50%;
+    #notify-btn:hover,
+    #notify-btn.active {
+      background: var(--black);
+      color: var(--sky);
     }
 
-    /* Hero */
+    /* ── HERO ── */
     .hero {
-      padding: 32px 20px 8px;
-      max-width: 640px;
-      margin: 0 auto;
+      padding: 12px 20px 20px;
+      overflow: hidden;
     }
 
     .hero-title {
-      font-size: clamp(36px, 9vw, 56px);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1;
-      text-transform: uppercase;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(72px, 22vw, 140px);
+      line-height: 0.92;
+      letter-spacing: 0.01em;
       color: var(--black);
-    }
-
-    .hero-title span { color: var(--white); }
-
-    .hero-sub {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--black);
-      opacity: 0.55;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-top: 8px;
+      user-select: none;
     }
 
-    /* Main content */
-    main { padding: 20px; max-width: 640px; margin: 0 auto; }
-
-    /* Add flight form */
-    .add-card {
-      background: var(--white);
-      border: 2px solid var(--black);
-      border-radius: 20px;
-      padding: 20px;
-      margin-bottom: 16px;
+    .hero-title .outline {
+      -webkit-text-stroke: 2px var(--black);
+      color: transparent;
     }
 
-    .card-label {
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1.5px solid var(--black);
+    }
+
+    .hero-meta-text {
       font-size: 10px;
       font-weight: 700;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--gray);
+    }
+
+    /* ── ADD BUTTON ── */
+    .add-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin: 0 20px 24px;
+      cursor: pointer;
+      width: calc(100% - 40px);
+      font-family: inherit;
+      transition: opacity 0.15s;
+    }
+
+    .add-trigger:hover { opacity: 0.85; }
+
+    .add-trigger-label {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .add-trigger-icon {
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 300;
+    }
+
+    /* ── FLIGHT LIST ── */
+    .flights-section { padding: 0 20px; }
+
+    .section-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .section-bar-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    .count-badge {
+      background: var(--black);
+      color: var(--white);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 100px;
+    }
+
+    /* ── FLIGHT ITEM ── */
+    .flight-item {
+      background: var(--white);
+      border-radius: 16px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: transform 0.12s;
+    }
+
+    .flight-item:active { transform: scale(0.98); }
+
+    .flight-item.alert { background: var(--black); }
+
+    .flight-item-top {
+      padding: 18px 20px 0;
+    }
+
+    .flight-route {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .iata-code {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      line-height: 1;
+      letter-spacing: 0.02em;
+      color: var(--black);
+    }
+
+    .flight-item.alert .iata-code { color: var(--white); }
+
+    .arrow-glyph {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      color: var(--gray);
+      flex-shrink: 0;
+    }
+
+    .flight-item.alert .arrow-glyph { color: rgba(255,255,255,0.35); }
+
+    .alert-tag {
+      margin-left: auto;
+      background: var(--sky);
+      color: var(--black);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+      align-self: center;
+    }
+
+    .flight-date {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray);
+      padding: 0 20px;
       margin-bottom: 14px;
+    }
+
+    .flight-item.alert .flight-date { color: rgba(255,255,255,0.38); }
+
+    /* price strip */
+    .price-strip {
+      display: flex;
+      align-items: stretch;
+      border-top: 1.5px solid rgba(13,13,13,0.08);
+    }
+
+    .flight-item.alert .price-strip { border-color: rgba(255,255,255,0.1); }
+
+    .price-cell {
+      flex: 1;
+      padding: 12px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .price-cell + .price-cell {
+      border-left: 1.5px solid rgba(13,13,13,0.08);
+    }
+
+    .flight-item.alert .price-cell + .price-cell { border-color: rgba(255,255,255,0.1); }
+
+    .price-cell-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    .flight-item.alert .price-cell-label { color: rgba(255,255,255,0.38); }
+
+    .price-cell-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      line-height: 1;
+      color: var(--black);
+      letter-spacing: 0.02em;
+    }
+
+    .price-cell-value.low { color: #1a7fd4; }
+    .flight-item.alert .price-cell-value { color: var(--sky); }
+    .price-cell-value.pending { font-size: 18px; opacity: 0.3; }
+
+    /* action strip */
+    .action-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px 14px;
+    }
+
+    .checked-at {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    .flight-item.alert .checked-at { color: rgba(255,255,255,0.3); }
+
+    .action-btns { display: flex; gap: 8px; }
+
+    .btn-sm {
+      font-family: inherit;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: transparent;
+      border: 1.5px solid rgba(13,13,13,0.2);
+      border-radius: 100px;
+      color: var(--black);
+      padding: 5px 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-sm:hover { border-color: var(--black); }
+    .btn-sm:disabled { opacity: 0.3; cursor: not-allowed; }
+    .btn-sm.danger:hover { border-color: #ef4444; color: #ef4444; }
+    .flight-item.alert .btn-sm { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.7); }
+    .flight-item.alert .btn-sm:hover { border-color: var(--white); color: var(--white); }
+
+    /* ── EMPTY ── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 0 40px;
+    }
+
+    .empty-big {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 64px;
+      line-height: 1;
+      color: rgba(13,13,13,0.15);
+      letter-spacing: 0.02em;
+    }
+
+    .empty-small {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-top: 8px;
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(13,13,13,0.55);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-sheet {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--white);
+      border-radius: 24px 24px 0 0;
+      padding: 0 20px calc(env(safe-area-inset-bottom, 0px) + 24px);
+      z-index: 101;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+
+    .modal-sheet.open { transform: translateY(0); }
+
+    .sheet-handle {
+      width: 36px;
+      height: 4px;
+      background: rgba(13,13,13,0.15);
+      border-radius: 2px;
+      margin: 14px auto 20px;
+    }
+
+    .sheet-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 38px;
+      line-height: 1;
+      color: var(--black);
+      margin-bottom: 20px;
     }
 
     .form-row {
@@ -153,351 +421,161 @@
 
     .input-group { display: flex; flex-direction: column; gap: 5px; }
 
-    label {
-      font-size: 10px;
+    .input-group label {
+      font-size: 9px;
       font-weight: 700;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--gray);
     }
 
-    input, select {
-      background: var(--light);
+    .input-group input,
+    .input-group select {
+      background: #f4f4f4;
       border: 2px solid transparent;
       border-radius: 10px;
       color: var(--black);
       font-family: inherit;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
-      padding: 10px 12px;
-      width: 100%;
+      padding: 11px 12px;
       outline: none;
       transition: border-color 0.15s;
       -webkit-appearance: none;
+      width: 100%;
     }
 
-    input::placeholder { color: #b0bec5; font-weight: 500; }
-    input:focus, select:focus { border-color: var(--black); background: var(--white); }
-    input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.4; }
-    select option { background: var(--white); }
+    .input-group input::placeholder { color: #aaa; font-weight: 500; }
+    .input-group input:focus,
+    .input-group select:focus { border-color: var(--black); background: var(--white); }
+    .input-group input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.3; }
 
-    .btn-add {
+    .btn-submit {
       width: 100%;
       background: var(--black);
-      border: 2px solid var(--black);
+      border: none;
       border-radius: 12px;
       color: var(--white);
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 700;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
       letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 14px;
+      padding: 16px;
       cursor: pointer;
-      margin-top: 6px;
+      margin-top: 16px;
       transition: opacity 0.15s;
     }
 
-    .btn-add:hover { opacity: 0.8; }
-    .btn-add:disabled { opacity: 0.3; cursor: not-allowed; }
+    .btn-submit:hover { opacity: 0.82; }
+    .btn-submit:disabled { opacity: 0.3; cursor: not-allowed; }
 
-    /* Section divider */
-    .section-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--black);
-      opacity: 0.5;
-      margin-bottom: 12px;
-      margin-top: 4px;
-    }
-
-    /* Flight cards */
-    .flights-list { display: flex; flex-direction: column; gap: 10px; }
-
-    .flight-card {
-      background: var(--white);
-      border: 2px solid var(--black);
-      border-radius: 20px;
-      padding: 18px 20px;
-      position: relative;
-      transition: transform 0.1s;
-    }
-
-    .flight-card:active { transform: scale(0.98); }
-
-    .flight-card.alert {
-      background: var(--black);
-      color: var(--white);
-    }
-
-    .card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 14px;
-    }
-
-    .route {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .iata {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1;
-    }
-
-    .route-arrow {
-      font-size: 16px;
-      opacity: 0.4;
-    }
-
-    .flight-card.alert .route-arrow { opacity: 0.6; color: var(--sky); }
-
-    .badge-low {
-      display: inline-flex;
-      align-items: center;
-      background: var(--sky);
-      color: var(--black);
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 3px 8px;
-      border-radius: 100px;
-      margin-left: 8px;
-    }
-
-    .btn-delete {
-      background: transparent;
-      border: 2px solid currentColor;
-      border-radius: 100px;
-      color: var(--gray);
-      font-family: inherit;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      cursor: pointer;
-      transition: all 0.15s;
-      flex-shrink: 0;
-    }
-
-    .btn-delete:hover { border-color: var(--red); color: var(--red); }
-    .flight-card.alert .btn-delete { color: rgba(255,255,255,0.5); border-color: rgba(255,255,255,0.3); }
-    .flight-card.alert .btn-delete:hover { border-color: var(--red); color: var(--red); }
-
-    .card-dates {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--gray);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 16px;
-    }
-
-    .flight-card.alert .card-dates { color: rgba(255,255,255,0.5); }
-
-    .card-prices {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      padding-top: 14px;
-      border-top: 1.5px solid var(--light);
-    }
-
-    .flight-card.alert .card-prices { border-color: rgba(255,255,255,0.12); }
-
-    .price-group { display: flex; flex-direction: column; gap: 3px; }
-
-    .price-tag {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--gray);
-    }
-
-    .flight-card.alert .price-tag { color: rgba(255,255,255,0.45); }
-
-    .price-num {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1;
-      color: var(--black);
-    }
-
-    .price-num.low { color: var(--sky-dark); }
-    .flight-card.alert .price-num { color: var(--sky); }
-    .price-num.pending { font-size: 16px; opacity: 0.35; }
-
-    .target-num {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--gray);
-      text-align: right;
-    }
-
-    .flight-card.alert .target-num { color: rgba(255,255,255,0.5); }
-
-    .card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 12px;
-    }
-
-    .last-checked {
-      font-size: 10px;
-      font-weight: 500;
-      color: var(--gray);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .flight-card.alert .last-checked { color: rgba(255,255,255,0.35); }
-
-    .btn-check {
-      background: var(--light);
-      border: 2px solid transparent;
-      border-radius: 100px;
-      color: var(--black);
-      font-family: inherit;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 5px 12px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .btn-check:hover { border-color: var(--black); }
-    .btn-check:disabled { opacity: 0.3; cursor: not-allowed; }
-    .flight-card.alert .btn-check { background: rgba(255,255,255,0.12); color: var(--white); }
-
-    /* Empty */
-    .empty {
-      text-align: center;
-      padding: 56px 0 32px;
-    }
-
-    .empty-icon {
-      font-size: 48px;
-      margin-bottom: 12px;
-      display: block;
-      filter: grayscale(0.3);
-    }
-
-    .empty-text {
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--black);
-      opacity: 0.4;
-    }
-
-    /* Toast */
+    /* ── TOAST ── */
     .toast {
       position: fixed;
-      bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
       left: 50%;
       transform: translateX(-50%) translateY(80px);
       background: var(--black);
-      border-radius: 100px;
       color: var(--white);
       font-family: inherit;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       padding: 12px 20px;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      z-index: 100;
-      white-space: nowrap;
+      border-radius: 100px;
+      z-index: 200;
       pointer-events: none;
+      white-space: nowrap;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* bottom spacer */
+    .spacer { height: 40px; }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">
-    <span>MFF</span>
-    <div class="logo-dot"></div>
-  </div>
-  <button id="notify-btn" onclick="toggleNotifications()">
-    <div class="notify-dot"></div>
-    通知
-  </button>
-</header>
+<nav>
+  <div class="logo-pill">MFF</div>
+  <button id="notify-btn" onclick="toggleNotifications()">通知</button>
+</nav>
 
 <div class="hero">
-  <h1 class="hero-title">MY<br><span>FAVORITE</span><br>FLIGHT</h1>
-  <p class="hero-sub">Track · Alert · Fly</p>
+  <h1 class="hero-title">
+    MY<br>
+    <span class="outline">FAV</span><br>
+    FLIGHT
+  </h1>
+  <div class="hero-meta">
+    <span class="hero-meta-text">Track · Alert · Fly</span>
+    <span class="hero-meta-text" id="flight-count">0 Routes</span>
+  </div>
 </div>
 
-<main>
-  <div class="add-card">
-    <p class="card-label">追蹤新航班</p>
-    <div class="form-row">
-      <div class="input-group">
-        <label>出發地</label>
-        <input id="origin" type="text" placeholder="TPE" maxlength="3" />
-      </div>
-      <div class="input-group">
-        <label>目的地</label>
-        <input id="destination" type="text" placeholder="NRT" maxlength="3" />
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="input-group">
-        <label>去程</label>
-        <input id="departure_date" type="date" />
-      </div>
-      <div class="input-group">
-        <label>回程（選填）</label>
-        <input id="return_date" type="date" />
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="input-group">
-        <label>目標價格</label>
-        <input id="target_price" type="number" placeholder="5000" />
-      </div>
-      <div class="input-group">
-        <label>幣別</label>
-        <select id="currency">
-          <option value="TWD">TWD</option>
-          <option value="USD">USD</option>
-          <option value="JPY">JPY</option>
-          <option value="HKD">HKD</option>
-          <option value="KRW">KRW</option>
-        </select>
-      </div>
-    </div>
-    <button class="btn-add" id="add-btn" onclick="addFlight()">Track This Flight</button>
+<button class="add-trigger" onclick="openModal()">
+  <span class="add-trigger-label">Track New Flight</span>
+  <span class="add-trigger-icon">+</span>
+</button>
+
+<div class="flights-section">
+  <div class="section-bar">
+    <span class="section-bar-label">Tracking</span>
   </div>
-
-  <p class="section-label">追蹤中</p>
-
-  <div class="flights-list" id="flights-list">
-    <div class="empty">
-      <span class="empty-icon">✈️</span>
-      <p class="empty-text">尚無追蹤航班</p>
+  <div id="flights-list">
+    <div class="empty-state">
+      <div class="empty-big">TPE→???</div>
+      <p class="empty-small">尚無追蹤航班</p>
     </div>
   </div>
-</main>
+</div>
+
+<div class="spacer"></div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()"></div>
+<div class="modal-sheet" id="modal-sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">TRACK<br>FLIGHT</div>
+  <div class="form-row">
+    <div class="input-group">
+      <label>出發地 IATA</label>
+      <input id="origin" type="text" placeholder="TPE" maxlength="3" />
+    </div>
+    <div class="input-group">
+      <label>目的地 IATA</label>
+      <input id="destination" type="text" placeholder="NRT" maxlength="3" />
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="input-group">
+      <label>去程日期</label>
+      <input id="departure_date" type="date" />
+    </div>
+    <div class="input-group">
+      <label>回程（選填）</label>
+      <input id="return_date" type="date" />
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="input-group">
+      <label>目標價格</label>
+      <input id="target_price" type="number" placeholder="5000" />
+    </div>
+    <div class="input-group">
+      <label>幣別</label>
+      <select id="currency">
+        <option value="TWD">TWD</option>
+        <option value="USD">USD</option>
+        <option value="JPY">JPY</option>
+        <option value="HKD">HKD</option>
+        <option value="KRW">KRW</option>
+      </select>
+    </div>
+  </div>
+  <button class="btn-submit" id="add-btn" onclick="addFlight()">Track This Flight</button>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -508,8 +586,19 @@
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/static/sw.js").then(reg => {
       swRegistration = reg;
-      checkNotificationStatus();
+      updateNotifyBtn();
     });
+  }
+
+  function updateNotifyBtn() {
+    const btn = document.getElementById("notify-btn");
+    if (Notification.permission === "granted") {
+      btn.textContent = "通知 ✓";
+      btn.classList.add("active");
+    } else {
+      btn.textContent = "通知";
+      btn.classList.remove("active");
+    }
   }
 
   function urlBase64ToUint8Array(b) {
@@ -519,99 +608,94 @@
     return new Uint8Array([...raw].map(c => c.charCodeAt(0)));
   }
 
-  async function checkNotificationStatus() {
-    if (!("PushManager" in window)) return;
-    const btn = document.getElementById("notify-btn");
-    if (Notification.permission === "granted") {
-      btn.textContent = "";
-      const dot = document.createElement("div");
-      dot.className = "notify-dot";
-      btn.appendChild(dot);
-      btn.appendChild(document.createTextNode(" 已開啟"));
-      btn.classList.add("active");
-    }
-  }
-
   async function toggleNotifications() {
     if (!swRegistration) return showToast("不支援推播通知");
     if (Notification.permission === "denied") return showToast("請到設定允許通知");
-
-    const btn = document.getElementById("notify-btn");
     if (Notification.permission === "granted") {
       const sub = await swRegistration.pushManager.getSubscription();
       if (sub) {
         await fetch("/api/unsubscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(sub.toJSON()) });
         await sub.unsubscribe();
-        btn.innerHTML = '<div class="notify-dot"></div> 通知';
-        btn.classList.remove("active");
+        updateNotifyBtn();
         showToast("已關閉通知");
         return;
       }
     }
-
     const permission = await Notification.requestPermission();
     if (permission !== "granted") return showToast("通知權限被拒絕");
-
     try {
       const sub = await swRegistration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
       });
       await fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(sub.toJSON()) });
-      btn.innerHTML = '<div class="notify-dot"></div> 已開啟';
-      btn.classList.add("active");
+      updateNotifyBtn();
       showToast("低價通知已開啟！");
-    } catch (e) {
-      showToast("開啟失敗：" + e.message);
-    }
+    } catch (e) { showToast("開啟失敗"); }
+  }
+
+  function openModal() {
+    document.getElementById("modal-overlay").classList.add("open");
+    document.getElementById("modal-sheet").classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal() {
+    document.getElementById("modal-overlay").classList.remove("open");
+    document.getElementById("modal-sheet").classList.remove("open");
+    document.body.style.overflow = "";
   }
 
   async function loadFlights() {
     const res = await fetch("/api/flights");
     const flights = await res.json();
+    document.getElementById("flight-count").textContent = `${flights.length} Route${flights.length !== 1 ? "s" : ""}`;
     renderFlights(flights);
   }
 
   function renderFlights(flights) {
     const el = document.getElementById("flights-list");
     if (!flights.length) {
-      el.innerHTML = '<div class="empty"><span class="empty-icon">✈️</span><p class="empty-text">尚無追蹤航班</p></div>';
+      el.innerHTML = '<div class="empty-state"><div class="empty-big">TPE→???</div><p class="empty-small">尚無追蹤航班</p></div>';
       return;
     }
     el.innerHTML = flights.map(f => {
       const isLow = f.current_price && f.current_price <= f.target_price;
-      const priceHtml = f.current_price
-        ? `<span class="price-num ${isLow ? "low" : ""}">${f.current_price.toLocaleString()}</span>`
-        : `<span class="price-num pending">— —</span>`;
+      const priceVal = f.current_price
+        ? `<span class="price-cell-value ${isLow ? "low" : ""}">${f.current_price.toLocaleString()}</span>`
+        : `<span class="price-cell-value pending">- -</span>`;
       const dates = f.return_date ? `${f.departure_date} — ${f.return_date}` : f.departure_date;
       const checked = f.last_checked
         ? new Date(f.last_checked + "Z").toLocaleString("zh-TW", { timeZone: "Asia/Taipei", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" })
         : "未查價";
+
       return `
-        <div class="flight-card ${isLow ? "alert" : ""}">
-          <div class="card-top">
-            <div class="route">
-              <span class="iata">${f.origin}</span>
-              <span class="route-arrow">→</span>
-              <span class="iata">${f.destination}</span>
-              ${isLow ? '<span class="badge-low">低價</span>' : ""}
-            </div>
-            <button class="btn-delete" onclick="deleteFlight(${f.id})">移除</button>
-          </div>
-          <div class="card-dates">${dates}</div>
-          <div class="card-prices">
-            <div class="price-group">
-              <span class="price-tag">目前最低 (${f.currency})</span>
-              ${priceHtml}
-            </div>
-            <div class="price-group" style="text-align:right">
-              <span class="price-tag">目標</span>
-              <span class="target-num">≤ ${f.target_price.toLocaleString()}</span>
+        <div class="flight-item ${isLow ? "alert" : ""}">
+          <div class="flight-item-top">
+            <div class="flight-route">
+              <span class="iata-code">${f.origin}</span>
+              <span class="arrow-glyph">→</span>
+              <span class="iata-code">${f.destination}</span>
+              ${isLow ? '<span class="alert-tag">低價 ↓</span>' : ""}
             </div>
           </div>
-          <div class="card-footer">
-            <span class="last-checked">查價 ${checked}</span>
-            <button class="btn-check" id="check-btn-${f.id}" onclick="checkNow(${f.id})">立即查價</button>
+          <div class="flight-date">${dates} · ${f.currency}</div>
+          <div class="price-strip">
+            <div class="price-cell">
+              <span class="price-cell-label">目前最低</span>
+              ${priceVal}
+            </div>
+            <div class="price-cell">
+              <span class="price-cell-label">目標價格</span>
+              <span class="price-cell-value">≤${f.target_price.toLocaleString()}</span>
+            </div>
+          </div>
+          <div class="action-strip">
+            <span class="checked-at">${checked}</span>
+            <div class="action-btns">
+              <button class="btn-sm" id="check-btn-${f.id}" onclick="checkNow(${f.id})">查價</button>
+              <button class="btn-sm danger" onclick="deleteFlight(${f.id})">移除</button>
+            </div>
           </div>
         </div>`;
     }).join("");
@@ -626,7 +710,7 @@
     const target_price = document.getElementById("target_price").value;
     const currency = document.getElementById("currency").value;
     if (!origin || !destination || !departure_date || !target_price) return showToast("請填寫必要欄位");
-    btn.disabled = true; btn.textContent = "新增中...";
+    btn.disabled = true; btn.textContent = "Adding...";
     try {
       const res = await fetch("/api/flights", {
         method: "POST",
@@ -635,7 +719,8 @@
       });
       if (!res.ok) throw new Error();
       ["origin","destination","departure_date","return_date","target_price"].forEach(id => document.getElementById(id).value = "");
-      showToast("已新增，查詢價格中...");
+      closeModal();
+      showToast("已新增！查詢價格中...");
       await loadFlights();
     } catch { showToast("新增失敗"); }
     finally { btn.disabled = false; btn.textContent = "Track This Flight"; }
@@ -649,13 +734,13 @@
 
   async function checkNow(id) {
     const btn = document.getElementById(`check-btn-${id}`);
-    btn.disabled = true; btn.textContent = "查詢中...";
+    btn.disabled = true; btn.textContent = "...";
     try {
       const res = await fetch(`/api/flights/${id}/check`, { method: "POST" });
       if (!res.ok) throw new Error();
       showToast("價格已更新！");
       await loadFlights();
-    } catch { showToast("查詢失敗"); btn.disabled = false; btn.textContent = "立即查價"; }
+    } catch { showToast("查詢失敗"); btn.disabled = false; btn.textContent = "查價"; }
   }
 
   function showToast(msg) {
