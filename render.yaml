@@ -5,9 +5,7 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app --workers 1 --threads 2 --timeout 120
     envVars:
-      - key: AMADEUS_API_KEY
-        sync: false
-      - key: AMADEUS_API_SECRET
+      - key: SERPAPI_KEY
         sync: false
       - key: VAPID_PUBLIC_KEY
         sync: false
