@@ -1119,8 +1119,41 @@
     '南亞':   ['南亞'],
   };
   const CONTINENTS = ['亞洲','中東','歐洲','美洲','大洋洲','非洲'];
-  // Taiwan airports with international routes (origin only)
+  // Taiwan airports with international routes (shown pinned in origin picker)
   const TW_INTL = ['TPE','TSA','KHH','RMQ'];
+
+  // Allowed destination regions per origin (null = no restriction)
+  const ORIGIN_ALLOWED_REGIONS = {
+    // 高雄：東亞 + 東南亞，無法直飛歐美中東大洋洲
+    KHH: ['台灣','日本','韓國','中國大陸','香港・澳門','東南亞'],
+    // 松山：東亞商務航線為主
+    TSA: ['台灣','日本','韓國','中國大陸','香港・澳門'],
+    // 台中：東亞 + 部分東南亞
+    RMQ: ['台灣','日本','韓國','中國大陸','香港・澳門','東南亞'],
+    // 桃園：全球（不限制）
+    TPE: null,
+  };
+
+  // Return airport pool filtered by allowed regions for selected origin
+  function getAirportPool() {
+    if (activeAirportTarget !== 'destination') return AIRPORTS;
+    const origin = (document.getElementById('origin').value || '').toUpperCase();
+    const allowed = ORIGIN_ALLOWED_REGIONS[origin];
+    if (!allowed) return AIRPORTS;
+    return AIRPORTS.filter(a => allowed.includes(a.region));
+  }
+
+  function getCityGroupPool() {
+    if (activeAirportTarget !== 'destination') return CITY_GROUPS;
+    const origin = (document.getElementById('origin').value || '').toUpperCase();
+    const allowed = ORIGIN_ALLOWED_REGIONS[origin];
+    if (!allowed) return CITY_GROUPS;
+    // Use the first member airport to determine region
+    return CITY_GROUPS.filter(cg => {
+      const ref = AIRPORTS.find(a => cg.airports.includes(a.code));
+      return ref && allowed.includes(ref.region);
+    });
+  }
 
   // ── Airport modal state ──
   const airportModal = document.getElementById('airport-modal');
@@ -1217,11 +1250,11 @@
   }
 
   function airportsInRegions(regions) {
-    return AIRPORTS.filter(a => regions.includes(a.region));
+    return getAirportPool().filter(a => regions.includes(a.region));
   }
 
   function airportsForContinent(continent) {
-    return AIRPORTS.filter(a => {
+    return getAirportPool().filter(a => {
       const m = REGION_META[a.region];
       return m && m.continent === continent;
     });
@@ -1295,8 +1328,8 @@
   }
 
   function renderAirportsByCountry(country) {
-    const groups = CITY_GROUPS.filter(cg => cg.country === country && cg.airports.length > 1);
-    const airports = AIRPORTS.filter(a => a.country === country);
+    const groups = getCityGroupPool().filter(cg => cg.country === country && cg.airports.length > 1);
+    const airports = getAirportPool().filter(a => a.country === country);
     const groupHtml = groups.map(cg => cityGroupItemHTML(cg)).join('');
     const airportHtml = airports.map(a => airportItemHTML(a)).join('');
     return (groups.length ? `<div class="region-header">城市任選</div>${groupHtml}<div class="region-header">個別機場</div>` : '') + airportHtml;
@@ -1312,7 +1345,7 @@
     }
     navPath = []; updateNavBar();
     const lower = q.toLowerCase();
-    const filtered = AIRPORTS.filter(a =>
+    const filtered = getAirportPool().filter(a =>
       a.code.toLowerCase().includes(lower) ||
       a.name.toLowerCase().includes(lower) ||
       a.country.toLowerCase().includes(lower)
