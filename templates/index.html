@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a1628" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="MFF" />
+  <link rel="manifest" href="/static/manifest.json" />
+  <link rel="apple-touch-icon" href="/static/icon-192.png" />
+  <title>My Favorite Flight</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0a1628 0%, #0d2b5e 40%, #1a5276 70%, #f0ece3 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 43200s ease infinite;
+      color: #fff;
+      padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    header {
+      padding: 24px 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #fff;
+    }
+
+    .logo span { color: #5bc8f5; }
+
+    #notify-btn {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      color: #fff;
+      font-size: 13px;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #notify-btn:hover { background: rgba(255,255,255,0.2); }
+    #notify-btn.active { background: rgba(91,200,245,0.25); border-color: #5bc8f5; }
+
+    main { padding: 24px 20px; max-width: 600px; margin: 0 auto; }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    /* Add form */
+    .add-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 28px;
+      backdrop-filter: blur(12px);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .form-row.single { grid-template-columns: 1fr; }
+    .form-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+
+    .input-group { display: flex; flex-direction: column; gap: 4px; }
+
+    label {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    input, select {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 15px;
+      padding: 10px 12px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+
+    input::placeholder { color: rgba(255,255,255,0.3); }
+    input:focus, select:focus { border-color: #5bc8f5; }
+    input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1) opacity(0.5); }
+
+    select option { background: #0d2b5e; }
+
+    .btn-add {
+      width: 100%;
+      background: #5bc8f5;
+      border: none;
+      border-radius: 12px;
+      color: #0a1628;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 13px;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: opacity 0.2s;
+    }
+
+    .btn-add:hover { opacity: 0.88; }
+    .btn-add:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Flight cards */
+    .flights-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .flight-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 18px 20px;
+      backdrop-filter: blur(12px);
+      position: relative;
+      transition: transform 0.15s;
+    }
+
+    .flight-card:active { transform: scale(0.98); }
+    .flight-card.alert { border-color: #5bc8f5; background: rgba(91,200,245,0.1); }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .route {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .route-arrow { color: rgba(255,255,255,0.4); font-size: 16px; }
+
+    .btn-delete {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      color: rgba(255,255,255,0.45);
+      font-size: 13px;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-delete:hover { background: rgba(255,80,80,0.2); border-color: rgba(255,80,80,0.4); color: #ff6b6b; }
+
+    .card-dates {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 14px;
+    }
+
+    .card-prices {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .price-block { display: flex; flex-direction: column; gap: 2px; }
+
+    .price-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .price-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .price-value.low { color: #5bc8f5; }
+    .price-value.pending { font-size: 16px; color: rgba(255,255,255,0.35); }
+
+    .target-value {
+      font-size: 15px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .last-checked {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .btn-check {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      color: rgba(255,255,255,0.6);
+      font-size: 12px;
+      padding: 5px 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-check:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .btn-check:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 0;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 15px; }
+
+    .toast {
+      position: fixed;
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: rgba(15, 30, 60, 0.95);
+      border: 1px solid rgba(91,200,245,0.4);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 14px;
+      padding: 12px 20px;
+      transition: transform 0.3s ease;
+      z-index: 100;
+      white-space: nowrap;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    .badge-alert {
+      display: inline-block;
+      background: #5bc8f5;
+      color: #0a1628;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">M<span>FF</span></div>
+  <button id="notify-btn" onclick="toggleNotifications()">開啟通知</button>
+</header>
+
+<main>
+  <div class="section-title">追蹤新航班</div>
+  <div class="add-card">
+    <div class="form-row">
+      <div class="input-group">
+        <label>出發地</label>
+        <input id="origin" type="text" placeholder="TPE" maxlength="3" />
+      </div>
+      <div class="input-group">
+        <label>目的地</label>
+        <input id="destination" type="text" placeholder="NRT" maxlength="3" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="input-group">
+        <label>去程日期</label>
+        <input id="departure_date" type="date" />
+      </div>
+      <div class="input-group">
+        <label>回程日期（選填）</label>
+        <input id="return_date" type="date" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="input-group">
+        <label>目標價格</label>
+        <input id="target_price" type="number" placeholder="5000" />
+      </div>
+      <div class="input-group">
+        <label>幣別</label>
+        <select id="currency">
+          <option value="TWD">TWD 台幣</option>
+          <option value="USD">USD 美元</option>
+          <option value="JPY">JPY 日圓</option>
+          <option value="HKD">HKD 港幣</option>
+          <option value="KRW">KRW 韓圜</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-add" id="add-btn" onclick="addFlight()">TRACK THIS FLIGHT</button>
+  </div>
+
+  <div class="section-title">追蹤中的航班</div>
+  <div class="flights-list" id="flights-list">
+    <div class="empty-state">
+      <div class="icon">✈️</div>
+      <p>還沒有追蹤任何航班</p>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const VAPID_PUBLIC_KEY = "{{ vapid_public_key }}";
+  let swRegistration = null;
+  let pushSubscription = null;
+
+  // --- PWA & Notifications ---
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/static/sw.js").then((reg) => {
+      swRegistration = reg;
+      checkNotificationStatus();
+    });
+  }
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+    const rawData = atob(base64);
+    return new Uint8Array([...rawData].map((c) => c.charCodeAt(0)));
+  }
+
+  async function checkNotificationStatus() {
+    if (!("PushManager" in window)) return;
+    const perm = Notification.permission;
+    const btn = document.getElementById("notify-btn");
+    if (perm === "granted") {
+      btn.textContent = "通知已開啟";
+      btn.classList.add("active");
+    } else if (perm === "denied") {
+      btn.textContent = "通知已封鎖";
+    }
+  }
+
+  async function toggleNotifications() {
+    if (!swRegistration) return showToast("瀏覽器不支援推播通知");
+    if (Notification.permission === "denied") return showToast("請到設定中允許通知");
+
+    if (Notification.permission === "granted") {
+      const sub = await swRegistration.pushManager.getSubscription();
+      if (sub) {
+        await fetch("/api/unsubscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(sub.toJSON()) });
+        await sub.unsubscribe();
+        document.getElementById("notify-btn").textContent = "開啟通知";
+        document.getElementById("notify-btn").classList.remove("active");
+        showToast("已關閉通知");
+        return;
+      }
+    }
+
+    const permission = await Notification.requestPermission();
+    if (permission !== "granted") return showToast("通知權限被拒絕");
+
+    try {
+      const sub = await swRegistration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+      });
+      await fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(sub.toJSON()) });
+      document.getElementById("notify-btn").textContent = "通知已開啟";
+      document.getElementById("notify-btn").classList.add("active");
+      showToast("已開啟低價通知！");
+    } catch (e) {
+      showToast("開啟通知失敗：" + e.message);
+    }
+  }
+
+  // --- Flights ---
+  async function loadFlights() {
+    const res = await fetch("/api/flights");
+    const flights = await res.json();
+    renderFlights(flights);
+  }
+
+  function renderFlights(flights) {
+    const container = document.getElementById("flights-list");
+    if (!flights.length) {
+      container.innerHTML = '<div class="empty-state"><div class="icon">✈️</div><p>還沒有追蹤任何航班</p></div>';
+      return;
+    }
+
+    container.innerHTML = flights.map((f) => {
+      const isLow = f.current_price && f.current_price <= f.target_price;
+      const priceDisplay = f.current_price
+        ? `<span class="price-value ${isLow ? "low" : ""}">${f.current_price.toLocaleString()}</span>`
+        : `<span class="price-value pending">查詢中...</span>`;
+
+      const dates = f.return_date
+        ? `${f.departure_date} → ${f.return_date}`
+        : `單程 ${f.departure_date}`;
+
+      const lastChecked = f.last_checked
+        ? `上次查價：${new Date(f.last_checked + "Z").toLocaleString("zh-TW", { timeZone: "Asia/Taipei", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })}`
+        : "尚未查價";
+
+      return `
+        <div class="flight-card ${isLow ? "alert" : ""}">
+          <div class="card-header">
+            <div class="route">
+              <span>${f.origin}</span>
+              <span class="route-arrow">→</span>
+              <span>${f.destination}</span>
+              ${isLow ? '<span class="badge-alert">低價！</span>' : ""}
+            </div>
+            <button class="btn-delete" onclick="deleteFlight(${f.id})">移除</button>
+          </div>
+          <div class="card-dates">${dates}</div>
+          <div class="card-prices">
+            <div class="price-block">
+              <span class="price-label">目前價格 (${f.currency})</span>
+              ${priceDisplay}
+            </div>
+            <div class="price-block" style="text-align:right">
+              <span class="price-label">目標價格</span>
+              <span class="target-value">≤ ${f.target_price.toLocaleString()} ${f.currency}</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="last-checked">${lastChecked}</span>
+            <button class="btn-check" id="check-btn-${f.id}" onclick="checkNow(${f.id})">立即查價</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  async function addFlight() {
+    const btn = document.getElementById("add-btn");
+    const origin = document.getElementById("origin").value.trim().toUpperCase();
+    const destination = document.getElementById("destination").value.trim().toUpperCase();
+    const departure_date = document.getElementById("departure_date").value;
+    const return_date = document.getElementById("return_date").value;
+    const target_price = document.getElementById("target_price").value;
+    const currency = document.getElementById("currency").value;
+
+    if (!origin || !destination || !departure_date || !target_price) {
+      return showToast("請填寫出發地、目的地、日期和目標價格");
+    }
+
+    btn.disabled = true;
+    btn.textContent = "新增中...";
+
+    try {
+      const res = await fetch("/api/flights", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ origin, destination, departure_date, return_date, target_price, currency }),
+      });
+
+      if (!res.ok) throw new Error("新增失敗");
+
+      document.getElementById("origin").value = "";
+      document.getElementById("destination").value = "";
+      document.getElementById("departure_date").value = "";
+      document.getElementById("return_date").value = "";
+      document.getElementById("target_price").value = "";
+      showToast("已新增！正在查詢最新價格...");
+      await loadFlights();
+    } catch (e) {
+      showToast("新增失敗，請稍後再試");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "TRACK THIS FLIGHT";
+    }
+  }
+
+  async function deleteFlight(id) {
+    await fetch(`/api/flights/${id}`, { method: "DELETE" });
+    showToast("已移除");
+    loadFlights();
+  }
+
+  async function checkNow(id) {
+    const btn = document.getElementById(`check-btn-${id}`);
+    btn.disabled = true;
+    btn.textContent = "查詢中...";
+    try {
+      const res = await fetch(`/api/flights/${id}/check`, { method: "POST" });
+      if (!res.ok) throw new Error();
+      showToast("價格已更新！");
+      await loadFlights();
+    } catch {
+      showToast("查詢失敗，請稍後再試");
+      btn.disabled = false;
+      btn.textContent = "立即查價";
+    }
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 3000);
+  }
+
+  loadFlights();
+</script>
+</body>
+</html>

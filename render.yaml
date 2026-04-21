@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: mff-app
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 1 --threads 2 --timeout 120
+    envVars:
+      - key: AMADEUS_API_KEY
+        sync: false
+      - key: AMADEUS_API_SECRET
+        sync: false
+      - key: VAPID_PUBLIC_KEY
+        sync: false
+      - key: VAPID_PRIVATE_KEY
+        sync: false
+      - key: VAPID_EMAIL
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mff-db
+          property: connectionString
+
+databases:
+  - name: mff-db
+    plan: free
