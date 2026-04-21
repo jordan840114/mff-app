@@ -16,23 +16,28 @@ if database_url.startswith("postgres://"):
 
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-    "connect_args": {"connect_timeout": 10} if "postgresql" in database_url else {},
-    "pool_pre_ping": True,
-}
+if "postgresql" in database_url:
+    app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+        "connect_args": {"connect_timeout": 10, "sslmode": "require"},
+        "pool_pre_ping": True,
+        "pool_recycle": 300,
+    }
 
 db.init_app(app)
 
-# 啟動時建立資料表，失敗時重試
-for attempt in range(5):
+# 建立資料表，最多重試 3 次
+_db_ready = False
+for attempt in range(3):
     try:
         with app.app_context():
             db.create_all()
+        _db_ready = True
+        print(f"DB ready (attempt {attempt+1})")
         break
     except Exception as e:
         print(f"DB init attempt {attempt+1} failed: {e}")
-        if attempt < 4:
-            time.sleep(3)
+        if attempt < 2:
+            time.sleep(5)
 
 
 def send_notification(title, body):
@@ -48,8 +53,14 @@ scheduler.add_job(
 )
 try:
     scheduler.start()
+    print("Scheduler started")
 except Exception as e:
     print(f"Scheduler start failed: {e}")
+
+
+@app.route("/health")
+def health():
+    return {"status": "ok", "db_ready": _db_ready}
 
 
 @app.route("/")

@@ -1,17 +1,20 @@
 import os
 import json
-from pywebpush import webpush, WebPushException
 
+try:
+    from pywebpush import webpush, WebPushException
+    _WEBPUSH_AVAILABLE = True
+except Exception as e:
+    print(f"pywebpush not available: {e}")
+    _WEBPUSH_AVAILABLE = False
 
-VAPID_PUBLIC_KEY = os.environ.get("VAPID_PUBLIC_KEY", "")
-# 環境變數中的 \n 是字面上的兩個字元，需還原成真正的換行
 _raw = os.environ.get("VAPID_PRIVATE_KEY", "")
 VAPID_PRIVATE_KEY = _raw.replace("\\n", "\n") if _raw else None
 VAPID_CLAIMS = {"sub": "mailto:" + os.environ.get("VAPID_EMAIL", "admin@mff.app")}
 
 
 def send_push_to_all(db, PushSubscription, title, body):
-    if not VAPID_PRIVATE_KEY:
+    if not _WEBPUSH_AVAILABLE or not VAPID_PRIVATE_KEY:
         print(f"[通知] {title}: {body}")
         return
 
