@@ -3,72 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#000000" />
+  <meta name="theme-color" content="#7bc8e2" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="MFF" />
   <link rel="manifest" href="/static/manifest.json" />
   <link rel="apple-touch-icon" href="/static/icon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <title>MFF</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #000000;
-      --fg: #fbfbfb;
-      --dim: rgba(251,251,251,0.35);
-      --line: rgba(251,251,251,0.1);
+      --sky: #7bc8e2;
+      --white: #ffffff;
+      --black: #0d0d0d;
+      --dim: rgba(13,13,13,0.38);
+      --line: rgba(13,13,13,0.1);
       --alert: #EF4444;
     }
 
     html, body {
-      background: var(--bg);
-      color: var(--fg);
-      font-family: 'DM Sans', -apple-system, sans-serif;
-      font-size: 13px;
-      letter-spacing: 0.04em;
+      background: var(--sky);
+      color: var(--black);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── NAV ── */
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 16px 14px;
-      border-bottom: 1px solid var(--line);
+    /* ── NAV PILL ── */
+    .nav-wrap {
+      padding: 14px 14px 0;
       position: sticky;
       top: 0;
       z-index: 50;
-      background: var(--bg);
+    }
+
+    nav {
+      background: var(--white);
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
     }
 
     .nav-logo {
-      font-family: 'Space Mono', monospace;
       font-size: 12px;
+      font-weight: 700;
       letter-spacing: 0.12em;
-      color: var(--fg);
       text-transform: uppercase;
-    }
-
-    .nav-logo span {
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      background: var(--fg);
-      border-radius: 50%;
-      margin-left: 6px;
-      vertical-align: middle;
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 16px;
+      color: var(--black);
     }
 
     .notif-btn {
@@ -76,7 +65,7 @@
       border: none;
       color: var(--dim);
       font-family: 'Space Mono', monospace;
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       cursor: pointer;
@@ -84,221 +73,181 @@
       transition: color 0.2s;
     }
 
-    .notif-btn.active { color: var(--fg); }
-    .notif-btn:hover { color: var(--fg); }
+    .notif-btn.active { color: var(--black); }
 
-    /* ── HEADER ── */
-    header {
-      padding: 40px 16px 32px;
-      border-bottom: 1px solid var(--line);
+    /* ── PAGE CONTENT ── */
+    main {
+      padding: 28px 14px;
     }
 
-    .header-label {
-      font-family: 'Space Mono', monospace;
+    /* ── ADD ROW ── */
+    .add-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .page-label {
       font-size: 10px;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--dim);
-      margin-bottom: 10px;
-    }
-
-    .header-title {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 28px;
-      font-weight: 300;
-      letter-spacing: -0.01em;
-      line-height: 1.1;
-      text-transform: uppercase;
-      color: var(--fg);
-    }
-
-    .header-title em {
-      font-style: normal;
-      color: var(--dim);
-    }
-
-    /* ── ADD BUTTON ── */
-    .add-bar {
-      padding: 0 16px;
-      border-bottom: 1px solid var(--line);
     }
 
     .add-btn {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      padding: 16px 0;
-      background: none;
+      background: var(--white);
       border: none;
-      color: var(--dim);
+      border-radius: 100px;
       font-family: 'Space Mono', monospace;
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
+      color: var(--black);
+      padding: 8px 14px;
       cursor: pointer;
-      gap: 10px;
-      transition: color 0.2s;
-    }
-
-    .add-btn:hover, .add-btn:active { color: var(--fg); }
-
-    .add-btn-icon {
-      width: 20px;
-      height: 20px;
-      border: 1px solid currentColor;
-      border-radius: 50%;
+      transition: opacity 0.2s;
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      line-height: 1;
-      flex-shrink: 0;
+      gap: 6px;
     }
 
-    /* ── FLIGHT LIST ── */
-    #flight-list { }
+    .add-btn:active { opacity: 0.7; }
 
+    /* ── EMPTY STATE ── */
     .empty-state {
-      padding: 60px 16px;
+      padding: 60px 0;
       text-align: center;
-      color: var(--dim);
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.1em;
+      font-size: 10px;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      line-height: 2;
+      color: var(--dim);
+      line-height: 2.4;
     }
 
     /* ── FLIGHT ITEM ── */
     .flight-item {
-      padding: 20px 16px;
-      border-bottom: 1px solid var(--line);
-      position: relative;
+      background: var(--white);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 10px;
+      transition: opacity 0.2s;
     }
 
     .flight-item.alerted {
       background: var(--alert);
+      color: var(--white);
     }
 
-    .flight-row-top {
+    .flight-top {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
-      margin-bottom: 6px;
+      margin-bottom: 10px;
     }
 
     .flight-route {
-      font-family: 'Space Mono', monospace;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 700;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
       line-height: 1;
     }
 
-    .flight-item.alerted .flight-route { color: #000; }
-
-    .flight-arrow {
-      color: var(--dim);
-      margin: 0 6px;
+    .flight-route .arrow {
       font-size: 14px;
+      font-weight: 400;
+      opacity: 0.4;
+      margin: 0 4px;
     }
 
-    .flight-item.alerted .flight-arrow { color: rgba(0,0,0,0.4); }
-
-    .flight-price-current {
-      font-family: 'Space Mono', monospace;
-      font-size: 20px;
+    .flight-price {
+      font-size: 18px;
       font-weight: 700;
       letter-spacing: 0.02em;
+      text-align: right;
     }
 
-    .flight-item.alerted .flight-price-current { color: #000; }
-
-    .flight-row-mid {
+    .flight-mid {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 12px;
     }
 
-    .flight-meta {
-      font-family: 'Space Mono', monospace;
+    .flight-date {
       font-size: 10px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--dim);
+      opacity: 0.5;
     }
 
-    .flight-item.alerted .flight-meta { color: rgba(0,0,0,0.5); }
+    .alert-badge {
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.2);
+      padding: 3px 7px;
+      border-radius: 100px;
+    }
 
-    .flight-target-row {
+    .flight-bottom {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding-top: 10px;
+      border-top: 1px solid rgba(13,13,13,0.08);
     }
 
-    .flight-target-label {
-      font-family: 'Space Mono', monospace;
+    .flight-item.alerted .flight-bottom {
+      border-top-color: rgba(255,255,255,0.2);
+    }
+
+    .flight-target {
       font-size: 10px;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--dim);
+      opacity: 0.5;
     }
-
-    .flight-item.alerted .flight-target-label { color: rgba(0,0,0,0.5); }
-
-    .flight-target-value {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      color: var(--dim);
-    }
-
-    .flight-item.alerted .flight-target-value { color: rgba(0,0,0,0.6); }
 
     .flight-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .btn-check, .btn-delete {
+    .btn-sm {
       background: none;
-      border: none;
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      padding: 0;
-      transition: opacity 0.2s;
-    }
-
-    .btn-check { color: var(--dim); }
-    .btn-delete { color: var(--dim); }
-    .flight-item.alerted .btn-check,
-    .flight-item.alerted .btn-delete { color: rgba(0,0,0,0.5); }
-    .btn-check:hover, .btn-delete:hover { opacity: 1; color: var(--fg); }
-    .flight-item.alerted .btn-check:hover,
-    .flight-item.alerted .btn-delete:hover { color: #000; opacity: 0.8; }
-
-    .alert-badge {
+      border: 1px solid rgba(13,13,13,0.15);
+      border-radius: 100px;
       font-family: 'Space Mono', monospace;
       font-size: 9px;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      background: #000;
-      color: var(--alert);
-      padding: 2px 6px;
-      border-radius: 2px;
+      color: var(--dim);
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .flight-item.alerted .btn-sm {
+      border-color: rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.7);
+    }
+
+    .btn-sm:active { opacity: 0.6; }
+
+    .checked-time {
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      opacity: 0.4;
     }
 
     /* ── BOTTOM SHEET ── */
     .sheet-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.35);
       z-index: 100;
       opacity: 0;
       pointer-events: none;
@@ -315,10 +264,10 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: #111;
-      border-top: 1px solid var(--line);
+      background: var(--white);
+      border-radius: 20px 20px 0 0;
       z-index: 101;
-      padding: 0 16px calc(env(safe-area-inset-bottom, 16px) + 16px);
+      padding: 0 18px calc(env(safe-area-inset-bottom, 16px) + 20px);
       transform: translateY(100%);
       transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
       max-height: 92vh;
@@ -332,7 +281,7 @@
     .sheet-handle {
       width: 36px;
       height: 3px;
-      background: var(--line);
+      background: rgba(0,0,0,0.1);
       border-radius: 2px;
       margin: 12px auto 0;
     }
@@ -341,104 +290,102 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px 0 16px;
+      padding: 18px 0 16px;
       border-bottom: 1px solid var(--line);
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
 
     .sheet-title {
-      font-family: 'Space Mono', monospace;
       font-size: 12px;
+      font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--fg);
     }
 
     .sheet-close {
-      background: none;
+      background: rgba(0,0,0,0.06);
       border: none;
-      color: var(--dim);
+      border-radius: 100px;
       font-family: 'Space Mono', monospace;
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      color: var(--dim);
+      padding: 5px 12px;
       cursor: pointer;
-      padding: 0;
     }
 
-    .field {
-      margin-bottom: 20px;
-    }
+    .field { margin-bottom: 18px; }
 
     .field-label {
-      font-family: 'Space Mono', monospace;
       font-size: 10px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--dim);
-      margin-bottom: 8px;
+      margin-bottom: 7px;
       display: block;
     }
 
     .field input, .field select {
       width: 100%;
-      background: none;
+      background: rgba(0,0,0,0.04);
       border: none;
-      border-bottom: 1px solid var(--line);
-      color: var(--fg);
+      border-radius: 8px;
+      color: var(--black);
       font-family: 'Space Mono', monospace;
-      font-size: 14px;
+      font-size: 13px;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      padding: 10px 0;
+      padding: 11px 12px;
       outline: none;
-      transition: border-color 0.2s;
       -webkit-appearance: none;
-      border-radius: 0;
+      transition: background 0.2s;
     }
 
-    .field input::placeholder { color: var(--dim); text-transform: uppercase; }
-    .field input:focus, .field select:focus { border-color: var(--fg); }
-
-    .field select option { background: #111; }
+    .field input::placeholder { color: var(--dim); }
+    .field input:focus, .field select:focus { background: rgba(0,0,0,0.08); }
+    .field select option { background: #fff; text-transform: uppercase; }
 
     .field-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 12px;
     }
 
     .submit-btn {
       width: 100%;
-      background: var(--fg);
-      color: var(--bg);
+      background: var(--black);
+      color: var(--white);
       border: none;
+      border-radius: 100px;
       font-family: 'Space Mono', monospace;
-      font-size: 12px;
+      font-size: 11px;
+      font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       padding: 16px;
       cursor: pointer;
-      margin-top: 8px;
+      margin-top: 6px;
       transition: opacity 0.2s;
     }
 
-    .submit-btn:hover { opacity: 0.85; }
     .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .submit-btn:active { opacity: 0.8; }
 
     /* ── TOAST ── */
     .toast {
       position: fixed;
-      bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
       left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: var(--fg);
-      color: var(--bg);
+      transform: translateX(-50%) translateY(16px);
+      background: var(--black);
+      color: var(--white);
       font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.08em;
+      font-size: 10px;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 10px 18px;
+      padding: 9px 16px;
+      border-radius: 100px;
       white-space: nowrap;
       opacity: 0;
       pointer-events: none;
@@ -451,53 +398,33 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    .loading-bar {
-      height: 1px;
-      background: var(--line);
-      position: relative;
-      overflow: hidden;
+    .spin {
+      display: inline-block;
+      animation: spin 0.8s linear infinite;
     }
 
-    .loading-bar::after {
-      content: '';
-      position: absolute;
-      left: -100%;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--fg);
-      animation: load 1.2s ease infinite;
-    }
-
-    @keyframes load {
-      to { left: 100%; }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-logo">MFF<span></span></div>
-  <div class="nav-actions">
-    <button class="notif-btn" id="notif-btn">[ Notify ]</button>
+<div class="nav-wrap">
+  <nav>
+    <div class="nav-logo">MFF ●</div>
+    <button class="notif-btn" id="notif-btn">Notify</button>
+  </nav>
+</div>
+
+<main>
+  <div class="add-row">
+    <span class="page-label">Price Tracker</span>
+    <button class="add-btn" id="open-sheet-btn">+ Track Flight</button>
   </div>
-</nav>
 
-<header>
-  <div class="header-label">Price Tracker</div>
-  <div class="header-title">My <em>Favorite</em><br>Flight</div>
-</header>
-
-<div class="add-bar">
-  <button class="add-btn" id="open-sheet-btn">
-    <span class="add-btn-icon">+</span>
-    Track New Flight
-  </button>
-</div>
-
-<div id="flight-list">
-  <div class="empty-state">No flights tracked.<br>Add one above.</div>
-</div>
+  <div id="flight-list">
+    <div class="empty-state">No flights tracked.<br>Add one above.</div>
+  </div>
+</main>
 
 <!-- Bottom Sheet -->
 <div class="sheet-overlay" id="overlay"></div>
@@ -505,7 +432,7 @@
   <div class="sheet-handle"></div>
   <div class="sheet-header">
     <span class="sheet-title">Track Flight</span>
-    <button class="sheet-close" id="close-sheet-btn">[ Close ]</button>
+    <button class="sheet-close" id="close-sheet-btn">Close</button>
   </div>
 
   <div class="field-row">
@@ -550,17 +477,13 @@
   <button class="submit-btn" id="submit-btn">Add Flight</button>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
   const VAPID_PUBLIC_KEY = "{{ vapid_public_key }}";
 
-  // ── Sheet ──
   const overlay = document.getElementById('overlay');
   const sheet = document.getElementById('sheet');
-  const openBtn = document.getElementById('open-sheet-btn');
-  const closeBtn = document.getElementById('close-sheet-btn');
 
   function openSheet() {
     sheet.classList.add('open');
@@ -574,11 +497,10 @@
     document.body.style.overflow = '';
   }
 
-  openBtn.addEventListener('click', openSheet);
-  closeBtn.addEventListener('click', closeSheet);
+  document.getElementById('open-sheet-btn').addEventListener('click', openSheet);
+  document.getElementById('close-sheet-btn').addEventListener('click', closeSheet);
   overlay.addEventListener('click', closeSheet);
 
-  // ── Toast ──
   function showToast(msg, duration = 2500) {
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -586,19 +508,13 @@
     setTimeout(() => t.classList.remove('show'), duration);
   }
 
-  // ── Format helpers ──
   function fmtPrice(price, currency) {
     if (price == null) return '—';
     return price.toLocaleString() + ' ' + currency;
   }
 
-  function fmtDate(str) {
-    if (!str) return '';
-    return str;
-  }
-
   function timeSince(str) {
-    if (!str) return 'Never checked';
+    if (!str) return 'Not checked';
     const diff = Date.now() - new Date(str + 'Z').getTime();
     const h = Math.floor(diff / 3600000);
     if (h < 1) return 'Just now';
@@ -606,7 +522,6 @@
     return Math.floor(h / 24) + 'd ago';
   }
 
-  // ── Render flights ──
   function renderFlights(flights) {
     const list = document.getElementById('flight-list');
     if (!flights.length) {
@@ -618,56 +533,44 @@
       const alerted = f.current_price && f.current_price <= f.target_price;
       const cls = alerted ? 'flight-item alerted' : 'flight-item';
       const currentDisplay = f.current_price ? fmtPrice(f.current_price, f.currency) : '—';
-      const tripType = f.return_date ? 'Round Trip' : 'One Way';
+      const tripLabel = f.return_date ? 'RT' : 'OW';
       return `
         <div class="${cls}" data-id="${f.id}">
-          <div class="flight-row-top">
+          <div class="flight-top">
             <div class="flight-route">
-              ${f.origin}<span class="flight-arrow">→</span>${f.destination}
+              ${f.origin}<span class="arrow"> → </span>${f.destination}
             </div>
-            <div class="flight-price-current">${currentDisplay}</div>
+            <div class="flight-price">${currentDisplay}</div>
           </div>
-          <div class="flight-row-mid">
-            <div class="flight-meta">${fmtDate(f.departure_date)}${f.return_date ? ' · ' + fmtDate(f.return_date) : ''} · ${tripType}</div>
+          <div class="flight-mid">
+            <div class="flight-date">${f.departure_date}${f.return_date ? ' · ' + f.return_date : ''} · ${tripLabel}</div>
             ${alerted ? '<span class="alert-badge">↓ Below Target</span>' : ''}
           </div>
-          <div class="flight-target-row">
-            <div class="flight-target-label">Target: <span class="flight-target-value">${fmtPrice(f.target_price, f.currency)}</span></div>
+          <div class="flight-bottom">
+            <div class="flight-target">Target: ${fmtPrice(f.target_price, f.currency)}</div>
             <div class="flight-actions">
-              <span class="flight-meta" style="margin-right:4px">${timeSince(f.last_checked)}</span>
-              <button class="btn-check" onclick="checkFlight(${f.id})">[ Check ]</button>
-              <button class="btn-delete" onclick="deleteFlight(${f.id})">[ Del ]</button>
+              <span class="checked-time">${timeSince(f.last_checked)}</span>
+              <button class="btn-sm" onclick="checkFlight(${f.id})">Check</button>
+              <button class="btn-sm" onclick="deleteFlight(${f.id})">Del</button>
             </div>
           </div>
         </div>`;
     }).join('');
   }
 
-  // ── API calls ──
   async function loadFlights() {
     try {
       const r = await fetch('/api/flights');
-      const data = await r.json();
-      renderFlights(data);
-    } catch (e) {
-      showToast('Load failed');
-    }
+      renderFlights(await r.json());
+    } catch (e) { showToast('Load failed'); }
   }
 
   async function checkFlight(id) {
-    const el = document.querySelector(`[data-id="${id}"]`);
-    if (el) {
-      const orig = el.innerHTML;
-      el.innerHTML = '<div class="loading-bar"></div>';
-      el.style.padding = '0';
-    }
     try {
       const r = await fetch(`/api/flights/${id}/check`, { method: 'POST' });
       if (!r.ok) throw new Error();
       showToast('Updated');
-    } catch (e) {
-      showToast('Check failed');
-    }
+    } catch (e) { showToast('Check failed'); }
     await loadFlights();
   }
 
@@ -675,12 +578,9 @@
     try {
       await fetch(`/api/flights/${id}`, { method: 'DELETE' });
       await loadFlights();
-    } catch (e) {
-      showToast('Delete failed');
-    }
+    } catch (e) { showToast('Delete failed'); }
   }
 
-  // ── Submit ──
   document.getElementById('submit-btn').addEventListener('click', async () => {
     const origin = document.getElementById('origin').value.trim().toUpperCase();
     const destination = document.getElementById('destination').value.trim().toUpperCase();
@@ -707,21 +607,15 @@
       if (!r.ok) throw new Error();
       closeSheet();
       showToast('Flight added');
-      document.getElementById('origin').value = '';
-      document.getElementById('destination').value = '';
-      document.getElementById('departure_date').value = '';
-      document.getElementById('return_date').value = '';
-      document.getElementById('target_price').value = '';
+      ['origin','destination','departure_date','return_date','target_price'].forEach(id => document.getElementById(id).value = '');
       await loadFlights();
-    } catch (e) {
-      showToast('Failed to add flight');
-    } finally {
+    } catch (e) { showToast('Failed to add'); }
+    finally {
       btn.disabled = false;
       btn.textContent = 'Add Flight';
     }
   });
 
-  // ── Push notifications ──
   const notifBtn = document.getElementById('notif-btn');
   let pushSub = null;
 
