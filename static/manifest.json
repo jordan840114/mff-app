@@ -4,8 +4,8 @@
   "description": "追蹤你最愛的機票價格",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a1628",
-  "theme_color": "#0a1628",
+  "background_color": "#7ec8e3",
+  "theme_color": "#7ec8e3",
   "orientation": "portrait",
   "icons": [
     {
