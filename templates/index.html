@@ -8,6 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="MFF" />
   <link rel="manifest" href="/static/manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="/static/logo.svg" />
   <link rel="apple-touch-icon" href="/static/icon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -44,39 +45,50 @@
 
     .blob {
       position: absolute;
-      border-radius: 50%;
       will-change: transform;
       transition: background 1.4s ease;
     }
 
-    /* 深藍底層：縮小、降 opacity，不搶視覺 */
-    #b1 { width: 52vw; height: 52vw; filter: blur(68px);  opacity: 0.78;
-          top: 5%;   left: 8%;   background: #0a3870;
+    /* 深藍底層 */
+    #b1 { width: 52vw; height: 52vw; filter: blur(68px); opacity: 0.78;
+          top: 5%;  left: 8%;  background: #0a3870;
+          border-radius: 64% 36% 52% 48% / 58% 44% 56% 42%;
           animation: da 52s ease-in-out infinite; }
-    #b2 { width: 44vw; height: 44vw; filter: blur(58px);  opacity: 0.74;
-          top: 52%;  right: 5%;  background: #0c3d7a;
+    #b2 { width: 44vw; height: 44vw; filter: blur(58px); opacity: 0.74;
+          top: 52%; right: 5%; background: #0c3d7a;
+          border-radius: 42% 58% 66% 34% / 52% 68% 32% 48%;
           animation: db 44s ease-in-out infinite; }
-    /* 中藍：主體，最明顯的色塊 */
-    #b3 { width: 46vw; height: 46vw; filter: blur(52px);  opacity: 0.88;
-          top: 28%;  left: 25%;  background: #1878c0;
+    /* 中藍主體 */
+    #b3 { width: 46vw; height: 46vw; filter: blur(52px); opacity: 0.88;
+          top: 28%; left: 25%; background: #1878c0;
+          border-radius: 72% 28% 44% 56% / 36% 62% 38% 64%;
           animation: dc 36s ease-in-out infinite; }
-    #b4 { width: 40vw; height: 40vw; filter: blur(46px);  opacity: 0.84;
-          top: 55%;  left: 5%;   background: #1a6ab0;
+    #b4 { width: 40vw; height: 40vw; filter: blur(46px); opacity: 0.84;
+          top: 55%; left: 5%;  background: #1a6ab0;
+          border-radius: 38% 62% 58% 42% / 66% 34% 62% 38%;
           animation: dd 30s ease-in-out infinite; }
-    #b8 { width: 38vw; height: 38vw; filter: blur(44px);  opacity: 0.82;
-          top: 12%;  left: 48%;  background: #1268a8;
+    #b8 { width: 38vw; height: 38vw; filter: blur(44px); opacity: 0.82;
+          top: 12%; left: 48%; background: #1268a8;
+          border-radius: 56% 44% 36% 64% / 44% 56% 48% 52%;
           animation: dh 46s ease-in-out infinite; }
-    /* 淺藍亮塊：點綴，讓畫面有亮度層次 */
-    #b5 { width: 32vw; height: 32vw; filter: blur(38px);  opacity: 0.78;
-          top: 8%;   right: 18%; background: #3aa0d0;
+    /* 淺藍點綴 */
+    #b5 { width: 32vw; height: 32vw; filter: blur(38px); opacity: 0.78;
+          top: 8%;  right: 18%; background: #3aa0d0;
+          border-radius: 48% 52% 68% 32% / 60% 40% 56% 44%;
           animation: de 26s ease-in-out infinite; }
-    #b6 { width: 28vw; height: 28vw; filter: blur(34px);  opacity: 0.74;
-          top: 68%;  right: 22%; background: #48b0dc;
+    #b6 { width: 28vw; height: 28vw; filter: blur(34px); opacity: 0.74;
+          top: 68%; right: 22%; background: #48b0dc;
+          border-radius: 66% 34% 42% 58% / 38% 62% 44% 56%;
           animation: df 38s ease-in-out infinite; }
-    /* 霧白強調小塊 */
-    #b7 { width: 22vw; height: 22vw; filter: blur(30px);  opacity: 0.36;
-          top: 38%;  left: 52%;  background: #88b0c4;
+    /* 米白塊：面積加大、兩塊 */
+    #b7 { width: 30vw; height: 30vw; filter: blur(34px); opacity: 0.52;
+          top: 35%; left: 50%; background: #c8dce8;
+          border-radius: 54% 46% 62% 38% / 48% 66% 34% 52%;
           animation: dg 32s ease-in-out infinite; }
+    #b9 { width: 24vw; height: 24vw; filter: blur(28px); opacity: 0.44;
+          top: 72%; left: 38%; background: #b8ccd8;
+          border-radius: 40% 60% 54% 46% / 62% 38% 58% 42%;
+          animation: di 29s ease-in-out infinite; }
 
     @keyframes da {
       0%   { transform: translate(0,0) scale(1); }
@@ -153,6 +165,14 @@
       54%  { transform: translate(14vw, -32vh) scale(1.1); }
       71%  { transform: translate(28vw,  8vh)  scale(0.9); }
       87%  { transform: translate(10vw,  28vh) scale(1.05); }
+      100% { transform: translate(0,0) scale(1); }
+    }
+    @keyframes di {
+      0%   { transform: translate(0,0) scale(1); }
+      20%  { transform: translate(22vw,-18vh) scale(1.12); }
+      42%  { transform: translate(10vw, 26vh) scale(0.88); }
+      64%  { transform: translate(-20vw, 18vh) scale(1.1); }
+      84%  { transform: translate(-12vw,-24vh) scale(0.9); }
       100% { transform: translate(0,0) scale(1); }
     }
 
@@ -597,6 +617,7 @@
   <div class="blob" id="b6"></div>
   <div class="blob" id="b7"></div>
   <div class="blob" id="b8"></div>
+  <div class="blob" id="b9"></div>
 </div>
 
 <!-- Grain overlay (canvas-based, injected by JS) -->
