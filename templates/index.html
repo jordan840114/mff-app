@@ -38,7 +38,7 @@
       position: fixed;
       inset: -8%;
       z-index: 0;
-      background: #07233c;
+      background: #060810;
       transition: background 1.4s ease;
       filter: url(#lava-filter);
     }
@@ -49,44 +49,44 @@
       transition: background 1.4s ease;
     }
 
-    /* 深藍底層 — 極深，高 blur 讓邊緣自然消散 */
-    #b1 { width: 58vw; height: 58vw; filter: blur(88px); opacity: 0.82;
-          top: 5%;  left: 8%;  background: #050f2c;
+    /* 近黑底層 */
+    #b1 { width: 58vw; height: 58vw; filter: blur(88px); opacity: 0.90;
+          top: 5%;  left: 8%;  background: #070c16;
           border-radius: 64% 36% 52% 48% / 58% 44% 56% 42%;
           animation: da 52s ease-in-out infinite; }
-    #b2 { width: 50vw; height: 50vw; filter: blur(78px); opacity: 0.78;
-          top: 52%; right: 5%; background: #06122e;
+    #b2 { width: 50vw; height: 50vw; filter: blur(78px); opacity: 0.86;
+          top: 52%; right: 5%; background: #04080e;
           border-radius: 42% 58% 66% 34% / 52% 68% 32% 48%;
           animation: db 44s ease-in-out infinite; }
-    /* 過渡中藍 — 深與淺之間的橋接 */
-    #b3 { width: 52vw; height: 52vw; filter: blur(70px); opacity: 0.86;
-          top: 28%; left: 22%; background: #0d4e90;
+    /* 深青藍主體 */
+    #b3 { width: 54vw; height: 54vw; filter: blur(70px); opacity: 0.88;
+          top: 28%; left: 18%; background: #0e5060;
           border-radius: 72% 28% 44% 56% / 36% 62% 38% 64%;
           animation: dc 36s ease-in-out infinite; }
-    #b4 { width: 46vw; height: 46vw; filter: blur(64px); opacity: 0.82;
-          top: 55%; left: 5%;  background: #105ea0;
+    #b4 { width: 48vw; height: 48vw; filter: blur(64px); opacity: 0.84;
+          top: 55%; left: 5%;  background: #1a6878;
           border-radius: 38% 62% 58% 42% / 66% 34% 62% 38%;
           animation: dd 30s ease-in-out infinite; }
-    #b8 { width: 44vw; height: 44vw; filter: blur(62px); opacity: 0.80;
-          top: 12%; left: 48%; background: #0c4a84;
+    #b8 { width: 46vw; height: 46vw; filter: blur(62px); opacity: 0.82;
+          top: 10%; left: 45%; background: #124858;
           border-radius: 56% 44% 36% 64% / 44% 56% 48% 52%;
           animation: dh 46s ease-in-out infinite; }
-    /* 灰藍淡色 — 去飽和度，不搶眼 */
-    #b5 { width: 38vw; height: 38vw; filter: blur(54px); opacity: 0.72;
-          top: 8%;  right: 18%; background: #3c88a8;
+    /* 薰衣草紫粉 */
+    #b5 { width: 40vw; height: 40vw; filter: blur(56px); opacity: 0.76;
+          top: 5%;  right: 12%; background: #9878b8;
           border-radius: 48% 52% 68% 32% / 60% 40% 56% 44%;
           animation: de 26s ease-in-out infinite; }
-    #b6 { width: 34vw; height: 34vw; filter: blur(48px); opacity: 0.68;
-          top: 68%; right: 22%; background: #4a95b2;
+    #b6 { width: 36vw; height: 36vw; filter: blur(50px); opacity: 0.72;
+          top: 65%; right: 18%; background: #c0a0d0;
           border-radius: 66% 34% 42% 58% / 38% 62% 44% 56%;
           animation: df 38s ease-in-out infinite; }
-    /* 米灰白 — 更低飽和，類舊紙白 */
-    #b7 { width: 36vw; height: 36vw; filter: blur(46px); opacity: 0.46;
-          top: 35%; left: 50%; background: #7aa8bc;
+    /* 近白亮點 — 低飽和 lavender-white */
+    #b7 { width: 36vw; height: 36vw; filter: blur(48px); opacity: 0.50;
+          top: 32%; left: 52%; background: #ccc0d8;
           border-radius: 54% 46% 62% 38% / 48% 66% 34% 52%;
           animation: dg 32s ease-in-out infinite; }
-    #b9 { width: 30vw; height: 30vw; filter: blur(40px); opacity: 0.40;
-          top: 72%; left: 38%; background: #6e9aac;
+    #b9 { width: 30vw; height: 30vw; filter: blur(42px); opacity: 0.44;
+          top: 70%; left: 35%; background: #baaec8;
           border-radius: 40% 60% 54% 46% / 62% 38% 58% 42%;
           animation: di 29s ease-in-out infinite; }
 
@@ -1116,13 +1116,19 @@
     activeAirportTarget = target;
     navPath = [];
     document.getElementById('airport-search').value = '';
+    document.getElementById('airport-search-wrap').style.display = '';
     if (target === 'origin') {
-      document.getElementById('airport-search-wrap').style.display = 'none';
-      document.getElementById('airport-nav').style.display = 'none';
+      // Taiwan airports pinned at top, then full hierarchy below
+      const pinned = AIRPORTS.filter(a => TW_INTL.includes(a.code));
       document.getElementById('airport-results').innerHTML =
-        AIRPORTS.filter(a => TW_INTL.includes(a.code)).map(a => airportItemHTML(a)).join('');
+        `<div class="region-header">台灣 — 優先選項</div>` +
+        pinned.map(a => airportItemHTML(a)).join('') +
+        `<div class="region-header" style="margin-top:8px">其他出發地</div>` +
+        CONTINENTS.map(c => {
+          const cnt = airportsForContinent(c).length;
+          return hierItemHTML(c, cnt + ' 個機場', `drillDown('${c}')`);
+        }).join('');
     } else {
-      document.getElementById('airport-search-wrap').style.display = '';
       renderHierarchy();
     }
     airportModal.classList.add('open');
