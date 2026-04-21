@@ -3,33 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#a8d8ea" />
+  <meta name="theme-color" content="#000000" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta name="apple-mobile-web-app-title" content="MFF" />
   <link rel="manifest" href="/static/manifest.json" />
   <link rel="apple-touch-icon" href="/static/icon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <title>MY FAVORITE FLIGHT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <title>MFF</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --sky: #a8d8ea;
-      --black: #0d0d0d;
-      --white: #ffffff;
-      --gray: rgba(13,13,13,0.4);
-      --mid: rgba(13,13,13,0.12);
+      --bg: #000000;
+      --fg: #fbfbfb;
+      --dim: rgba(251,251,251,0.35);
+      --line: rgba(251,251,251,0.1);
+      --alert: #EF4444;
     }
 
-    html { font-family: 'Space Grotesk', -apple-system, sans-serif; }
-
-    body {
-      background: var(--sky);
+    html, body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.04em;
       min-height: 100vh;
-      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* ── NAV ── */
@@ -37,719 +39,734 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 18px 20px;
+      padding: 18px 16px 14px;
+      border-bottom: 1px solid var(--line);
       position: sticky;
       top: 0;
       z-index: 50;
-      background: var(--sky);
+      background: var(--bg);
     }
 
-    .logo-pill {
-      background: var(--black);
-      color: var(--white);
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
+    .nav-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      color: var(--fg);
       text-transform: uppercase;
-      padding: 6px 13px;
-      border-radius: 100px;
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
     }
 
-    .logo-pill::after {
-      content: '';
-      width: 5px;
-      height: 5px;
-      background: var(--sky);
+    .nav-logo span {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--fg);
       border-radius: 50%;
-      display: block;
+      margin-left: 6px;
+      vertical-align: middle;
     }
 
-    #notify-btn {
-      font-family: inherit;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      background: transparent;
-      border: 1.5px solid var(--black);
-      border-radius: 100px;
-      color: var(--black);
-      padding: 6px 14px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    #notify-btn:hover,
-    #notify-btn.active {
-      background: var(--black);
-      color: var(--sky);
-    }
-
-    /* ── HERO ── */
-    .hero {
-      padding: 12px 20px 20px;
-      overflow: hidden;
-    }
-
-    .hero-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(72px, 22vw, 140px);
-      line-height: 0.92;
-      letter-spacing: 0.01em;
-      color: var(--black);
-      text-transform: uppercase;
-      user-select: none;
-    }
-
-    .hero-title .outline {
-      -webkit-text-stroke: 2px var(--black);
-      color: transparent;
-    }
-
-    .hero-meta {
+    .nav-actions {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-top: 14px;
-      padding-top: 12px;
-      border-top: 1.5px solid var(--black);
+      gap: 16px;
     }
 
-    .hero-meta-text {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
+    .notif-btn {
+      background: none;
+      border: none;
+      color: var(--dim);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--gray);
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.2s;
+    }
+
+    .notif-btn.active { color: var(--fg); }
+    .notif-btn:hover { color: var(--fg); }
+
+    /* ── HEADER ── */
+    header {
+      padding: 40px 16px 32px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 10px;
+    }
+
+    .header-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      text-transform: uppercase;
+      color: var(--fg);
+    }
+
+    .header-title em {
+      font-style: normal;
+      color: var(--dim);
     }
 
     /* ── ADD BUTTON ── */
-    .add-trigger {
+    .add-bar {
+      padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .add-btn {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      background: var(--black);
-      color: var(--white);
+      width: 100%;
+      padding: 16px 0;
+      background: none;
       border: none;
-      border-radius: 14px;
-      padding: 16px 20px;
-      margin: 0 20px 24px;
-      cursor: pointer;
-      width: calc(100% - 40px);
-      font-family: inherit;
-      transition: opacity 0.15s;
-    }
-
-    .add-trigger:hover { opacity: 0.85; }
-
-    .add-trigger-label {
-      font-size: 13px;
-      font-weight: 700;
+      color: var(--dim);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
+      cursor: pointer;
+      gap: 10px;
+      transition: color 0.2s;
     }
 
-    .add-trigger-icon {
-      font-size: 22px;
+    .add-btn:hover, .add-btn:active { color: var(--fg); }
+
+    .add-btn-icon {
+      width: 20px;
+      height: 20px;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
       line-height: 1;
-      font-weight: 300;
+      flex-shrink: 0;
     }
 
     /* ── FLIGHT LIST ── */
-    .flights-section { padding: 0 20px; }
+    #flight-list { }
 
-    .section-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
-
-    .section-bar-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
+    .empty-state {
+      padding: 60px 16px;
+      text-align: center;
+      color: var(--dim);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--gray);
-    }
-
-    .count-badge {
-      background: var(--black);
-      color: var(--white);
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 100px;
+      line-height: 2;
     }
 
     /* ── FLIGHT ITEM ── */
     .flight-item {
-      background: var(--white);
-      border-radius: 16px;
-      margin-bottom: 10px;
-      overflow: hidden;
-      transition: transform 0.12s;
+      padding: 20px 16px;
+      border-bottom: 1px solid var(--line);
+      position: relative;
     }
 
-    .flight-item:active { transform: scale(0.98); }
+    .flight-item.alerted {
+      background: var(--alert);
+    }
 
-    .flight-item.alert { background: var(--black); }
-
-    .flight-item-top {
-      padding: 18px 20px 0;
+    .flight-row-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 6px;
     }
 
     .flight-route {
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      margin-bottom: 4px;
-    }
-
-    .iata-code {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 52px;
-      line-height: 1;
-      letter-spacing: 0.02em;
-      color: var(--black);
-    }
-
-    .flight-item.alert .iata-code { color: var(--white); }
-
-    .arrow-glyph {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 18px;
-      color: var(--gray);
-      flex-shrink: 0;
-    }
-
-    .flight-item.alert .arrow-glyph { color: rgba(255,255,255,0.35); }
-
-    .alert-tag {
-      margin-left: auto;
-      background: var(--sky);
-      color: var(--black);
-      font-size: 9px;
+      font-family: 'Space Mono', monospace;
+      font-size: 20px;
       font-weight: 700;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 100px;
-      align-self: center;
-    }
-
-    .flight-date {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--gray);
-      padding: 0 20px;
-      margin-bottom: 14px;
-    }
-
-    .flight-item.alert .flight-date { color: rgba(255,255,255,0.38); }
-
-    /* price strip */
-    .price-strip {
-      display: flex;
-      align-items: stretch;
-      border-top: 1.5px solid rgba(13,13,13,0.08);
-    }
-
-    .flight-item.alert .price-strip { border-color: rgba(255,255,255,0.1); }
-
-    .price-cell {
-      flex: 1;
-      padding: 12px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .price-cell + .price-cell {
-      border-left: 1.5px solid rgba(13,13,13,0.08);
-    }
-
-    .flight-item.alert .price-cell + .price-cell { border-color: rgba(255,255,255,0.1); }
-
-    .price-cell-label {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gray);
-    }
-
-    .flight-item.alert .price-cell-label { color: rgba(255,255,255,0.38); }
-
-    .price-cell-value {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 28px;
       line-height: 1;
-      color: var(--black);
+    }
+
+    .flight-item.alerted .flight-route { color: #000; }
+
+    .flight-arrow {
+      color: var(--dim);
+      margin: 0 6px;
+      font-size: 14px;
+    }
+
+    .flight-item.alerted .flight-arrow { color: rgba(0,0,0,0.4); }
+
+    .flight-price-current {
+      font-family: 'Space Mono', monospace;
+      font-size: 20px;
+      font-weight: 700;
       letter-spacing: 0.02em;
     }
 
-    .price-cell-value.low { color: #1a7fd4; }
-    .flight-item.alert .price-cell-value { color: var(--sky); }
-    .price-cell-value.pending { font-size: 18px; opacity: 0.3; }
+    .flight-item.alerted .flight-price-current { color: #000; }
 
-    /* action strip */
-    .action-strip {
+    .flight-row-mid {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 20px 14px;
+      margin-bottom: 12px;
     }
 
-    .checked-at {
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--gray);
-    }
-
-    .flight-item.alert .checked-at { color: rgba(255,255,255,0.3); }
-
-    .action-btns { display: flex; gap: 8px; }
-
-    .btn-sm {
-      font-family: inherit;
-      font-size: 9px;
-      font-weight: 700;
+    .flight-meta {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      background: transparent;
-      border: 1.5px solid rgba(13,13,13,0.2);
-      border-radius: 100px;
-      color: var(--black);
-      padding: 5px 12px;
-      cursor: pointer;
-      transition: all 0.15s;
+      color: var(--dim);
     }
 
-    .btn-sm:hover { border-color: var(--black); }
-    .btn-sm:disabled { opacity: 0.3; cursor: not-allowed; }
-    .btn-sm.danger:hover { border-color: #ef4444; color: #ef4444; }
-    .flight-item.alert .btn-sm { border-color: rgba(255,255,255,0.25); color: rgba(255,255,255,0.7); }
-    .flight-item.alert .btn-sm:hover { border-color: var(--white); color: var(--white); }
+    .flight-item.alerted .flight-meta { color: rgba(0,0,0,0.5); }
 
-    /* ── EMPTY ── */
-    .empty-state {
-      text-align: center;
-      padding: 60px 0 40px;
+    .flight-target-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    .empty-big {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 64px;
-      line-height: 1;
-      color: rgba(13,13,13,0.15);
-      letter-spacing: 0.02em;
-    }
-
-    .empty-small {
+    .flight-target-label {
+      font-family: 'Space Mono', monospace;
       font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--gray);
-      margin-top: 8px;
+      color: var(--dim);
     }
 
-    /* ── MODAL ── */
-    .modal-overlay {
+    .flight-item.alerted .flight-target-label { color: rgba(0,0,0,0.5); }
+
+    .flight-target-value {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--dim);
+    }
+
+    .flight-item.alerted .flight-target-value { color: rgba(0,0,0,0.6); }
+
+    .flight-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-check, .btn-delete {
+      background: none;
+      border: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 0;
+      transition: opacity 0.2s;
+    }
+
+    .btn-check { color: var(--dim); }
+    .btn-delete { color: var(--dim); }
+    .flight-item.alerted .btn-check,
+    .flight-item.alerted .btn-delete { color: rgba(0,0,0,0.5); }
+    .btn-check:hover, .btn-delete:hover { opacity: 1; color: var(--fg); }
+    .flight-item.alerted .btn-check:hover,
+    .flight-item.alerted .btn-delete:hover { color: #000; opacity: 0.8; }
+
+    .alert-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: #000;
+      color: var(--alert);
+      padding: 2px 6px;
+      border-radius: 2px;
+    }
+
+    /* ── BOTTOM SHEET ── */
+    .sheet-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(13,13,13,0.55);
+      background: rgba(0,0,0,0.7);
       z-index: 100;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.25s;
     }
 
-    .modal-overlay.open {
+    .sheet-overlay.open {
       opacity: 1;
       pointer-events: all;
     }
 
-    .modal-sheet {
+    .sheet {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: var(--white);
-      border-radius: 24px 24px 0 0;
-      padding: 0 20px calc(env(safe-area-inset-bottom, 0px) + 24px);
+      background: #111;
+      border-top: 1px solid var(--line);
       z-index: 101;
+      padding: 0 16px calc(env(safe-area-inset-bottom, 16px) + 16px);
       transform: translateY(100%);
       transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
       max-height: 92vh;
       overflow-y: auto;
     }
 
-    .modal-sheet.open { transform: translateY(0); }
+    .sheet.open {
+      transform: translateY(0);
+    }
 
     .sheet-handle {
       width: 36px;
-      height: 4px;
-      background: rgba(13,13,13,0.15);
+      height: 3px;
+      background: var(--line);
       border-radius: 2px;
-      margin: 14px auto 20px;
+      margin: 12px auto 0;
+    }
+
+    .sheet-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0 16px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 24px;
     }
 
     .sheet-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 38px;
-      line-height: 1;
-      color: var(--black);
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--fg);
+    }
+
+    .sheet-close {
+      background: none;
+      border: none;
+      color: var(--dim);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .field {
       margin-bottom: 20px;
     }
 
-    .form-row {
+    .field-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--line);
+      color: var(--fg);
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 10px 0;
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+      border-radius: 0;
+    }
+
+    .field input::placeholder { color: var(--dim); text-transform: uppercase; }
+    .field input:focus, .field select:focus { border-color: var(--fg); }
+
+    .field select option { background: #111; }
+
+    .field-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 10px;
+      gap: 16px;
     }
 
-    .input-group { display: flex; flex-direction: column; gap: 5px; }
-
-    .input-group label {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--gray);
-    }
-
-    .input-group input,
-    .input-group select {
-      background: #f4f4f4;
-      border: 2px solid transparent;
-      border-radius: 10px;
-      color: var(--black);
-      font-family: inherit;
-      font-size: 16px;
-      font-weight: 600;
-      padding: 11px 12px;
-      outline: none;
-      transition: border-color 0.15s;
-      -webkit-appearance: none;
+    .submit-btn {
       width: 100%;
-    }
-
-    .input-group input::placeholder { color: #aaa; font-weight: 500; }
-    .input-group input:focus,
-    .input-group select:focus { border-color: var(--black); background: var(--white); }
-    .input-group input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.3; }
-
-    .btn-submit {
-      width: 100%;
-      background: var(--black);
+      background: var(--fg);
+      color: var(--bg);
       border: none;
-      border-radius: 12px;
-      color: var(--white);
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 22px;
-      letter-spacing: 0.1em;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       padding: 16px;
       cursor: pointer;
-      margin-top: 16px;
-      transition: opacity 0.15s;
+      margin-top: 8px;
+      transition: opacity 0.2s;
     }
 
-    .btn-submit:hover { opacity: 0.82; }
-    .btn-submit:disabled { opacity: 0.3; cursor: not-allowed; }
+    .submit-btn:hover { opacity: 0.85; }
+    .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
     /* ── TOAST ── */
     .toast {
       position: fixed;
-      bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
       left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--black);
-      color: var(--white);
-      font-family: inherit;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--fg);
+      color: var(--bg);
+      font-family: 'Space Mono', monospace;
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      padding: 12px 20px;
-      border-radius: 100px;
-      z-index: 200;
-      pointer-events: none;
+      padding: 10px 18px;
       white-space: nowrap;
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s;
+      z-index: 200;
     }
 
-    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
 
-    /* bottom spacer */
-    .spacer { height: 40px; }
+    .loading-bar {
+      height: 1px;
+      background: var(--line);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .loading-bar::after {
+      content: '';
+      position: absolute;
+      left: -100%;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--fg);
+      animation: load 1.2s ease infinite;
+    }
+
+    @keyframes load {
+      to { left: 100%; }
+    }
   </style>
 </head>
 <body>
 
 <nav>
-  <div class="logo-pill">MFF</div>
-  <button id="notify-btn" onclick="toggleNotifications()">通知</button>
+  <div class="nav-logo">MFF<span></span></div>
+  <div class="nav-actions">
+    <button class="notif-btn" id="notif-btn">[ Notify ]</button>
+  </div>
 </nav>
 
-<div class="hero">
-  <h1 class="hero-title">
-    MY<br>
-    <span class="outline">FAV</span><br>
-    FLIGHT
-  </h1>
-  <div class="hero-meta">
-    <span class="hero-meta-text">Track · Alert · Fly</span>
-    <span class="hero-meta-text" id="flight-count">0 Routes</span>
-  </div>
+<header>
+  <div class="header-label">Price Tracker</div>
+  <div class="header-title">My <em>Favorite</em><br>Flight</div>
+</header>
+
+<div class="add-bar">
+  <button class="add-btn" id="open-sheet-btn">
+    <span class="add-btn-icon">+</span>
+    Track New Flight
+  </button>
 </div>
 
-<button class="add-trigger" onclick="openModal()">
-  <span class="add-trigger-label">Track New Flight</span>
-  <span class="add-trigger-icon">+</span>
-</button>
-
-<div class="flights-section">
-  <div class="section-bar">
-    <span class="section-bar-label">Tracking</span>
-  </div>
-  <div id="flights-list">
-    <div class="empty-state">
-      <div class="empty-big">TPE→???</div>
-      <p class="empty-small">尚無追蹤航班</p>
-    </div>
-  </div>
+<div id="flight-list">
+  <div class="empty-state">No flights tracked.<br>Add one above.</div>
 </div>
 
-<div class="spacer"></div>
-
-<!-- Modal -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeModal()"></div>
-<div class="modal-sheet" id="modal-sheet">
+<!-- Bottom Sheet -->
+<div class="sheet-overlay" id="overlay"></div>
+<div class="sheet" id="sheet">
   <div class="sheet-handle"></div>
-  <div class="sheet-title">TRACK<br>FLIGHT</div>
-  <div class="form-row">
-    <div class="input-group">
-      <label>出發地 IATA</label>
-      <input id="origin" type="text" placeholder="TPE" maxlength="3" />
+  <div class="sheet-header">
+    <span class="sheet-title">Track Flight</span>
+    <button class="sheet-close" id="close-sheet-btn">[ Close ]</button>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label class="field-label">From</label>
+      <input type="text" id="origin" placeholder="TPE" maxlength="3" />
     </div>
-    <div class="input-group">
-      <label>目的地 IATA</label>
-      <input id="destination" type="text" placeholder="NRT" maxlength="3" />
+    <div class="field">
+      <label class="field-label">To</label>
+      <input type="text" id="destination" placeholder="NRT" maxlength="3" />
     </div>
   </div>
-  <div class="form-row">
-    <div class="input-group">
-      <label>去程日期</label>
-      <input id="departure_date" type="date" />
+
+  <div class="field-row">
+    <div class="field">
+      <label class="field-label">Depart</label>
+      <input type="date" id="departure_date" />
     </div>
-    <div class="input-group">
-      <label>回程（選填）</label>
-      <input id="return_date" type="date" />
+    <div class="field">
+      <label class="field-label">Return</label>
+      <input type="date" id="return_date" />
     </div>
   </div>
-  <div class="form-row">
-    <div class="input-group">
-      <label>目標價格</label>
-      <input id="target_price" type="number" placeholder="5000" />
+
+  <div class="field-row">
+    <div class="field">
+      <label class="field-label">Target Price</label>
+      <input type="number" id="target_price" placeholder="8000" />
     </div>
-    <div class="input-group">
-      <label>幣別</label>
+    <div class="field">
+      <label class="field-label">Currency</label>
       <select id="currency">
         <option value="TWD">TWD</option>
         <option value="USD">USD</option>
         <option value="JPY">JPY</option>
-        <option value="HKD">HKD</option>
+        <option value="EUR">EUR</option>
         <option value="KRW">KRW</option>
       </select>
     </div>
   </div>
-  <button class="btn-submit" id="add-btn" onclick="addFlight()">Track This Flight</button>
+
+  <button class="submit-btn" id="submit-btn">Add Flight</button>
 </div>
 
+<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
   const VAPID_PUBLIC_KEY = "{{ vapid_public_key }}";
-  let swRegistration = null;
 
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/static/sw.js").then(reg => {
-      swRegistration = reg;
-      updateNotifyBtn();
-    });
+  // ── Sheet ──
+  const overlay = document.getElementById('overlay');
+  const sheet = document.getElementById('sheet');
+  const openBtn = document.getElementById('open-sheet-btn');
+  const closeBtn = document.getElementById('close-sheet-btn');
+
+  function openSheet() {
+    sheet.classList.add('open');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
   }
 
-  function updateNotifyBtn() {
-    const btn = document.getElementById("notify-btn");
-    if (Notification.permission === "granted") {
-      btn.textContent = "通知 ✓";
-      btn.classList.add("active");
-    } else {
-      btn.textContent = "通知";
-      btn.classList.remove("active");
-    }
+  function closeSheet() {
+    sheet.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
   }
 
-  function urlBase64ToUint8Array(b) {
-    const pad = "=".repeat((4 - b.length % 4) % 4);
-    const base64 = (b + pad).replace(/-/g, "+").replace(/_/g, "/");
-    const raw = atob(base64);
-    return new Uint8Array([...raw].map(c => c.charCodeAt(0)));
+  openBtn.addEventListener('click', openSheet);
+  closeBtn.addEventListener('click', closeSheet);
+  overlay.addEventListener('click', closeSheet);
+
+  // ── Toast ──
+  function showToast(msg, duration = 2500) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), duration);
   }
 
-  async function toggleNotifications() {
-    if (!swRegistration) return showToast("不支援推播通知");
-    if (Notification.permission === "denied") return showToast("請到設定允許通知");
-    if (Notification.permission === "granted") {
-      const sub = await swRegistration.pushManager.getSubscription();
-      if (sub) {
-        await fetch("/api/unsubscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(sub.toJSON()) });
-        await sub.unsubscribe();
-        updateNotifyBtn();
-        showToast("已關閉通知");
-        return;
-      }
-    }
-    const permission = await Notification.requestPermission();
-    if (permission !== "granted") return showToast("通知權限被拒絕");
-    try {
-      const sub = await swRegistration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
-      });
-      await fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(sub.toJSON()) });
-      updateNotifyBtn();
-      showToast("低價通知已開啟！");
-    } catch (e) { showToast("開啟失敗"); }
+  // ── Format helpers ──
+  function fmtPrice(price, currency) {
+    if (price == null) return '—';
+    return price.toLocaleString() + ' ' + currency;
   }
 
-  function openModal() {
-    document.getElementById("modal-overlay").classList.add("open");
-    document.getElementById("modal-sheet").classList.add("open");
-    document.body.style.overflow = "hidden";
+  function fmtDate(str) {
+    if (!str) return '';
+    return str;
   }
 
-  function closeModal() {
-    document.getElementById("modal-overlay").classList.remove("open");
-    document.getElementById("modal-sheet").classList.remove("open");
-    document.body.style.overflow = "";
+  function timeSince(str) {
+    if (!str) return 'Never checked';
+    const diff = Date.now() - new Date(str + 'Z').getTime();
+    const h = Math.floor(diff / 3600000);
+    if (h < 1) return 'Just now';
+    if (h < 24) return h + 'h ago';
+    return Math.floor(h / 24) + 'd ago';
   }
 
-  async function loadFlights() {
-    const res = await fetch("/api/flights");
-    const flights = await res.json();
-    document.getElementById("flight-count").textContent = `${flights.length} Route${flights.length !== 1 ? "s" : ""}`;
-    renderFlights(flights);
-  }
-
+  // ── Render flights ──
   function renderFlights(flights) {
-    const el = document.getElementById("flights-list");
+    const list = document.getElementById('flight-list');
     if (!flights.length) {
-      el.innerHTML = '<div class="empty-state"><div class="empty-big">TPE→???</div><p class="empty-small">尚無追蹤航班</p></div>';
+      list.innerHTML = '<div class="empty-state">No flights tracked.<br>Add one above.</div>';
       return;
     }
-    el.innerHTML = flights.map(f => {
-      const isLow = f.current_price && f.current_price <= f.target_price;
-      const priceVal = f.current_price
-        ? `<span class="price-cell-value ${isLow ? "low" : ""}">${f.current_price.toLocaleString()}</span>`
-        : `<span class="price-cell-value pending">- -</span>`;
-      const dates = f.return_date ? `${f.departure_date} — ${f.return_date}` : f.departure_date;
-      const checked = f.last_checked
-        ? new Date(f.last_checked + "Z").toLocaleString("zh-TW", { timeZone: "Asia/Taipei", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" })
-        : "未查價";
 
+    list.innerHTML = flights.map(f => {
+      const alerted = f.current_price && f.current_price <= f.target_price;
+      const cls = alerted ? 'flight-item alerted' : 'flight-item';
+      const currentDisplay = f.current_price ? fmtPrice(f.current_price, f.currency) : '—';
+      const tripType = f.return_date ? 'Round Trip' : 'One Way';
       return `
-        <div class="flight-item ${isLow ? "alert" : ""}">
-          <div class="flight-item-top">
+        <div class="${cls}" data-id="${f.id}">
+          <div class="flight-row-top">
             <div class="flight-route">
-              <span class="iata-code">${f.origin}</span>
-              <span class="arrow-glyph">→</span>
-              <span class="iata-code">${f.destination}</span>
-              ${isLow ? '<span class="alert-tag">低價 ↓</span>' : ""}
+              ${f.origin}<span class="flight-arrow">→</span>${f.destination}
             </div>
+            <div class="flight-price-current">${currentDisplay}</div>
           </div>
-          <div class="flight-date">${dates} · ${f.currency}</div>
-          <div class="price-strip">
-            <div class="price-cell">
-              <span class="price-cell-label">目前最低</span>
-              ${priceVal}
-            </div>
-            <div class="price-cell">
-              <span class="price-cell-label">目標價格</span>
-              <span class="price-cell-value">≤${f.target_price.toLocaleString()}</span>
-            </div>
+          <div class="flight-row-mid">
+            <div class="flight-meta">${fmtDate(f.departure_date)}${f.return_date ? ' · ' + fmtDate(f.return_date) : ''} · ${tripType}</div>
+            ${alerted ? '<span class="alert-badge">↓ Below Target</span>' : ''}
           </div>
-          <div class="action-strip">
-            <span class="checked-at">${checked}</span>
-            <div class="action-btns">
-              <button class="btn-sm" id="check-btn-${f.id}" onclick="checkNow(${f.id})">查價</button>
-              <button class="btn-sm danger" onclick="deleteFlight(${f.id})">移除</button>
+          <div class="flight-target-row">
+            <div class="flight-target-label">Target: <span class="flight-target-value">${fmtPrice(f.target_price, f.currency)}</span></div>
+            <div class="flight-actions">
+              <span class="flight-meta" style="margin-right:4px">${timeSince(f.last_checked)}</span>
+              <button class="btn-check" onclick="checkFlight(${f.id})">[ Check ]</button>
+              <button class="btn-delete" onclick="deleteFlight(${f.id})">[ Del ]</button>
             </div>
           </div>
         </div>`;
-    }).join("");
+    }).join('');
   }
 
-  async function addFlight() {
-    const btn = document.getElementById("add-btn");
-    const origin = document.getElementById("origin").value.trim().toUpperCase();
-    const destination = document.getElementById("destination").value.trim().toUpperCase();
-    const departure_date = document.getElementById("departure_date").value;
-    const return_date = document.getElementById("return_date").value;
-    const target_price = document.getElementById("target_price").value;
-    const currency = document.getElementById("currency").value;
-    if (!origin || !destination || !departure_date || !target_price) return showToast("請填寫必要欄位");
-    btn.disabled = true; btn.textContent = "Adding...";
+  // ── API calls ──
+  async function loadFlights() {
     try {
-      const res = await fetch("/api/flights", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ origin, destination, departure_date, return_date, target_price, currency })
-      });
-      if (!res.ok) throw new Error();
-      ["origin","destination","departure_date","return_date","target_price"].forEach(id => document.getElementById(id).value = "");
-      closeModal();
-      showToast("已新增！查詢價格中...");
-      await loadFlights();
-    } catch { showToast("新增失敗"); }
-    finally { btn.disabled = false; btn.textContent = "Track This Flight"; }
+      const r = await fetch('/api/flights');
+      const data = await r.json();
+      renderFlights(data);
+    } catch (e) {
+      showToast('Load failed');
+    }
+  }
+
+  async function checkFlight(id) {
+    const el = document.querySelector(`[data-id="${id}"]`);
+    if (el) {
+      const orig = el.innerHTML;
+      el.innerHTML = '<div class="loading-bar"></div>';
+      el.style.padding = '0';
+    }
+    try {
+      const r = await fetch(`/api/flights/${id}/check`, { method: 'POST' });
+      if (!r.ok) throw new Error();
+      showToast('Updated');
+    } catch (e) {
+      showToast('Check failed');
+    }
+    await loadFlights();
   }
 
   async function deleteFlight(id) {
-    await fetch(`/api/flights/${id}`, { method: "DELETE" });
-    showToast("已移除");
-    loadFlights();
-  }
-
-  async function checkNow(id) {
-    const btn = document.getElementById(`check-btn-${id}`);
-    btn.disabled = true; btn.textContent = "...";
     try {
-      const res = await fetch(`/api/flights/${id}/check`, { method: "POST" });
-      if (!res.ok) throw new Error();
-      showToast("價格已更新！");
+      await fetch(`/api/flights/${id}`, { method: 'DELETE' });
       await loadFlights();
-    } catch { showToast("查詢失敗"); btn.disabled = false; btn.textContent = "查價"; }
+    } catch (e) {
+      showToast('Delete failed');
+    }
   }
 
-  function showToast(msg) {
-    const t = document.getElementById("toast");
-    t.textContent = msg;
-    t.classList.add("show");
-    setTimeout(() => t.classList.remove("show"), 3000);
+  // ── Submit ──
+  document.getElementById('submit-btn').addEventListener('click', async () => {
+    const origin = document.getElementById('origin').value.trim().toUpperCase();
+    const destination = document.getElementById('destination').value.trim().toUpperCase();
+    const departure_date = document.getElementById('departure_date').value;
+    const return_date = document.getElementById('return_date').value;
+    const target_price = document.getElementById('target_price').value;
+    const currency = document.getElementById('currency').value;
+
+    if (!origin || !destination || !departure_date || !target_price) {
+      showToast('Fill all required fields');
+      return;
+    }
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Adding...';
+
+    try {
+      const r = await fetch('/api/flights', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ origin, destination, departure_date, return_date, target_price: parseInt(target_price), currency })
+      });
+      if (!r.ok) throw new Error();
+      closeSheet();
+      showToast('Flight added');
+      document.getElementById('origin').value = '';
+      document.getElementById('destination').value = '';
+      document.getElementById('departure_date').value = '';
+      document.getElementById('return_date').value = '';
+      document.getElementById('target_price').value = '';
+      await loadFlights();
+    } catch (e) {
+      showToast('Failed to add flight');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Add Flight';
+    }
+  });
+
+  // ── Push notifications ──
+  const notifBtn = document.getElementById('notif-btn');
+  let pushSub = null;
+
+  async function initPush() {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+    try {
+      const reg = await navigator.serviceWorker.register('/static/sw.js');
+      pushSub = await reg.pushManager.getSubscription();
+      notifBtn.classList.toggle('active', !!pushSub);
+    } catch (e) {}
   }
 
+  notifBtn.addEventListener('click', async () => {
+    if (!('serviceWorker' in navigator)) { showToast('Not supported'); return; }
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      if (pushSub) {
+        await fetch('/api/unsubscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ endpoint: pushSub.endpoint }) });
+        await pushSub.unsubscribe();
+        pushSub = null;
+        notifBtn.classList.remove('active');
+        showToast('Notifications off');
+      } else {
+        const perm = await Notification.requestPermission();
+        if (perm !== 'granted') { showToast('Permission denied'); return; }
+        const sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+        });
+        await fetch('/api/subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(sub) });
+        pushSub = sub;
+        notifBtn.classList.add('active');
+        showToast('Notifications on');
+      }
+    } catch (e) { showToast('Error'); }
+  });
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = atob(base64);
+    return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
+  }
+
+  initPush();
   loadFlights();
 </script>
 </body>
