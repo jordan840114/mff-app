@@ -1017,8 +1017,23 @@
     ALERT:['#c82020','#901010','#e04040','#c03030','#f8d0d0','#780808'],
   };
 
+  // City-group "任一機場" definitions (mirrors tracker.py CITY_AIRPORTS)
+  const CITY_GROUPS = [
+    { code:'TYO', city:'東京', country:'日本', airports:['NRT','HND'] },
+    { code:'OSA', city:'大阪', country:'日本', airports:['KIX','ITM'] },
+    { code:'SEL', city:'首爾', country:'韓國', airports:['ICN','GMP'] },
+    { code:'SHA', city:'上海', country:'中國大陸', airports:['PVG','SHA'] },
+    { code:'BJS', city:'北京', country:'中國大陸', airports:['PEK'] },
+    { code:'LON', city:'倫敦', country:'英國', airports:['LHR','LGW'] },
+    { code:'NYC', city:'紐約', country:'美國', airports:['JFK','LGA','EWR'] },
+  ];
+  // city-code → first member airport palette fallback
+  const CITY_PALETTE_MAP = { TYO:'NRT', OSA:'KIX', SEL:'ICN', SHA:'PVG', BJS:'PEK', LON:'LHR', NYC:'JFK' };
+
   function getPalette(iata) {
-    return PALETTES[(iata||'').toUpperCase()] || PALETTES.DEFAULT;
+    const code = (iata||'').toUpperCase();
+    const mapped = CITY_PALETTE_MAP[code];
+    return PALETTES[mapped || code] || PALETTES.DEFAULT;
   }
 
   function applyPalette(p, animate = true) {
@@ -1157,6 +1172,19 @@
     </div>`;
   }
 
+  function cityGroupItemHTML(cg) {
+    const safeName = (cg.city + ' 任一機場').replace(/'/g,"\\'");
+    return `<div class="airport-item" style="background:rgba(255,255,255,0.18)"
+              onclick="selectAirport('${cg.code}','${safeName}')">
+      <div class="airport-code" style="font-size:11px">${cg.code}</div>
+      <div class="airport-info">
+        <div class="airport-name">${cg.city} <span style="opacity:0.55;font-size:11px">任一機場</span></div>
+        <div class="airport-country">${cg.airports.join(' · ')} — 比較最低價</div>
+      </div>
+      <div style="font-size:9px;color:var(--dim);flex-shrink:0">✦</div>
+    </div>`;
+  }
+
   function hierItemHTML(name, meta, onclick) {
     return `<div class="hier-item" onclick="${onclick}">
       <div class="hier-name">${name}</div>
@@ -1256,14 +1284,22 @@
       } else {
         // Level 2: airports in country (non-Asia)
         const country = navPath[1];
-        results.innerHTML = AIRPORTS.filter(a => a.country === country).map(a => airportItemHTML(a)).join('');
+        results.innerHTML = renderAirportsByCountry(country);
       }
 
     } else if (depth === 3) {
       // Level 3: airports in country (Asia path)
       const country = navPath[2];
-      results.innerHTML = AIRPORTS.filter(a => a.country === country).map(a => airportItemHTML(a)).join('');
+      results.innerHTML = renderAirportsByCountry(country);
     }
+  }
+
+  function renderAirportsByCountry(country) {
+    const groups = CITY_GROUPS.filter(cg => cg.country === country && cg.airports.length > 1);
+    const airports = AIRPORTS.filter(a => a.country === country);
+    const groupHtml = groups.map(cg => cityGroupItemHTML(cg)).join('');
+    const airportHtml = airports.map(a => airportItemHTML(a)).join('');
+    return (groups.length ? `<div class="region-header">城市任選</div>${groupHtml}<div class="region-header">個別機場</div>` : '') + airportHtml;
   }
 
   document.getElementById('airport-search').addEventListener('input', function() {
@@ -1325,7 +1361,7 @@
   let selectedId = null;
 
   function updateBg() {
-    if (allFlights.some(f => f.current_price && f.current_price <= f.target_price)) {
+    if (allFlights.some(f => f.target_price && f.current_price && f.current_price <= f.target_price)) {
       applyPalette(PALETTES.ALERT); return;
     }
     if (selectedId) {
@@ -1344,7 +1380,7 @@
       updateBg(); return;
     }
     list.innerHTML = flights.map(f => {
-      const alerted  = f.current_price && f.current_price <= f.target_price;
+      const alerted  = f.target_price && f.current_price && f.current_price <= f.target_price;
       const selected = f.id === selectedId;
       let cls = 'flight-item' + (alerted ? ' alerted' : '') + (selected ? ' selected' : '');
       const tripLabel = f.return_date ? 'RT' : 'OW';
@@ -1358,7 +1394,7 @@
           ${alerted ? '<span class="alert-badge">↓ Below Target</span>' : ''}
         </div>
         <div class="flight-bottom">
-          <div class="flight-target">Target: ${fmtPrice(f.target_price, f.currency)}</div>
+          <div class="flight-target">${f.target_price ? 'Target: ' + fmtPrice(f.target_price, f.currency) : '追蹤中'}</div>
           <div class="flight-actions">
             <span class="checked-time">${timeSince(f.last_checked)}</span>
             <button class="btn-sm" onclick="event.stopPropagation();checkFlight(${f.id})">Check</button>
@@ -1402,7 +1438,7 @@
     const target       = document.getElementById('target_price').value;
     const currency     = document.getElementById('currency').value;
 
-    if (!origin || !destination || !dep || !target) { showToast('請填寫所有必填欄位'); return; }
+    if (!origin || !destination || !dep) { showToast('請選擇機場與出發日期'); return; }
 
     const btn = document.getElementById('submit-btn');
     btn.disabled = true; btn.textContent = '新增中...';
@@ -1410,7 +1446,7 @@
     try {
       const r = await fetch('/api/flights', {
         method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({origin, destination, departure_date:dep, return_date:ret, target_price:parseInt(target), currency})
+        body: JSON.stringify({origin, destination, departure_date:dep, return_date:ret, target_price:target?parseInt(target):null, currency})
       });
       if (!r.ok) throw 0;
       closeSheet();

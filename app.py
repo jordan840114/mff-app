@@ -77,16 +77,17 @@ def get_flights():
 @app.route("/api/flights", methods=["POST"])
 def add_flight():
     data = request.json
-    required = ["origin", "destination", "departure_date", "target_price"]
+    required = ["origin", "destination", "departure_date"]
     if not all(data.get(k) for k in required):
         return jsonify({"error": "缺少必要欄位"}), 400
 
+    tp = data.get("target_price")
     flight = Flight(
         origin=data["origin"].upper(),
         destination=data["destination"].upper(),
         departure_date=data["departure_date"],
         return_date=data.get("return_date"),
-        target_price=int(data["target_price"]),
+        target_price=int(tp) if tp else None,
         currency=data.get("currency", "TWD"),
     )
     db.session.add(flight)

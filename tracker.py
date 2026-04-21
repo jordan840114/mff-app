@@ -5,11 +5,19 @@ from datetime import datetime
 
 SERPAPI_KEY = os.environ.get("SERPAPI_KEY")
 
+# 城市任選代碼 → 展開為各機場（供最低價比較）
+CITY_AIRPORTS = {
+    'TYO': ['NRT', 'HND'],
+    'OSA': ['KIX', 'ITM'],
+    'SEL': ['ICN', 'GMP'],
+    'SHA': ['PVG', 'SHA'],
+    'BJS': ['PEK'],
+    'LON': ['LHR', 'LGW'],
+    'NYC': ['JFK', 'LGA', 'EWR'],
+}
 
-def fetch_cheapest_price(origin, destination, departure_date, return_date=None, currency="TWD"):
-    if not SERPAPI_KEY:
-        return None
 
+def _fetch_one(origin, destination, departure_date, return_date, currency):
     params = {
         "engine": "google_flights",
         "departure_id": origin,
@@ -21,26 +29,35 @@ def fetch_cheapest_price(origin, destination, departure_date, return_date=None, 
     }
     if return_date:
         params["return_date"] = return_date
-        params["type"] = "1"  # round trip
+        params["type"] = "1"
     else:
-        params["type"] = "2"  # one way
+        params["type"] = "2"
 
-    try:
-        resp = requests.get("https://serpapi.com/search", params=params, timeout=30)
-        resp.raise_for_status()
-        data = resp.json()
+    resp = requests.get("https://serpapi.com/search", params=params, timeout=30)
+    resp.raise_for_status()
+    data = resp.json()
+    all_flights = data.get("best_flights", []) + data.get("other_flights", [])
+    prices = [f["price"] for f in all_flights if f.get("price")]
+    return min(prices) if prices else None
 
-        # 從 best_flights 或 other_flights 取最低價
-        all_flights = data.get("best_flights", []) + data.get("other_flights", [])
-        if not all_flights:
-            return None
 
-        prices = [f["price"] for f in all_flights if f.get("price")]
-        return min(prices) if prices else None
-
-    except Exception as e:
-        print(f"查價失敗: {e}")
+def fetch_cheapest_price(origin, destination, departure_date, return_date=None, currency="TWD"):
+    if not SERPAPI_KEY:
         return None
+
+    origins = CITY_AIRPORTS.get(origin.upper(), [origin.upper()])
+    dests   = CITY_AIRPORTS.get(destination.upper(), [destination.upper()])
+
+    min_price = None
+    for o in origins:
+        for d in dests:
+            try:
+                p = _fetch_one(o, d, departure_date, return_date, currency)
+                if p and (min_price is None or p < min_price):
+                    min_price = p
+            except Exception as e:
+                print(f"查價失敗 ({o}→{d}): {e}")
+    return min_price
 
 
 def check_all_flights(app, db, Flight, send_notification_fn):
@@ -62,10 +79,10 @@ def check_all_flights(app, db, Flight, send_notification_fn):
                 flight.last_checked = datetime.utcnow()
                 db.session.commit()
 
-                if price <= flight.target_price:
+                if flight.target_price is not None and price <= flight.target_price:
                     send_notification_fn(
                         title="MFF 低價警報！",
-                        body=f"{flight.origin} → {flight.destination} 現在 {price} {flight.currency}，低於你的目標 {flight.target_price}！",
+                        body=f"{flight.origin} → {flight.destination} 現在 {price} {flight.currency}，低於目標 {flight.target_price}！",
                     )
             except Exception as e:
                 print(f"查價失敗 ({flight.origin}→{flight.destination}): {e}")

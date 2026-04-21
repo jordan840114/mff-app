@@ -11,7 +11,7 @@ class Flight(db.Model):
     destination = db.Column(db.String(3), nullable=False)
     departure_date = db.Column(db.String(10), nullable=False)
     return_date = db.Column(db.String(10))
-    target_price = db.Column(db.Integer, nullable=False)
+    target_price = db.Column(db.Integer, nullable=True)
     current_price = db.Column(db.Integer)
     currency = db.Column(db.String(3), default="TWD")
     last_checked = db.Column(db.DateTime)
