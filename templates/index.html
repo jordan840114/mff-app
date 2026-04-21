@@ -35,11 +35,10 @@
     /* ── ANIMATED GRADIENT BACKGROUND ── */
     #grad-bg {
       position: fixed;
-      inset: 0;
+      inset: -8%;
       z-index: 0;
-      background: #0c5a84;
+      background: #0e6898;
       transition: background 1.4s ease;
-      overflow: hidden;
       filter: url(#lava-filter);
     }
 
@@ -50,30 +49,34 @@
       transition: background 1.4s ease;
     }
 
-    #b1 { width: 62vw; height: 62vw; filter: blur(72px);  opacity: 0.92;
-          top: 5%;   left: 10%;  background: #0a3870;
+    /* 深藍底層：縮小、降 opacity，不搶視覺 */
+    #b1 { width: 52vw; height: 52vw; filter: blur(68px);  opacity: 0.78;
+          top: 5%;   left: 8%;   background: #0a3870;
           animation: da 52s ease-in-out infinite; }
-    #b2 { width: 50vw; height: 50vw; filter: blur(62px);  opacity: 0.88;
-          top: 50%;  right: 5%;  background: #082858;
+    #b2 { width: 44vw; height: 44vw; filter: blur(58px);  opacity: 0.74;
+          top: 52%;  right: 5%;  background: #0c3d7a;
           animation: db 44s ease-in-out infinite; }
-    #b3 { width: 38vw; height: 38vw; filter: blur(50px);  opacity: 0.82;
-          top: 30%;  left: 30%;  background: #1e80c8;
+    /* 中藍：主體，最明顯的色塊 */
+    #b3 { width: 46vw; height: 46vw; filter: blur(52px);  opacity: 0.88;
+          top: 28%;  left: 25%;  background: #1878c0;
           animation: dc 36s ease-in-out infinite; }
-    #b4 { width: 32vw; height: 32vw; filter: blur(42px);  opacity: 0.78;
-          top: 60%;  left: 8%;   background: #1a6ab0;
+    #b4 { width: 40vw; height: 40vw; filter: blur(46px);  opacity: 0.84;
+          top: 55%;  left: 5%;   background: #1a6ab0;
           animation: dd 30s ease-in-out infinite; }
-    #b5 { width: 26vw; height: 26vw; filter: blur(36px);  opacity: 0.72;
-          top: 10%;  right: 20%; background: #4aa8d8;
-          animation: de 26s ease-in-out infinite; }
-    #b6 { width: 22vw; height: 22vw; filter: blur(32px);  opacity: 0.68;
-          top: 70%;  right: 25%; background: #5ab8e8;
-          animation: df 38s ease-in-out infinite; }
-    #b7 { width: 18vw; height: 18vw; filter: blur(28px);  opacity: 0.32;
-          top: 40%;  left: 55%;  background: #8aaec0;
-          animation: dg 32s ease-in-out infinite; }
-    #b8 { width: 20vw; height: 20vw; filter: blur(34px);  opacity: 0.76;
-          top: 15%;  left: 50%;  background: #0e4a7a;
+    #b8 { width: 38vw; height: 38vw; filter: blur(44px);  opacity: 0.82;
+          top: 12%;  left: 48%;  background: #1268a8;
           animation: dh 46s ease-in-out infinite; }
+    /* 淺藍亮塊：點綴，讓畫面有亮度層次 */
+    #b5 { width: 32vw; height: 32vw; filter: blur(38px);  opacity: 0.78;
+          top: 8%;   right: 18%; background: #3aa0d0;
+          animation: de 26s ease-in-out infinite; }
+    #b6 { width: 28vw; height: 28vw; filter: blur(34px);  opacity: 0.74;
+          top: 68%;  right: 22%; background: #48b0dc;
+          animation: df 38s ease-in-out infinite; }
+    /* 霧白強調小塊 */
+    #b7 { width: 22vw; height: 22vw; filter: blur(30px);  opacity: 0.36;
+          top: 38%;  left: 52%;  background: #88b0c4;
+          animation: dg 32s ease-in-out infinite; }
 
     @keyframes da {
       0%   { transform: translate(0,0) scale(1); }
@@ -602,7 +605,7 @@
 <div class="page">
   <nav>
     <!-- Circular text logo -->
-    <img class="nav-logo" src="/static/logo.png" alt="My Fav Flight">
+    <img class="nav-logo" src="/static/logo.svg" alt="My Fav Flight">
     <button class="notif-btn" id="notif-btn">Notify</button>
   </nav>
 
@@ -956,7 +959,7 @@
     PER:['#083260','#1478b8','#64b8e8','#acd4f4','#eefaff','#062858'],
     AKL:['#083a68','#1480c0','#6ac0e8','#b0daf8','#f0fbff','#062e58'],
     // Default — deep blue + light blue + white 三層流動
-    DEFAULT:['#0a3a6e','#1878b8','#5ab0e0','#90cef0','#e8f6ff','#083060'],
+    DEFAULT:['#0a3870','#1878c0','#3aa0d0','#48b0dc','#88b0c4','#0e6898'],
     // Alert — deep red (price target hit)
     ALERT:['#c82020','#901010','#e04040','#c03030','#f8d0d0','#780808'],
   };
