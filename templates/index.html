@@ -1146,6 +1146,7 @@
     CJU:['#083860','#0e78b8','#68c0e8','#b0d8f8','#f0faff','#063050'],
     // China / HK — midnight navy + light blue + white
     PEK:['#060f30','#0c3070','#3870b0','#80b0d8','#e8f0ff','#050c28'],
+    PKX:['#060f30','#0c3070','#3870b0','#80b0d8','#e8f0ff','#050c28'],
     PVG:['#060f30','#0c3070','#3870b0','#80b0d8','#e8f0ff','#050c28'],
     CAN:['#070e32','#0d3272','#3a72b2','#82b2da','#e8f2ff','#060c2a'],
     HKG:['#060f32','#0c3272','#4070b0','#88b4d8','#e8f2ff','#050c2a'],
@@ -1154,9 +1155,11 @@
     SZX:['#070e32','#0d3070','#3a70b0','#82b0d8','#e8f2ff','#060c2a'],
     // Southeast Asia — vivid sky blue + crisp white
     BKK:['#083a68','#1480c0','#6ac0e8','#b0daf8','#f0fbff','#062e58'],
+    DMK:['#083a68','#1480c0','#6ac0e8','#b0daf8','#f0fbff','#062e58'],
     HKT:['#073560','#1288c8','#68c0ec','#b0dcf8','#f0fbff','#062a50'],
     SIN:['#083a68','#1480c0','#68bcec','#aed8f8','#f0faff','#062e58'],
     KUL:['#073260','#1278b8','#64b8e8','#acd4f4','#eefaff','#062858'],
+    SZB:['#073260','#1278b8','#64b8e8','#acd4f4','#eefaff','#062858'],
     DPS:['#073560','#1288c8','#6ac0ec','#b0dcf8','#f0fbff','#062a50'],
     BKI:['#073260','#1278b8','#64b8e8','#acd4f4','#eefaff','#062858'],
     MNL:['#072e58','#1070b0','#60b0e4','#a8cef0','#eef8ff','#062450'],
@@ -1175,6 +1178,7 @@
     LHR:['#060e38','#103070','#3470b0','#7aaad4','#dce8ff','#050c30'],
     LGW:['#060e38','#103070','#3470b0','#7aaad4','#dce8ff','#050c30'],
     CDG:['#070f3a','#103272','#3472b2','#7cacd6','#dce8ff','#050d32'],
+    ORY:['#070f3a','#103272','#3472b2','#7cacd6','#dce8ff','#050d32'],
     FRA:['#060e36','#0e2e6e','#3068ac','#78a8d2','#d8e4ff','#050b2e'],
     AMS:['#070f38','#103070','#3270b0','#7aaad4','#dce8ff','#050c30'],
     FCO:['#070f3a','#103272','#3272b2','#7aacd6','#dce8ff','#050d30'],
@@ -1219,12 +1223,15 @@
     { code:'OSA', city:'大阪', nameEn:'Osaka',     country:'日本',   airports:['KIX','ITM'] },
     { code:'SEL', city:'首爾', nameEn:'Seoul',     country:'韓國',   airports:['ICN','GMP'] },
     { code:'SHA', city:'上海', nameEn:'Shanghai',  country:'中國大陸', airports:['PVG','SHA'] },
-    { code:'BJS', city:'北京', nameEn:'Beijing',   country:'中國大陸', airports:['PEK'] },
+    { code:'BJS', city:'北京', nameEn:'Beijing',   country:'中國大陸', airports:['PEK','PKX'] },
     { code:'LON', city:'倫敦', nameEn:'London',    country:'英國',   airports:['LHR','LGW'] },
     { code:'NYC', city:'紐約', nameEn:'New York',  country:'美國',   airports:['JFK','LGA','EWR'] },
+    { code:'BKK', city:'曼谷', nameEn:'Bangkok',   country:'泰國',   airports:['BKK','DMK'] },
+    { code:'PAR', city:'巴黎', nameEn:'Paris',     country:'法國',   airports:['CDG','ORY'] },
+    { code:'KUL', city:'吉隆坡', nameEn:'Kuala Lumpur', country:'馬來西亞', airports:['KUL','SZB'] },
   ];
   // city-code → first member airport palette fallback
-  const CITY_PALETTE_MAP = { TYO:'NRT', OSA:'KIX', SEL:'ICN', SHA:'PVG', BJS:'PEK', LON:'LHR', NYC:'JFK' };
+  const CITY_PALETTE_MAP = { TYO:'NRT', OSA:'KIX', SEL:'ICN', SHA:'PVG', BJS:'PEK', LON:'LHR', NYC:'JFK', BKK:'BKK', PAR:'CDG', KUL:'KUL' };
 
   function getPalette(iata) {
     const code = (iata||'').toUpperCase();
@@ -1310,7 +1317,7 @@
   }
 
   // ── Booking URL builder (Skyscanner) ──
-  const CITY_FIRST_MAP = {TYO:'NRT',OSA:'KIX',SEL:'ICN',SHA:'PVG',BJS:'PEK',LON:'LHR',NYC:'JFK'};
+  const CITY_FIRST_MAP = {TYO:'NRT',OSA:'KIX',SEL:'ICN',SHA:'PVG',BJS:'PEK',LON:'LHR',NYC:'JFK',BKK:'BKK',PAR:'CDG',KUL:'KUL'};
   const SKY_CABIN = {1:'economy', 2:'premiumeconomy', 3:'business', 4:'first'};
   function toSkyDate(s) { return s ? s.replace(/-/g,'').slice(2) : null; }
   function buildBookingUrl(f, overrideO, overrideD) {

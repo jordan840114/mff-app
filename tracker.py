@@ -11,9 +11,12 @@ CITY_AIRPORTS = {
     'OSA': ['KIX', 'ITM'],
     'SEL': ['ICN', 'GMP'],
     'SHA': ['PVG', 'SHA'],
-    'BJS': ['PEK'],
+    'BJS': ['PEK', 'PKX'],
     'LON': ['LHR', 'LGW'],
     'NYC': ['JFK', 'LGA', 'EWR'],
+    'BKK': ['BKK', 'DMK'],  # Suvarnabhumi + Don Mueang（廉航）
+    'PAR': ['CDG', 'ORY'],
+    'KUL': ['KUL', 'SZB'],  # KLIA + Subang
 }
 
 
