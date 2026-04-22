@@ -17,7 +17,7 @@ CITY_AIRPORTS = {
 }
 
 
-def _fetch_one(origin, destination, departure_date, return_date, currency):
+def _fetch_one(origin, destination, departure_date, return_date, currency, adults=1, travel_class=1):
     params = {
         "engine": "google_flights",
         "departure_id": origin,
@@ -25,6 +25,8 @@ def _fetch_one(origin, destination, departure_date, return_date, currency):
         "outbound_date": departure_date,
         "currency": currency,
         "hl": "zh-tw",
+        "adults": adults,
+        "travel_class": travel_class,
         "api_key": SERPAPI_KEY,
     }
     if return_date:
@@ -41,7 +43,7 @@ def _fetch_one(origin, destination, departure_date, return_date, currency):
     return min(prices) if prices else None
 
 
-def fetch_cheapest_price(origin, destination, departure_date, return_date=None, currency="TWD"):
+def fetch_cheapest_price(origin, destination, departure_date, return_date=None, currency="TWD", adults=1, travel_class=1):
     if not SERPAPI_KEY:
         return None
 
@@ -52,7 +54,7 @@ def fetch_cheapest_price(origin, destination, departure_date, return_date=None, 
     for o in origins:
         for d in dests:
             try:
-                p = _fetch_one(o, d, departure_date, return_date, currency)
+                p = _fetch_one(o, d, departure_date, return_date, currency, adults, travel_class)
                 if p and (min_price is None or p < min_price):
                     min_price = p
             except Exception as e:
@@ -71,6 +73,8 @@ def check_all_flights(app, db, Flight, send_notification_fn):
                     flight.departure_date,
                     flight.return_date,
                     flight.currency,
+                    getattr(flight, 'passengers', 1) or 1,
+                    getattr(flight, 'cabin_class', 1) or 1,
                 )
                 if price is None:
                     continue

@@ -14,6 +14,8 @@ class Flight(db.Model):
     target_price = db.Column(db.Integer, nullable=True)
     current_price = db.Column(db.Integer)
     currency = db.Column(db.String(3), default="TWD")
+    passengers = db.Column(db.Integer, default=1)
+    cabin_class = db.Column(db.Integer, default=1)
     last_checked = db.Column(db.DateTime)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -27,6 +29,8 @@ class Flight(db.Model):
             "target_price": self.target_price,
             "current_price": self.current_price,
             "currency": self.currency,
+            "passengers": self.passengers or 1,
+            "cabin_class": self.cabin_class or 1,
             "last_checked": self.last_checked.isoformat() if self.last_checked else None,
         }
 

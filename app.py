@@ -2,6 +2,7 @@ import os
 import json
 import time
 from flask import Flask, render_template, request, jsonify
+from sqlalchemy import text
 from apscheduler.schedulers.background import BackgroundScheduler
 from models import db, Flight, PushSubscription
 from tracker import check_all_flights, fetch_cheapest_price
@@ -33,6 +34,22 @@ for attempt in range(3):
             db.create_all()
         _db_ready = True
         print(f"DB ready (attempt {attempt+1})")
+        # ALTER TABLE migration：讓 target_price 可為 null（舊 DB 欄位可能有 NOT NULL）
+        try:
+            with db.engine.connect() as conn:
+                conn.execute(text("ALTER TABLE flights ALTER COLUMN target_price DROP NOT NULL"))
+                conn.commit()
+            print("Migration: target_price nullable OK")
+        except Exception as me:
+            print(f"Migration note: {me}")
+        try:
+            with db.engine.connect() as conn:
+                conn.execute(text("ALTER TABLE flights ADD COLUMN passengers INTEGER DEFAULT 1"))
+                conn.execute(text("ALTER TABLE flights ADD COLUMN cabin_class INTEGER DEFAULT 1"))
+                conn.commit()
+            print("Migration: passengers, cabin_class OK")
+        except Exception as me:
+            print(f"Migration note (passengers/cabin): {me}")
         break
     except Exception as e:
         print(f"DB init attempt {attempt+1} failed: {e}")
@@ -86,9 +103,11 @@ def add_flight():
         origin=data["origin"].upper(),
         destination=data["destination"].upper(),
         departure_date=data["departure_date"],
-        return_date=data.get("return_date"),
+        return_date=data.get("return_date") or None,
         target_price=int(tp) if tp else None,
         currency=data.get("currency", "TWD"),
+        passengers=int(data.get("passengers") or 1),
+        cabin_class=int(data.get("cabin_class") or 1),
     )
     db.session.add(flight)
     db.session.commit()
@@ -96,7 +115,8 @@ def add_flight():
     try:
         price = fetch_cheapest_price(
             flight.origin, flight.destination,
-            flight.departure_date, flight.return_date, flight.currency
+            flight.departure_date, flight.return_date, flight.currency,
+            flight.passengers or 1, flight.cabin_class or 1,
         )
         if price:
             flight.current_price = price
@@ -121,7 +141,8 @@ def check_flight(flight_id):
     flight = Flight.query.get_or_404(flight_id)
     price = fetch_cheapest_price(
         flight.origin, flight.destination,
-        flight.departure_date, flight.return_date, flight.currency
+        flight.departure_date, flight.return_date, flight.currency,
+        flight.passengers or 1, flight.cabin_class or 1,
     )
     if price is None:
         return jsonify({"error": "查詢失敗"}), 502

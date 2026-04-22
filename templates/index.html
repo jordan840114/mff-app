@@ -212,7 +212,7 @@
       -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(255,255,255,0.3);
       border-radius: 100px;
-      color: rgba(255,255,255,0.85);
+      color: rgba(255,255,255,0.95);
       font-family: 'Space Mono', monospace;
       font-size: 10px;
       letter-spacing: 0.1em;
@@ -241,7 +241,7 @@
       font-size: 10px;
       letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.55);
+      color: rgba(255,255,255,0.82);
     }
 
     .add-btn {
@@ -269,7 +269,7 @@
       font-size: 10px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.4);
+      color: rgba(255,255,255,0.68);
       line-height: 2.8;
     }
 
@@ -312,7 +312,7 @@
     .flight-route .arr {
       font-size: 13px;
       font-weight: 400;
-      opacity: 0.45;
+      opacity: 0.72;
       margin: 0 3px;
     }
     .flight-price {
@@ -331,7 +331,7 @@
       font-size: 10px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      opacity: 0.55;
+      opacity: 0.82;
     }
     .alert-badge {
       font-size: 9px;
@@ -352,7 +352,7 @@
       font-size: 10px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      opacity: 0.5;
+      opacity: 0.80;
     }
     .flight-actions {
       display: flex;
@@ -361,23 +361,41 @@
     }
     .checked-time {
       font-size: 9px;
-      opacity: 0.45;
+      opacity: 0.72;
       letter-spacing: 0.05em;
     }
     .btn-sm {
       background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.28);
       border-radius: 100px;
       font-family: 'Space Mono', monospace;
       font-size: 9px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.7);
+      color: rgba(255,255,255,0.90);
       padding: 4px 10px;
       cursor: pointer;
       transition: background 0.2s;
     }
     .btn-sm:active { background: rgba(255,255,255,0.28); }
+
+    .btn-book {
+      background: rgba(255,255,255,0.92);
+      border: none;
+      border-radius: 100px;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #0d0d0d;
+      padding: 4px 10px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      transition: opacity 0.2s;
+    }
+    .btn-book:active { opacity: 0.7; }
 
     /* ── BOTTOM SHEET ── */
     .sheet-overlay {
@@ -620,6 +638,35 @@
       transition: all 0.22s; z-index: 300;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── TRIP TYPE TOGGLE ── */
+    .trip-toggle {
+      display: flex;
+      background: rgba(0,0,0,0.06);
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 100px;
+      padding: 3px;
+      gap: 2px;
+    }
+    .trip-toggle-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      border-radius: 100px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dim);
+      padding: 7px 0;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .trip-toggle-btn.active {
+      background: rgba(255,255,255,0.95);
+      color: var(--fg);
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -677,6 +724,12 @@
     <span class="sheet-title">Track Flight</span>
     <button class="sheet-close" id="close-sheet-btn">Close</button>
   </div>
+  <div class="field">
+    <div class="trip-toggle">
+      <button class="trip-toggle-btn active" id="btn-roundtrip" onclick="setTripType('round')">往返</button>
+      <button class="trip-toggle-btn" id="btn-oneway" onclick="setTripType('one')">單程</button>
+    </div>
+  </div>
   <div class="field-row">
     <div class="field">
       <label class="field-label">出發地</label>
@@ -689,14 +742,39 @@
       <input type="hidden" id="destination" />
     </div>
   </div>
-  <div class="field-row">
+  <div class="field-row" id="date-row">
     <div class="field">
       <label class="field-label">去程日期</label>
       <input type="date" id="departure_date" />
     </div>
-    <div class="field">
+    <div class="field" id="return-field">
       <label class="field-label">回程日期</label>
       <input type="date" id="return_date" />
+    </div>
+  </div>
+  <div class="field-row">
+    <div class="field">
+      <label class="field-label">乘客人數</label>
+      <select id="passengers">
+        <option value="1">1 人</option>
+        <option value="2">2 人</option>
+        <option value="3">3 人</option>
+        <option value="4">4 人</option>
+        <option value="5">5 人</option>
+        <option value="6">6 人</option>
+        <option value="7">7 人</option>
+        <option value="8">8 人</option>
+        <option value="9">9 人</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="field-label">艙等</label>
+      <select id="cabin_class">
+        <option value="1">經濟艙</option>
+        <option value="2">豪華經濟艙</option>
+        <option value="3">商務艙</option>
+        <option value="4">頭等艙</option>
+      </select>
     </div>
   </div>
   <div class="field-row">
@@ -1094,6 +1172,34 @@
   document.getElementById('close-sheet-btn').addEventListener('click', closeSheet);
   overlay.addEventListener('click', closeSheet);
 
+  // ── Trip type toggle ──
+  let currentTripType = 'round';
+  function setTripType(type) {
+    currentTripType = type;
+    document.getElementById('btn-roundtrip').classList.toggle('active', type === 'round');
+    document.getElementById('btn-oneway').classList.toggle('active', type === 'one');
+    const returnField = document.getElementById('return-field');
+    if (type === 'one') {
+      returnField.style.display = 'none';
+      document.getElementById('return_date').value = '';
+    } else {
+      returnField.style.display = '';
+    }
+  }
+
+  // ── Booking URL builder (Google Flights deep link) ──
+  const CITY_FIRST_MAP = {TYO:'NRT',OSA:'KIX',SEL:'ICN',SHA:'PVG',BJS:'PEK',LON:'LHR',NYC:'JFK'};
+  function buildBookingUrl(f) {
+    const o = CITY_FIRST_MAP[f.origin] || f.origin;
+    const d = CITY_FIRST_MAP[f.destination] || f.destination;
+    const cur = f.currency || 'TWD';
+    const cabin = f.cabin_class || 1;
+    const flt = f.return_date
+      ? `${o}.${d}.${f.departure_date}*${d}.${o}.${f.return_date}`
+      : `${o}.${d}.${f.departure_date}`;
+    return `https://www.google.com/travel/flights#flt=${flt};c:${cur};e:${cabin};sd:1;t:f`;
+  }
+
   // ── Airport hierarchy data ──
   const REGION_META = {
     '台灣':      { continent:'亞洲', sub:'東亞'   },
@@ -1134,25 +1240,35 @@
     TPE: null,
   };
 
-  // Return airport pool filtered by allowed regions for selected origin
+  // Return airport pool filtered by allowed regions for selected origin,
+  // and always excluding the origin airport itself (including city-group members)
   function getAirportPool() {
     if (activeAirportTarget !== 'destination') return AIRPORTS;
     const origin = (document.getElementById('origin').value || '').toUpperCase();
     const allowed = ORIGIN_ALLOWED_REGIONS[origin];
-    if (!allowed) return AIRPORTS;
-    return AIRPORTS.filter(a => allowed.includes(a.region));
+    let pool = allowed ? AIRPORTS.filter(a => allowed.includes(a.region)) : [...AIRPORTS];
+    if (origin) {
+      const cityGroup = CITY_GROUPS.find(cg => cg.code === origin);
+      const excludeCodes = cityGroup ? cityGroup.airports : [origin];
+      pool = pool.filter(a => !excludeCodes.includes(a.code));
+    }
+    return pool;
   }
 
   function getCityGroupPool() {
     if (activeAirportTarget !== 'destination') return CITY_GROUPS;
     const origin = (document.getElementById('origin').value || '').toUpperCase();
     const allowed = ORIGIN_ALLOWED_REGIONS[origin];
-    if (!allowed) return CITY_GROUPS;
-    // Use the first member airport to determine region
-    return CITY_GROUPS.filter(cg => {
+    let groups = allowed ? CITY_GROUPS.filter(cg => {
       const ref = AIRPORTS.find(a => cg.airports.includes(a.code));
       return ref && allowed.includes(ref.region);
-    });
+    }) : [...CITY_GROUPS];
+    if (origin) {
+      const cityGroup = CITY_GROUPS.find(cg => cg.code === origin);
+      const excludeCodes = cityGroup ? cityGroup.airports : [origin];
+      groups = groups.filter(cg => cg.code !== origin && !cg.airports.some(c => excludeCodes.includes(c)));
+    }
+    return groups;
   }
 
   // ── Airport modal state ──
@@ -1266,9 +1382,10 @@
     const depth = navPath.length;
 
     if (depth === 0) {
-      // Level 0: continents
+      // Level 0: continents — hide if no reachable airports
       results.innerHTML = CONTINENTS.map(c => {
         const cnt = airportsForContinent(c).length;
+        if (!cnt) return '';
         return hierItemHTML(c, cnt + ' 個機場', `drillDown('${c}')`);
       }).join('');
 
@@ -1276,10 +1393,11 @@
       const continent = navPath[0];
       const subs = CONTINENT_SUBS[continent];
       if (subs) {
-        // Level 1: subregions (Asia only)
+        // Level 1: subregions — hide if no reachable airports
         results.innerHTML = subs.map(sub => {
           const regions = SUB_REGIONS[sub];
           const cnt = airportsInRegions(regions).length;
+          if (!cnt) return '';
           return hierItemHTML(sub, cnt + ' 個機場', `drillDown('${sub}')`);
         }).join('');
       } else {
@@ -1412,18 +1530,25 @@
       list.innerHTML = '<div class="empty-state">No flights tracked.<br>Add one above.</div>';
       updateBg(); return;
     }
+    const CABIN_LABELS = {1:'',2:'Prem Eco',3:'Business',4:'First'};
     list.innerHTML = flights.map(f => {
       const alerted  = f.target_price && f.current_price && f.current_price <= f.target_price;
       const selected = f.id === selectedId;
       let cls = 'flight-item' + (alerted ? ' alerted' : '') + (selected ? ' selected' : '');
       const tripLabel = f.return_date ? 'RT' : 'OW';
+      const pax = f.passengers || 1;
+      const cabin = f.cabin_class || 1;
+      const extraMeta = [
+        pax > 1 ? pax + ' pax' : '',
+        CABIN_LABELS[cabin] || '',
+      ].filter(Boolean).join(' · ');
       return `<div class="${cls}" data-id="${f.id}" onclick="selectFlight(${f.id})">
         <div class="flight-top">
           <div class="flight-route">${f.origin}<span class="arr"> → </span>${f.destination}</div>
           <div class="flight-price">${fmtPrice(f.current_price, f.currency)}</div>
         </div>
         <div class="flight-mid">
-          <div class="flight-date">${f.departure_date}${f.return_date?' · '+f.return_date:''} · ${tripLabel}</div>
+          <div class="flight-date">${f.departure_date}${f.return_date?' · '+f.return_date:''} · ${tripLabel}${extraMeta?' · '+extraMeta:''}</div>
           ${alerted ? '<span class="alert-badge">↓ Below Target</span>' : ''}
         </div>
         <div class="flight-bottom">
@@ -1431,6 +1556,7 @@
           <div class="flight-actions">
             <span class="checked-time">${timeSince(f.last_checked)}</span>
             <button class="btn-sm" onclick="event.stopPropagation();checkFlight(${f.id})">Check</button>
+            <a class="btn-book" href="${buildBookingUrl(f)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Book</a>
             <button class="btn-sm" onclick="event.stopPropagation();deleteFlight(${f.id})">Del</button>
           </div>
         </div>
@@ -1470,6 +1596,8 @@
     const ret          = document.getElementById('return_date').value;
     const target       = document.getElementById('target_price').value;
     const currency     = document.getElementById('currency').value;
+    const passengers   = document.getElementById('passengers').value;
+    const cabin_class  = document.getElementById('cabin_class').value;
 
     if (!origin || !destination || !dep) { showToast('請選擇機場與出發日期'); return; }
 
@@ -1479,7 +1607,12 @@
     try {
       const r = await fetch('/api/flights', {
         method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({origin, destination, departure_date:dep, return_date:ret, target_price:target?parseInt(target):null, currency})
+        body: JSON.stringify({
+          origin, destination, departure_date:dep,
+          return_date: ret || null,
+          target_price: target ? parseInt(target) : null,
+          currency, passengers: parseInt(passengers), cabin_class: parseInt(cabin_class),
+        })
       });
       if (!r.ok) throw 0;
       closeSheet();
@@ -1487,10 +1620,13 @@
       ['origin','destination','departure_date','return_date','target_price'].forEach(id => {
         document.getElementById(id).value = '';
       });
+      document.getElementById('passengers').value = '1';
+      document.getElementById('cabin_class').value = '1';
       document.getElementById('origin-trigger').textContent = '選擇機場';
       document.getElementById('origin-trigger').classList.add('placeholder');
       document.getElementById('destination-trigger').textContent = '選擇機場';
       document.getElementById('destination-trigger').classList.add('placeholder');
+      setTripType('round');
       await loadFlights();
     } catch(e) { showToast('新增失敗'); updateBg(); }
     finally { btn.disabled = false; btn.textContent = '新增航班'; }
