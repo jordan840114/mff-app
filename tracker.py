@@ -16,7 +16,7 @@ CITY_AIRPORTS = {
     'NYC': ['JFK', 'LGA', 'EWR'],
     'BKK': ['BKK', 'DMK'],  # Suvarnabhumi + Don Mueang（廉航）
     'PAR': ['CDG', 'ORY'],
-    'KUL': ['KUL', 'SZB'],  # KLIA + Subang
+    'KUL': ['KUL'],
 }
 
 
