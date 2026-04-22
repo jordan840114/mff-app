@@ -1826,11 +1826,13 @@
       await loadFlights();
       const newFlight = allFlights.find(f => f.id === id);
       const newPrice = newFlight ? newFlight.current_price : null;
-      if (oldPrice !== null && newPrice !== null && oldPrice !== newPrice) {
+      if (newPrice === null || oldPrice === null) {
+        showToast('Updated');
+      } else if (newPrice === oldPrice) {
+        showToast('No change');
+      } else {
         const diff = newPrice - oldPrice;
         showToast((diff > 0 ? '↑ +' : '↓ ') + Math.abs(diff).toLocaleString() + ' ' + newFlight.currency);
-      } else {
-        showToast('No change');
       }
     } catch(e) { showToast('Check failed'); }
   }
