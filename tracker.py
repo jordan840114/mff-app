@@ -43,31 +43,41 @@ def _fetch_one(origin, destination, departure_date, return_date, currency, adult
     return min(prices) if prices else None
 
 
-def fetch_cheapest_price(origin, destination, departure_date, return_date=None, currency="TWD", adults=1, travel_class=1):
+def fetch_price_breakdown(origin, destination, departure_date, return_date=None, currency="TWD", adults=1, travel_class=1):
+    """Returns (min_price, breakdown_list) where breakdown is [{o, d, price}, ...]."""
     if not SERPAPI_KEY:
-        return None
+        return None, []
 
     origins = CITY_AIRPORTS.get(origin.upper(), [origin.upper()])
     dests   = CITY_AIRPORTS.get(destination.upper(), [destination.upper()])
 
     min_price = None
+    breakdown = []
     for o in origins:
         for d in dests:
             try:
                 p = _fetch_one(o, d, departure_date, return_date, currency, adults, travel_class)
-                if p and (min_price is None or p < min_price):
-                    min_price = p
+                if p is not None:
+                    breakdown.append({"o": o, "d": d, "price": p})
+                    if min_price is None or p < min_price:
+                        min_price = p
             except Exception as e:
                 print(f"查價失敗 ({o}→{d}): {e}")
-    return min_price
+    return min_price, breakdown
+
+
+def fetch_cheapest_price(origin, destination, departure_date, return_date=None, currency="TWD", adults=1, travel_class=1):
+    price, _ = fetch_price_breakdown(origin, destination, departure_date, return_date, currency, adults, travel_class)
+    return price
 
 
 def check_all_flights(app, db, Flight, send_notification_fn):
+    import json
     with app.app_context():
         flights = Flight.query.all()
         for flight in flights:
             try:
-                price = fetch_cheapest_price(
+                price, breakdown = fetch_price_breakdown(
                     flight.origin,
                     flight.destination,
                     flight.departure_date,
@@ -80,6 +90,7 @@ def check_all_flights(app, db, Flight, send_notification_fn):
                     continue
 
                 flight.current_price = price
+                flight.price_breakdown = json.dumps(breakdown) if breakdown else None
                 flight.last_checked = datetime.utcnow()
                 db.session.commit()
 

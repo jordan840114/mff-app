@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, jsonify
 from sqlalchemy import text, inspect as sa_inspect
 from apscheduler.schedulers.background import BackgroundScheduler
 from models import db, Flight, PushSubscription
-from tracker import check_all_flights, fetch_cheapest_price
+from tracker import check_all_flights, fetch_cheapest_price, fetch_price_breakdown
 from notify import send_push_to_all
 from datetime import datetime
 
@@ -44,7 +44,11 @@ for attempt in range(3):
             try:
                 existing_cols = {c["name"] for c in sa_inspect(db.engine).get_columns("flights")}
                 with db.engine.connect() as conn:
-                    for col, coltype in [("passengers", "INTEGER DEFAULT 1"), ("cabin_class", "INTEGER DEFAULT 1")]:
+                    for col, coltype in [
+                        ("passengers", "INTEGER DEFAULT 1"),
+                        ("cabin_class", "INTEGER DEFAULT 1"),
+                        ("price_breakdown", "TEXT"),
+                    ]:
                         if col not in existing_cols:
                             conn.execute(text(f"ALTER TABLE flights ADD COLUMN {col} {coltype}"))
                             print(f"Migration: added {col}")
@@ -52,7 +56,7 @@ for attempt in range(3):
                             print(f"Migration: {col} already exists")
                     conn.commit()
             except Exception as me:
-                print(f"Migration error (passengers/cabin_class): {me}")
+                print(f"Migration error: {me}")
         break
     except Exception as e:
         print(f"DB init attempt {attempt+1} failed: {e}")
@@ -116,13 +120,15 @@ def add_flight():
     db.session.commit()
 
     try:
-        price = fetch_cheapest_price(
+        import json as _json
+        price, breakdown = fetch_price_breakdown(
             flight.origin, flight.destination,
             flight.departure_date, flight.return_date, flight.currency,
             flight.passengers or 1, flight.cabin_class or 1,
         )
         if price:
             flight.current_price = price
+            flight.price_breakdown = _json.dumps(breakdown) if breakdown else None
             flight.last_checked = datetime.utcnow()
             db.session.commit()
     except Exception:
@@ -142,7 +148,8 @@ def delete_flight(flight_id):
 @app.route("/api/flights/<int:flight_id>/check", methods=["POST"])
 def check_flight(flight_id):
     flight = Flight.query.get_or_404(flight_id)
-    price = fetch_cheapest_price(
+    import json as _json
+    price, breakdown = fetch_price_breakdown(
         flight.origin, flight.destination,
         flight.departure_date, flight.return_date, flight.currency,
         flight.passengers or 1, flight.cabin_class or 1,
@@ -151,6 +158,7 @@ def check_flight(flight_id):
         return jsonify({"error": "查詢失敗"}), 502
 
     flight.current_price = price
+    flight.price_breakdown = _json.dumps(breakdown) if breakdown else None
     flight.last_checked = datetime.utcnow()
     db.session.commit()
     return jsonify(flight.to_dict())

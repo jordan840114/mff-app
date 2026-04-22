@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import json
 
 db = SQLAlchemy()
 
@@ -13,6 +14,7 @@ class Flight(db.Model):
     return_date = db.Column(db.String(10))
     target_price = db.Column(db.Integer, nullable=True)
     current_price = db.Column(db.Integer)
+    price_breakdown = db.Column(db.Text, nullable=True)  # JSON: [{o,d,price}, ...]
     currency = db.Column(db.String(3), default="TWD")
     passengers = db.Column(db.Integer, default=1)
     cabin_class = db.Column(db.Integer, default=1)
@@ -20,6 +22,12 @@ class Flight(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
+        breakdown = None
+        try:
+            if self.price_breakdown:
+                breakdown = json.loads(self.price_breakdown)
+        except Exception:
+            pass
         return {
             "id": self.id,
             "origin": self.origin,
@@ -28,6 +36,7 @@ class Flight(db.Model):
             "return_date": self.return_date,
             "target_price": self.target_price,
             "current_price": self.current_price,
+            "price_breakdown": breakdown,
             "currency": self.currency,
             "passengers": self.passengers or 1,
             "cabin_class": self.cabin_class or 1,

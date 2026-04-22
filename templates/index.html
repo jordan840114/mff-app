@@ -729,6 +729,39 @@
       text-transform: uppercase; color: var(--dim);
       transition: background 0.12s;
     }
+
+    /* ── PER-AIRPORT PRICE BREAKDOWN ── */
+    .breakdown-list {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .breakdown-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 6px 10px;
+      text-decoration: none;
+      color: #fff;
+      transition: background 0.15s;
+    }
+    .breakdown-item:active { background: rgba(255,255,255,0.22); }
+    .bd-route {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .bd-price {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.04em;
+    }
   </style>
 </head>
 <body>
@@ -798,7 +831,6 @@
       <div class="airport-wrap">
         <input type="text" class="airport-input" id="origin-input" placeholder="搜尋機場代碼或名稱" autocomplete="off" />
         <input type="hidden" id="origin" />
-        <div class="airport-suggestions" id="origin-suggestions"></div>
       </div>
     </div>
     <div class="field">
@@ -806,7 +838,6 @@
       <div class="airport-wrap">
         <input type="text" class="airport-input" id="destination-input" placeholder="搜尋機場代碼或名稱" autocomplete="off" />
         <input type="hidden" id="destination" />
-        <div class="airport-suggestions" id="destination-suggestions"></div>
       </div>
     </div>
   </div>
@@ -886,6 +917,10 @@
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- Suggestion dropdowns — kept outside .sheet to avoid transform clipping -->
+<div class="airport-suggestions" id="origin-suggestions"></div>
+<div class="airport-suggestions" id="destination-suggestions"></div>
 
 <script>
   const VAPID_PUBLIC_KEY = "{{ vapid_public_key }}";
@@ -1165,13 +1200,13 @@
 
   // City-group "任一機場" definitions (mirrors tracker.py CITY_AIRPORTS)
   const CITY_GROUPS = [
-    { code:'TYO', city:'東京', country:'日本', airports:['NRT','HND'] },
-    { code:'OSA', city:'大阪', country:'日本', airports:['KIX','ITM'] },
-    { code:'SEL', city:'首爾', country:'韓國', airports:['ICN','GMP'] },
-    { code:'SHA', city:'上海', country:'中國大陸', airports:['PVG','SHA'] },
-    { code:'BJS', city:'北京', country:'中國大陸', airports:['PEK'] },
-    { code:'LON', city:'倫敦', country:'英國', airports:['LHR','LGW'] },
-    { code:'NYC', city:'紐約', country:'美國', airports:['JFK','LGA','EWR'] },
+    { code:'TYO', city:'東京', nameEn:'Tokyo',     country:'日本',   airports:['NRT','HND'] },
+    { code:'OSA', city:'大阪', nameEn:'Osaka',     country:'日本',   airports:['KIX','ITM'] },
+    { code:'SEL', city:'首爾', nameEn:'Seoul',     country:'韓國',   airports:['ICN','GMP'] },
+    { code:'SHA', city:'上海', nameEn:'Shanghai',  country:'中國大陸', airports:['PVG','SHA'] },
+    { code:'BJS', city:'北京', nameEn:'Beijing',   country:'中國大陸', airports:['PEK'] },
+    { code:'LON', city:'倫敦', nameEn:'London',    country:'英國',   airports:['LHR','LGW'] },
+    { code:'NYC', city:'紐約', nameEn:'New York',  country:'美國',   airports:['JFK','LGA','EWR'] },
   ];
   // city-code → first member airport palette fallback
   const CITY_PALETTE_MAP = { TYO:'NRT', OSA:'KIX', SEL:'ICN', SHA:'PVG', BJS:'PEK', LON:'LHR', NYC:'JFK' };
@@ -1259,17 +1294,19 @@
     }
   }
 
-  // ── Booking URL builder (Google Flights deep link) ──
+  // ── Booking URL builder (Skyscanner) ──
   const CITY_FIRST_MAP = {TYO:'NRT',OSA:'KIX',SEL:'ICN',SHA:'PVG',BJS:'PEK',LON:'LHR',NYC:'JFK'};
-  function buildBookingUrl(f) {
-    const o = CITY_FIRST_MAP[f.origin] || f.origin;
-    const d = CITY_FIRST_MAP[f.destination] || f.destination;
-    const cur = f.currency || 'TWD';
-    const cabin = f.cabin_class || 1;
-    const flt = f.return_date
-      ? `${o}.${d}.${f.departure_date}*${d}.${o}.${f.return_date}`
-      : `${o}.${d}.${f.departure_date}`;
-    return `https://www.google.com/travel/flights#flt=${flt};c:${cur};e:${cabin};sd:1;t:f`;
+  const SKY_CABIN = {1:'economy', 2:'premiumeconomy', 3:'business', 4:'first'};
+  function toSkyDate(s) { return s ? s.replace(/-/g,'').slice(2) : null; }
+  function buildBookingUrl(f, overrideO, overrideD) {
+    const o = (overrideO || CITY_FIRST_MAP[f.origin] || f.origin).toLowerCase();
+    const d = (overrideD || CITY_FIRST_MAP[f.destination] || f.destination).toLowerCase();
+    const cabin = SKY_CABIN[f.cabin_class || 1] || 'economy';
+    const pax = f.passengers || 1;
+    const out = toSkyDate(f.departure_date);
+    const ret = toSkyDate(f.return_date);
+    const base = `https://www.skyscanner.com.tw/transport/flights/${o}/${d}/${out}`;
+    return ret ? `${base}/${ret}/?adults=${pax}&cabinclass=${cabin}` : `${base}/?adults=${pax}&cabinclass=${cabin}`;
   }
 
   // ── Airport hierarchy data ──
@@ -1569,6 +1606,7 @@
       const filteredGroups = cityGroups.filter(cg =>
         cg.code.toLowerCase().startsWith(lower) ||
         cg.city.toLowerCase().includes(lower) ||
+        (cg.nameEn && cg.nameEn.toLowerCase().includes(lower)) ||
         cg.country.toLowerCase().includes(lower)
       );
       const filteredAirports = airports.filter(a =>
@@ -1737,10 +1775,18 @@
           <div class="flight-actions">
             <span class="checked-time">${timeSince(f.last_checked)}</span>
             <button class="btn-sm" onclick="event.stopPropagation();checkFlight(${f.id})">Check</button>
-            <a class="btn-book" href="${buildBookingUrl(f)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Book</a>
+            <a class="btn-book" href="${buildBookingUrl(f)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Skyscanner</a>
             <button class="btn-sm" onclick="event.stopPropagation();deleteFlight(${f.id})">Del</button>
           </div>
         </div>
+        ${(f.price_breakdown && f.price_breakdown.length > 1) ? `
+        <div class="breakdown-list" onclick="event.stopPropagation()">
+          ${f.price_breakdown.map(b => `
+            <a class="breakdown-item" href="${buildBookingUrl(f, b.o, b.d)}" target="_blank" rel="noopener">
+              <span class="bd-route">${b.o} → ${b.d}</span>
+              <span class="bd-price">${fmtPrice(b.price, f.currency)}</span>
+            </a>`).join('')}
+        </div>` : ''}
       </div>`;
     }).join('');
     updateBg();
