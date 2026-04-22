@@ -2,6 +2,8 @@ import os
 import requests
 from datetime import datetime
 
+PROMO_KEYWORDS = ['特賣', '促銷', '閃購', '限時', 'sale', 'flash sale', '機票優惠', '超低價']
+
 
 SERPAPI_KEY = os.environ.get("SERPAPI_KEY")
 
@@ -115,3 +117,39 @@ def check_all_flights(app, db, Flight, send_notification_fn):
                         )
             except Exception as e:
                 print(f"查價失敗 ({flight.origin}→{flight.destination}): {e}")
+
+
+def check_airline_promos(send_notification_fn):
+    """每週一次，搜尋航空特賣新聞，發現符合的推播通知。"""
+    if not SERPAPI_KEY:
+        return
+    queries = ['台灣 機票 特賣', '廉航 促銷 閃購', 'EVA Air sale', 'China Airlines promotion']
+    seen_titles = set()
+    for q in queries:
+        try:
+            resp = requests.get("https://serpapi.com/search", params={
+                "engine": "google",
+                "q": q,
+                "tbm": "nws",
+                "num": 5,
+                "hl": "zh-tw",
+                "api_key": SERPAPI_KEY,
+            }, timeout=20)
+            resp.raise_for_status()
+            results = resp.json().get("news_results", [])
+            for r in results:
+                title = r.get("title", "")
+                if title in seen_titles:
+                    continue
+                seen_titles.add(title)
+                combined = (title + " " + r.get("snippet", "")).lower()
+                if any(kw.lower() in combined for kw in PROMO_KEYWORDS):
+                    link = r.get("link", "")
+                    send_notification_fn(
+                        title="✈ 航空特賣消息",
+                        body=title[:80],
+                    )
+                    print(f"Promo found: {title[:60]}")
+                    break  # 每個 query 最多推一則
+        except Exception as e:
+            print(f"Promo search failed ({q}): {e}")

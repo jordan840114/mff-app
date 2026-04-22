@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, jsonify
 from sqlalchemy import text, inspect as sa_inspect
 from apscheduler.schedulers.background import BackgroundScheduler
 from models import db, Flight, PushSubscription
-from tracker import check_all_flights, fetch_cheapest_price, fetch_price_breakdown
+from tracker import check_all_flights, fetch_cheapest_price, fetch_price_breakdown, check_airline_promos
 from notify import send_push_to_all
 from datetime import datetime
 
@@ -75,6 +75,14 @@ scheduler.add_job(
     lambda: check_all_flights(app, db, Flight, send_notification),
     "cron",
     hour=8,
+    minute=0,
+)
+# 每週一早上 9 點掃描航空特賣新聞
+scheduler.add_job(
+    lambda: check_airline_promos(send_notification),
+    "cron",
+    day_of_week="mon",
+    hour=9,
     minute=0,
 )
 try:
