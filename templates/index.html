@@ -25,7 +25,11 @@
 
     html, body {
       min-height: 100vh;
-      background: #060810;
+      background:
+        radial-gradient(ellipse at 22% 28%, #0e4d6e 0%, transparent 52%),
+        radial-gradient(ellipse at 76% 14%, #5a3082 0%, transparent 48%),
+        radial-gradient(ellipse at 52% 82%, #0b3c58 0%, transparent 50%),
+        #060e1e;
       font-family: 'Space Mono', monospace;
       font-size: 11px;
       letter-spacing: 0.06em;
@@ -39,7 +43,11 @@
       position: fixed;
       inset: -8%;
       z-index: 0;
-      background: #060810;
+      background:
+        radial-gradient(ellipse at 22% 28%, #0e4d6e 0%, transparent 52%),
+        radial-gradient(ellipse at 76% 14%, #5a3082 0%, transparent 48%),
+        radial-gradient(ellipse at 52% 82%, #0b3c58 0%, transparent 50%),
+        #060e1e;
       transition: background 1.4s ease;
       filter: url(#lava-filter);
     }
@@ -1256,6 +1264,20 @@
     return PALETTES[mapped || code] || PALETTES.DEFAULT;
   }
 
+  function hex2rgba(hex, alpha) {
+    const [r, g, b] = (hex.match(/\w\w/g) || ['6','8','16']).map(x => parseInt(x, 16));
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+
+  function makeBgGradient(p) {
+    return [
+      `radial-gradient(ellipse at 22% 28%, ${hex2rgba(p[2], 0.32)} 0%, transparent 52%)`,
+      `radial-gradient(ellipse at 76% 14%, ${hex2rgba(p[4], 0.22)} 0%, transparent 48%)`,
+      `radial-gradient(ellipse at 52% 82%, ${hex2rgba(p[1], 0.28)} 0%, transparent 50%)`,
+      p[5],
+    ].join(', ');
+  }
+
   function applyPalette(p, animate = true) {
     const dur = animate ? '' : '0s';
     const bg = document.getElementById('grad-bg');
@@ -1270,7 +1292,7 @@
       if (!animate) setTimeout(() => el.style.transition = '', 30);
     });
     if (!animate) bg.style.transition = 'none';
-    bg.style.background = p[5];
+    bg.style.background = makeBgGradient(p);
     if (!animate) setTimeout(() => bg.style.transition = '', 30);
   }
 
