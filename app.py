@@ -26,34 +26,33 @@ if "postgresql" in database_url:
 
 db.init_app(app)
 
-# 建立資料表，最多重試 3 次
+# 建立資料表，最多重試 3 次（所有 migration 必須在同一 app_context 內執行）
 _db_ready = False
 for attempt in range(3):
     try:
         with app.app_context():
             db.create_all()
-        _db_ready = True
-        print(f"DB ready (attempt {attempt+1})")
-        # ALTER TABLE migration：讓 target_price 可為 null（舊 DB 欄位可能有 NOT NULL）
-        try:
-            with db.engine.connect() as conn:
-                conn.execute(text("ALTER TABLE flights ALTER COLUMN target_price DROP NOT NULL"))
-                conn.commit()
-            print("Migration: target_price nullable OK")
-        except Exception as me:
-            print(f"Migration note: {me}")
-        try:
-            existing_cols = {c["name"] for c in sa_inspect(db.engine).get_columns("flights")}
-            with db.engine.connect() as conn:
-                for col, coltype in [("passengers", "INTEGER DEFAULT 1"), ("cabin_class", "INTEGER DEFAULT 1")]:
-                    if col not in existing_cols:
-                        conn.execute(text(f"ALTER TABLE flights ADD COLUMN {col} {coltype}"))
-                        print(f"Migration: added {col}")
-                    else:
-                        print(f"Migration: {col} already exists")
-                conn.commit()
-        except Exception as me:
-            print(f"Migration error (passengers/cabin_class): {me}")
+            _db_ready = True
+            print(f"DB ready (attempt {attempt+1})")
+            try:
+                with db.engine.connect() as conn:
+                    conn.execute(text("ALTER TABLE flights ALTER COLUMN target_price DROP NOT NULL"))
+                    conn.commit()
+                print("Migration: target_price nullable OK")
+            except Exception as me:
+                print(f"Migration note: {me}")
+            try:
+                existing_cols = {c["name"] for c in sa_inspect(db.engine).get_columns("flights")}
+                with db.engine.connect() as conn:
+                    for col, coltype in [("passengers", "INTEGER DEFAULT 1"), ("cabin_class", "INTEGER DEFAULT 1")]:
+                        if col not in existing_cols:
+                            conn.execute(text(f"ALTER TABLE flights ADD COLUMN {col} {coltype}"))
+                            print(f"Migration: added {col}")
+                        else:
+                            print(f"Migration: {col} already exists")
+                    conn.commit()
+            except Exception as me:
+                print(f"Migration error (passengers/cabin_class): {me}")
         break
     except Exception as e:
         print(f"DB init attempt {attempt+1} failed: {e}")
