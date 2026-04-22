@@ -1789,7 +1789,7 @@
           <div class="flight-target">${f.target_price ? 'Target: ' + fmtPrice(f.target_price, f.currency) : '追蹤中'}</div>
           <div class="flight-actions">
             <span class="checked-time">${timeSince(f.last_checked)}</span>
-            <button class="btn-sm" onclick="event.stopPropagation();checkFlight(${f.id})">Check</button>
+            <button class="btn-sm" onclick="event.stopPropagation();checkFlight(${f.id},this)">Check</button>
             <a class="btn-book" href="${buildBookingUrl(f)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Skyscanner</a>
             <button class="btn-sm" onclick="event.stopPropagation();deleteFlight(${f.id})">Del</button>
           </div>
@@ -1817,7 +1817,8 @@
     catch(e) { showToast('Load failed'); }
   }
 
-  async function checkFlight(id) {
+  async function checkFlight(id, btn) {
+    if (btn) { btn.disabled = true; btn.textContent = '...'; }
     try {
       if (!(await fetch(`/api/flights/${id}/check`, {method:'POST'})).ok) throw 0;
       showToast('Updated');
