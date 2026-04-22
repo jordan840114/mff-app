@@ -667,6 +667,68 @@
       color: var(--fg);
       font-weight: 700;
     }
+
+    /* ── AIRPORT TEXT INPUT ── */
+    .airport-wrap { position: relative; }
+    .airport-input {
+      width: 100%;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.9);
+      border-radius: 10px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase;
+      color: var(--fg); padding: 11px 12px;
+      outline: none; -webkit-appearance: none;
+      transition: background 0.2s;
+    }
+    .airport-input::placeholder { color: var(--dim); text-transform: none; letter-spacing: 0.02em; font-size: 11px; }
+    .airport-input:focus { background: rgba(255,255,255,0.95); }
+    .airport-suggestions {
+      display: none;
+      position: fixed;
+      background: rgba(225,242,255,0.97);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.8);
+      border-radius: 12px;
+      z-index: 500;
+      max-height: 240px;
+      overflow-y: auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+    }
+    .airport-suggestions.open { display: block; }
+    .sug-item {
+      display: flex; align-items: center;
+      padding: 10px 12px; cursor: pointer; gap: 10px;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      transition: background 0.12s;
+    }
+    .sug-code {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.08em; color: var(--fg);
+      flex-shrink: 0; width: 36px;
+    }
+    .sug-info { flex: 1; min-width: 0; }
+    .sug-name {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px; color: var(--fg);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .sug-country {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--dim); margin-top: 1px;
+    }
+    .sug-browse {
+      display: flex; align-items: center;
+      padding: 10px 12px; cursor: pointer;
+      border-top: 1px solid rgba(0,0,0,0.06);
+      font-family: 'Space Mono', monospace;
+      font-size: 9px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--dim);
+      transition: background 0.12s;
+    }
   </style>
 </head>
 <body>
@@ -733,13 +795,19 @@
   <div class="field-row">
     <div class="field">
       <label class="field-label">出發地</label>
-      <button class="airport-trigger placeholder" id="origin-trigger" data-target="origin">選擇機場</button>
-      <input type="hidden" id="origin" />
+      <div class="airport-wrap">
+        <input type="text" class="airport-input" id="origin-input" placeholder="搜尋機場代碼或名稱" autocomplete="off" />
+        <input type="hidden" id="origin" />
+        <div class="airport-suggestions" id="origin-suggestions"></div>
+      </div>
     </div>
     <div class="field">
       <label class="field-label">目的地</label>
-      <button class="airport-trigger placeholder" id="destination-trigger" data-target="destination">選擇機場</button>
-      <input type="hidden" id="destination" />
+      <div class="airport-wrap">
+        <input type="text" class="airport-input" id="destination-input" placeholder="搜尋機場代碼或名稱" autocomplete="off" />
+        <input type="hidden" id="destination" />
+        <div class="airport-suggestions" id="destination-suggestions"></div>
+      </div>
     </div>
   </div>
   <div class="field-row" id="date-row">
@@ -1167,7 +1235,11 @@
   const overlay = document.getElementById('overlay');
   const sheet   = document.getElementById('sheet');
   function openSheet()  { sheet.classList.add('open'); overlay.classList.add('open'); document.body.style.overflow='hidden'; }
-  function closeSheet() { sheet.classList.remove('open'); overlay.classList.remove('open'); document.body.style.overflow=''; }
+  function closeSheet() {
+    sheet.classList.remove('open'); overlay.classList.remove('open'); document.body.style.overflow='';
+    setTripType('round');
+    closeSuggestions('origin'); closeSuggestions('destination');
+  }
   document.getElementById('open-sheet-btn').addEventListener('click', openSheet);
   document.getElementById('close-sheet-btn').addEventListener('click', closeSheet);
   overlay.addEventListener('click', closeSheet);
@@ -1307,8 +1379,6 @@
   }
 
   document.getElementById('modal-backdrop').addEventListener('click', closeAirportModal);
-  document.getElementById('origin-trigger').addEventListener('click', () => openAirportModal('origin'));
-  document.getElementById('destination-trigger').addEventListener('click', () => openAirportModal('destination'));
 
   function airportItemHTML(a) {
     const safeName = a.name.replace(/'/g,"\\'");
@@ -1474,12 +1544,123 @@
   function selectAirport(code, name) {
     if (!activeAirportTarget) return;
     document.getElementById(activeAirportTarget).value = code;
-    const trigger = document.getElementById(activeAirportTarget + '-trigger');
-    trigger.textContent = code + ' · ' + name;
-    trigger.classList.remove('placeholder');
+    const inputEl = document.getElementById(activeAirportTarget + '-input');
+    if (inputEl) inputEl.value = code + ' · ' + name;
     closeAirportModal();
     if (activeAirportTarget === 'destination') applyPalette(getPalette(code));
   }
+
+  // ── Inline airport suggestions ──
+  function openSuggestions(target, query) {
+    activeAirportTarget = target;
+    const inputEl = document.getElementById(target + '-input');
+    const rect = inputEl.getBoundingClientRect();
+    const sugEl = document.getElementById(target + '-suggestions');
+    sugEl.style.top = (rect.bottom + 4) + 'px';
+    sugEl.style.left = rect.left + 'px';
+    sugEl.style.width = rect.width + 'px';
+
+    const lower = (query || '').toLowerCase().trim();
+    const airports = target === 'destination' ? getAirportPool() : AIRPORTS;
+    const cityGroups = target === 'destination' ? getCityGroupPool() : CITY_GROUPS;
+
+    let combined = [];
+    if (lower.length >= 1) {
+      const filteredGroups = cityGroups.filter(cg =>
+        cg.code.toLowerCase().startsWith(lower) ||
+        cg.city.toLowerCase().includes(lower) ||
+        cg.country.toLowerCase().includes(lower)
+      );
+      const filteredAirports = airports.filter(a =>
+        a.code.toLowerCase().startsWith(lower) ||
+        a.name.toLowerCase().includes(lower) ||
+        a.country.toLowerCase().includes(lower)
+      );
+      combined = [
+        ...filteredGroups.map(cg => ({code: cg.code, name: cg.city + ' 任一機場', country: cg.country})),
+        ...filteredAirports.map(a => ({code: a.code, name: a.name, country: a.country})),
+      ].slice(0, 6);
+    }
+
+    const itemsHtml = combined.map(item =>
+      `<div class="sug-item" onmousedown="selectAirportInline('${target}','${item.code}','${item.name.replace(/'/g,"\\'")}')">
+        <div class="sug-code">${item.code}</div>
+        <div class="sug-info">
+          <div class="sug-name">${item.name}</div>
+          <div class="sug-country">${item.country}</div>
+        </div>
+      </div>`
+    ).join('');
+
+    const emptyHtml = combined.length === 0 && lower.length >= 1
+      ? `<div style="padding:12px;font-size:10px;color:var(--dim);text-align:center;letter-spacing:0.08em">找不到符合機場</div>`
+      : '';
+
+    const browseHtml = `<div class="sug-browse" onmousedown="selectBrowse('${target}')">瀏覽所有機場 ›</div>`;
+    sugEl.innerHTML = itemsHtml + emptyHtml + browseHtml;
+    sugEl.classList.add('open');
+  }
+
+  function closeSuggestions(target) {
+    const sugEl = document.getElementById(target + '-suggestions');
+    if (sugEl) sugEl.classList.remove('open');
+  }
+
+  function selectAirportInline(target, code, name) {
+    document.getElementById(target).value = code;
+    document.getElementById(target + '-input').value = code + ' · ' + name;
+    closeSuggestions(target);
+    if (target === 'destination') applyPalette(getPalette(code));
+  }
+
+  function selectBrowse(target) {
+    closeSuggestions(target);
+    openAirportModal(target);
+  }
+
+  // Text input event listeners
+  ['origin', 'destination'].forEach(function(target) {
+    var inputEl = document.getElementById(target + '-input');
+    inputEl.addEventListener('focus', function() {
+      var val = this.value.trim();
+      if (val.includes(' · ')) {
+        // Already selected — show just browse link
+        activeAirportTarget = target;
+        var sugEl = document.getElementById(target + '-suggestions');
+        var rect = this.getBoundingClientRect();
+        sugEl.style.top = (rect.bottom + 4) + 'px';
+        sugEl.style.left = rect.left + 'px';
+        sugEl.style.width = rect.width + 'px';
+        sugEl.innerHTML = `<div class="sug-browse" onmousedown="selectBrowse('${target}')">瀏覽所有機場 ›</div>`;
+        sugEl.classList.add('open');
+      } else {
+        openSuggestions(target, val);
+      }
+    });
+    inputEl.addEventListener('input', function() {
+      document.getElementById(target).value = '';
+      openSuggestions(target, this.value);
+    });
+    inputEl.addEventListener('blur', function() {
+      // Auto-match exact code on blur
+      var val = this.value.trim().toUpperCase();
+      var hiddenEl = document.getElementById(target);
+      if (!hiddenEl.value && val.length >= 2 && !val.includes('·')) {
+        var match = AIRPORTS.find(function(a) { return a.code === val; });
+        if (match) {
+          hiddenEl.value = match.code;
+          inputEl.value = match.code + ' · ' + match.name;
+        } else {
+          var cg = CITY_GROUPS.find(function(c) { return c.code === val; });
+          if (cg) {
+            hiddenEl.value = cg.code;
+            inputEl.value = cg.code + ' · ' + cg.city + ' 任一機場';
+          }
+        }
+      }
+      setTimeout(function() { closeSuggestions(target); }, 120);
+    });
+  });
 
   // ── Return date auto-fill (departure + 1 day) ──
   document.getElementById('departure_date').addEventListener('change', function() {
@@ -1622,11 +1803,8 @@
       });
       document.getElementById('passengers').value = '1';
       document.getElementById('cabin_class').value = '1';
-      document.getElementById('origin-trigger').textContent = '選擇機場';
-      document.getElementById('origin-trigger').classList.add('placeholder');
-      document.getElementById('destination-trigger').textContent = '選擇機場';
-      document.getElementById('destination-trigger').classList.add('placeholder');
-      setTripType('round');
+      document.getElementById('origin-input').value = '';
+      document.getElementById('destination-input').value = '';
       await loadFlights();
     } catch(e) { showToast('新增失敗'); updateBg(); }
     finally { btn.disabled = false; btn.textContent = '新增航班'; }
