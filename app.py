@@ -70,10 +70,12 @@ def send_notification(title, body):
 
 
 scheduler = BackgroundScheduler(timezone="Asia/Taipei", daemon=True)
+# 每天早上 8 點（台北時間）自動查價
 scheduler.add_job(
     lambda: check_all_flights(app, db, Flight, send_notification),
-    "interval",
-    hours=6,
+    "cron",
+    hour=8,
+    minute=0,
 )
 try:
     scheduler.start()

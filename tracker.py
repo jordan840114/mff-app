@@ -92,15 +92,26 @@ def check_all_flights(app, db, Flight, send_notification_fn):
                 if price is None:
                     continue
 
+                old_price = flight.current_price
                 flight.current_price = price
                 flight.price_breakdown = json.dumps(breakdown) if breakdown else None
                 flight.last_checked = datetime.utcnow()
                 db.session.commit()
 
+                # 達到目標價
                 if flight.target_price is not None and price <= flight.target_price:
                     send_notification_fn(
                         title="MFF 低價警報！",
                         body=f"{flight.origin} → {flight.destination} 現在 {price} {flight.currency}，低於目標 {flight.target_price}！",
                     )
+                # 較上次大幅下降（≥8% 或 ≥800 TWD）
+                elif old_price and price < old_price:
+                    drop = old_price - price
+                    drop_pct = drop / old_price
+                    if drop_pct >= 0.08 or drop >= 800:
+                        send_notification_fn(
+                            title="MFF 價格下降",
+                            body=f"{flight.origin} → {flight.destination} 降了 {drop:,} {flight.currency}，現在 {price:,}！",
+                        )
             except Exception as e:
                 print(f"查價失敗 ({flight.origin}→{flight.destination}): {e}")
