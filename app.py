@@ -42,14 +42,14 @@ for attempt in range(3):
             print("Migration: target_price nullable OK")
         except Exception as me:
             print(f"Migration note: {me}")
-        try:
-            with db.engine.connect() as conn:
-                conn.execute(text("ALTER TABLE flights ADD COLUMN passengers INTEGER DEFAULT 1"))
-                conn.execute(text("ALTER TABLE flights ADD COLUMN cabin_class INTEGER DEFAULT 1"))
-                conn.commit()
-            print("Migration: passengers, cabin_class OK")
-        except Exception as me:
-            print(f"Migration note (passengers/cabin): {me}")
+        for col, coltype in [("passengers", "INTEGER DEFAULT 1"), ("cabin_class", "INTEGER DEFAULT 1")]:
+            try:
+                with db.engine.connect() as conn:
+                    conn.execute(text(f"ALTER TABLE flights ADD COLUMN IF NOT EXISTS {col} {coltype}"))
+                    conn.commit()
+                print(f"Migration: {col} OK")
+            except Exception as me:
+                print(f"Migration note ({col}): {me}")
         break
     except Exception as e:
         print(f"DB init attempt {attempt+1} failed: {e}")
