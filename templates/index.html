@@ -765,6 +765,21 @@
       font-size: 14px; font-weight: 700;
       letter-spacing: 0.03em;
     }
+    .bd-best {
+      border-color: rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.18);
+    }
+    .bd-best .bd-price { color: #fff; }
+    .bd-best .bd-route::after {
+      content: 'BEST';
+      margin-left: 8px;
+      font-size: 8px;
+      letter-spacing: 0.12em;
+      background: rgba(255,255,255,0.22);
+      border-radius: 100px;
+      padding: 1px 6px;
+      vertical-align: middle;
+    }
     @media (hover: hover) {
       .flight-item:hover { background: rgba(255,255,255,0.24); border-color: rgba(255,255,255,0.38); }
       .btn-sm:hover { background: rgba(255,255,255,0.22); }
@@ -1801,14 +1816,16 @@
             <button class="btn-sm" onclick="event.stopPropagation();deleteFlight(${f.id})">Del</button>
           </div>
         </div>
-        ${(f.price_breakdown && f.price_breakdown.length > 1) ? `
-        <div class="breakdown-list" onclick="event.stopPropagation()">
+        ${(f.price_breakdown && f.price_breakdown.length > 1) ? (() => {
+          const minP = Math.min(...f.price_breakdown.map(b => b.price));
+          return `<div class="breakdown-list" onclick="event.stopPropagation()">
           ${f.price_breakdown.map(b => `
-            <a class="breakdown-item" href="${buildBookingUrl(f, b.o, b.d)}" target="_blank" rel="noopener">
+            <a class="breakdown-item${b.price === minP ? ' bd-best' : ''}" href="${buildBookingUrl(f, b.o, b.d)}" target="_blank" rel="noopener">
               <span class="bd-route">${b.o} → ${b.d}</span>
               <span class="bd-price">${fmtPrice(b.price, f.currency)}</span>
             </a>`).join('')}
-        </div>` : ''}
+        </div>`;
+        })() : ''}
       </div>`;
     }).join('');
     updateBg();
