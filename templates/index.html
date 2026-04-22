@@ -316,10 +316,11 @@
       margin: 0 3px;
     }
     .flight-price {
-      font-size: 18px;
+      font-size: 26px;
       font-weight: 700;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.01em;
       text-align: right;
+      line-height: 1;
     }
     .flight-mid {
       display: flex;
@@ -472,17 +473,19 @@
 
     .field input[type="date"], .field input[type="number"], .field select {
       width: 100%;
-      background: rgba(255,255,255,0.7);
-      border: 1px solid rgba(255,255,255,0.9);
-      border-radius: 10px;
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.75);
+      border-radius: 100px;
       color: var(--fg);
       font-family: 'Space Mono', monospace;
-      font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase;
-      padding: 11px 12px; outline: none; -webkit-appearance: none;
+      font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase;
+      padding: 11px 18px; outline: none; -webkit-appearance: none;
       transition: background 0.2s;
     }
     .field input::placeholder { color: var(--dim); }
-    .field input:focus, .field select:focus { background: rgba(255,255,255,0.95); }
+    .field input:focus, .field select:focus { background: rgba(255,255,255,0.82); }
     .field select option { background: #e4f2fa; }
 
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -754,13 +757,13 @@
     .breakdown-item:active { background: rgba(255,255,255,0.22); }
     .bd-route {
       font-family: 'Space Mono', monospace;
-      font-size: 10px; letter-spacing: 0.08em;
+      font-size: 11px; letter-spacing: 0.08em;
       text-transform: uppercase;
     }
     .bd-price {
       font-family: 'Space Mono', monospace;
-      font-size: 11px; font-weight: 700;
-      letter-spacing: 0.04em;
+      font-size: 14px; font-weight: 700;
+      letter-spacing: 0.03em;
     }
   </style>
 </head>
