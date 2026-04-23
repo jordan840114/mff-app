@@ -39,11 +39,15 @@
     }
 
     /* ── ANIMATED GRADIENT BACKGROUND ── */
-    #grad-bg {
+    #bg-clip {
       position: fixed;
-      inset: -8%;
+      inset: 0;
       z-index: 0;
       overflow: hidden;
+    }
+    #grad-bg {
+      position: absolute;
+      inset: -8%;
       background:
         radial-gradient(ellipse at 22% 28%, #0e4d6e 0%, transparent 52%),
         radial-gradient(ellipse at 76% 14%, #5a3082 0%, transparent 48%),
@@ -819,16 +823,18 @@
 </svg>
 
 <!-- Gradient background -->
-<div id="grad-bg">
-  <div class="blob" id="b1"></div>
-  <div class="blob" id="b2"></div>
-  <div class="blob" id="b3"></div>
-  <div class="blob" id="b4"></div>
-  <div class="blob" id="b5"></div>
-  <div class="blob" id="b6"></div>
-  <div class="blob" id="b7"></div>
-  <div class="blob" id="b8"></div>
-  <div class="blob" id="b9"></div>
+<div id="bg-clip">
+  <div id="grad-bg">
+    <div class="blob" id="b1"></div>
+    <div class="blob" id="b2"></div>
+    <div class="blob" id="b3"></div>
+    <div class="blob" id="b4"></div>
+    <div class="blob" id="b5"></div>
+    <div class="blob" id="b6"></div>
+    <div class="blob" id="b7"></div>
+    <div class="blob" id="b8"></div>
+    <div class="blob" id="b9"></div>
+  </div>
 </div>
 
 <!-- Grain overlay (canvas-based, injected by JS) -->
